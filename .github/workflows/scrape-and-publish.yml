@@ -47,8 +47,12 @@ jobs:
 
       - name: Stage feed for Pages
         run: |
-          mkdir -p _site
+          mkdir -p _site/.well-known
           cp New_Providence_Events.json _site/events.json
+          cp site/privacy.html _site/privacy.html
+          cp site/index.html _site/index.html
+          cp site/assetlinks.json _site/.well-known/assetlinks.json
+          touch _site/.nojekyll
 
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -9,14 +9,14 @@ plugins {
 
 android {
     namespace = "com.arctechnology.zerofomo"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.arctechnology.zerofomo"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 8
-        versionName = "0.7.0"
+        targetSdk = 36
+        versionCode = 9
+        versionName = "0.8.0"
 
         // Live feed: GitHub Pages on arctechnology-hq/zero-fomo, republished every 6 hours by
         // (moves to https://feeds.0fomo.app/ once the Cloudflare CNAME exists)

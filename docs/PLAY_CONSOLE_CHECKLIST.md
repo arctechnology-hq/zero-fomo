@@ -22,15 +22,23 @@ says **CI** or **done** is automated or already in the repo.
 | Category | Events |
 | Privacy policy URL | `https://0fomo.app/privacy.html` |
 
-## 1. D-U-N-S number (you, day 1, free, 5–30 business days)
+## 1. D-U-N-S number (SUBMITTED 2026-09-11, free 30-business-day track)
 
-1. https://www.dnb.com/duns/get-a-duns.html → "Get a D-U-N-S Number" → country
-   Bahamas.
-2. Business name `A.R.C Technology`, address above, phone, principal
-   Cappucienne McEva Richardson, sole proprietorship, start date 1 April 2025 (per
-   NIB), employees 1–4, line of business "Computer related services".
-3. Upload the Business Licence PDF if asked. Save the confirmation email; the
-   number arrives by email.
+Requested through **Dunsguide** (CIAL Dun & Bradstreet, the D&B partner for
+Central America and the Caribbean) — the D&B US "Google developer" flow is
+US-only (requires a US ZIP). Account holder: Cappucienne Richardson
+(rhan.richardson@arctechnologyhq.com). Workflow:
+https://www.dunsguide.com/workflows/2ab8a361-c1a9-4630-a440-acf313c7965b/success
+
+Submitted: legal name A.R.C Technology (trade name ARC Technology), Bahamas,
+TIN 131446276, founded 2025, industry "Computer related consulting services",
++1 242 804 9467, arctechnologyhq.com, 2 employees, annual sales USD 10,000
+(estimate), owner Cappucienne McEva Richardson associated since 2025-04-01,
+address #22 Denice Cay, Venice Bay, Nassau, New Providence; TIN certificate
+(Form 18A) uploaded as tax registration; CIAL Business Information Report
+workbook completed and uploaded (copy in the FIE secrets folder next to the
+keystore). Plan: "Access" (free). Expect the number by email within 30 business
+days (target ~2026-10-23); D&B may phone +1 242 804 9467 to validate.
 
 ## 2. Play Console account (you, ~20 min + verification)
 

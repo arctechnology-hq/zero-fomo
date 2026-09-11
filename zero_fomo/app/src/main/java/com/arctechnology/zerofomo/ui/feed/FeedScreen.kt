@@ -56,6 +56,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -63,6 +64,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.arctechnology.zerofomo.R
 import com.arctechnology.zerofomo.model.BahamianIsland
 import com.arctechnology.zerofomo.model.DateRangeFilter
 import com.arctechnology.zerofomo.model.Event
@@ -178,12 +180,22 @@ private fun FeedHeader(lastSyncEpochMs: Long, onSearchClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(Modifier.weight(1f)) {
-                Text(
-                    "0 FOMO",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Black,
-                    color = Color.White,
-                )
+                // Brand lockup: the cancelled-zero mark IS the "0" of "0 FOMO".
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        painterResource(R.drawable.ic_brand_mark),
+                        contentDescription = "0 FOMO",
+                        tint = Color.Unspecified,
+                        modifier = Modifier.size(30.dp),
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text(
+                        "FOMO",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Black,
+                        color = Color.White,
+                    )
+                }
                 Text(
                     freshnessLabel(lastSyncEpochMs),
                     style = MaterialTheme.typography.labelMedium,

@@ -1,13 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160" role="img" aria-label="0 FOMO mark">
-  <title>0 FOMO mark: The Embrace</title>
-  <!-- The Embrace: the zero is two arms that wrap around a small flame (the fear)
-       and cross at the bottom. The fear is not cancelled, it is held. -->
+  <title>0 FOMO mark: The Cancelled Zero</title>
+  <!-- Two arms (volt, aqua) form the zero and overlap at the bottom; a diagonal bar
+       from top-left to bottom-right strikes it through, the way a prohibition sign
+       does. FOMO, cancelled. The bar also makes the glyph read as a slashed zero. -->
   <rect width="160" height="160" rx="36" fill="#0B0F14"/>
-  <!-- arm A (volt): from the top-left, around the left and bottom, to lower right -->
   <path d="M62.90,33.02 A50,50 0 1 0 112.14,118.30" fill="none" stroke="#C8FF2E" stroke-width="16" stroke-linecap="round"/>
-  <!-- arm B (aqua): from the top-right, around the right and bottom, to lower left, drawn over A -->
   <path d="M97.10,33.02 A50,50 0 1 1 47.86,118.30" fill="none" stroke="#19D3C5" stroke-width="16" stroke-linecap="round"/>
-  <!-- the fear: a small flame, held at the centre -->
-  <path d="M80,64 C88,74 92,82 90,90 C88,98 72,98 70,90 C68,82 72,74 80,64 Z" fill="#F5F4EF"/>
-  <path d="M80,80 C84,85 85,89 83,92 C81,95 77,95 76,92 C75,89 76,85 80,80 Z" fill="#0B0F14"/>
+  <path d="M58.8,58.8 L101.2,101.2" fill="none" stroke="#F5F4EF" stroke-width="16" stroke-linecap="round"/>
 </svg>

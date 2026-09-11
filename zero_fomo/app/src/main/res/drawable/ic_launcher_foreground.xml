@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Adaptive-icon foreground: the 0 FOMO "Embrace" mark. Two arms (volt, aqua)
-     wrap a small paper flame and cross at the bottom. Inside the 66dp safe zone. -->
+<!-- Adaptive-icon foreground: the 0 FOMO "Cancelled Zero". Two arms (volt, aqua)
+     form the zero; a paper bar strikes through it top-left to bottom-right.
+     Kept inside the 66dp safe zone. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp" android:height="108dp"
     android:viewportWidth="108" android:viewportHeight="108">
@@ -10,6 +11,7 @@
     <path android:strokeColor="#19D3C5" android:strokeWidth="7.5"
         android:strokeLineCap="round" android:fillColor="#00000000"
         android:pathData="M61.52,33.33 A22,22 0 1 1 39.86,70.85" />
-    <path android:fillColor="#F5F4EF"
-        android:pathData="M54,46 C57.5,50.4 59.3,54 58.4,57.5 C57.5,61 50.5,61 49.6,57.5 C48.7,54 50.5,50.4 54,46 Z" />
+    <path android:strokeColor="#F5F4EF" android:strokeWidth="7.5"
+        android:strokeLineCap="round" android:fillColor="#00000000"
+        android:pathData="M44.67,44.67 L63.33,63.33" />
 </vector>

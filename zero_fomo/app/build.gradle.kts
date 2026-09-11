@@ -15,8 +15,8 @@ android {
         applicationId = "com.arctechnology.zerofomo"
         minSdk = 26
         targetSdk = 36
-        versionCode = 9
-        versionName = "0.8.0"
+        versionCode = 10
+        versionName = "0.8.1"
 
         // Live feed: GitHub Pages (arctechnology-hq/zero-fomo) on the custom domain 0fomo.app,
         // republished every 6 hours by

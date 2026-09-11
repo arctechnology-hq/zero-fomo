@@ -65,6 +65,8 @@ jobs:
     needs: test
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # attach the AAB to the GitHub Release
     environment: play-internal
     defaults:
       run:

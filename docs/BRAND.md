@@ -1,7 +1,7 @@
 # 0 FOMO — Brand Identity Brief
 
 Renamed from **wah gwaan** on 2026-09-11. Publisher: **ARC Technology**
-(GitHub: `arctechnology-hq/zero-fomo`). Mark v2 "The Embrace" replaced v1 "The Loop" the same day.
+(GitHub: `arctechnology-hq/zero-fomo`). Mark v3 "The Cancelled Zero" replaced v2 "The Embrace" and v1 "The Loop" the same day.
 
 ## 1. Positioning
 
@@ -14,23 +14,27 @@ Renamed from **wah gwaan** on 2026-09-11. Publisher: **ARC Technology**
 | Audience | 18–40, mobile-first, locals and visitors in the Caribbean and US cities. |
 | Voice | Short sentences. Second person. No exclamation marks in UI copy. |
 
-## 2. The mark: "The Embrace"
+## 2. The mark: "The Cancelled Zero"
 
-The brand idea is **embracing fear**: FOMO is not something to cancel, it is
-something to hold. The zero is drawn as two arms that wrap around a small flame
-and cross at the bottom.
+The zero is struck through. A diagonal bar runs from top-left to bottom-right,
+the way a prohibition sign does, so the mark reads two ways at once: as a
+slashed-zero glyph, and as **FOMO, cancelled**.
 
 - **Arms** = the `0`. Two arcs (volt on the left, aqua on the right) start at the
-  top with a small opening between them, sweep down, and overlap at the bottom.
-  The overlap is the embrace; the opening at the top is the way in.
-- **Flame** = the fear. Small, centred, held. It is the only warm-shaped element in
-  the system and it never grows larger than a third of the ring.
-- The two-colour arms read as motion and as two people; in one colour (themed
-  icons, notifications) the crossing still reads because the arm ends overlap.
+  top with a small opening, sweep down and overlap at the bottom. The two-tone
+  keeps the earlier "embrace" idea alive: the arms hold the letterform.
+- **Bar** = the cancel. Same weight as the arms, rounded ends, always top-left to
+  bottom-right (a backslash), never the other way. It stays inside the ring so the
+  glyph still sets as a zero next to the wordmark.
+- In one colour (themed icons, notifications) the arms and bar share a colour; the
+  crossing at the bottom and the bar still read at 24 dp.
 
-The mark is the `0` of the wordmark: lockup reads `[mark] FOMO`. It must survive at
-16 px (favicon, notification icon) and in one colour (Android themed icons). At
-24 dp the flame is a solid teardrop with no inner counter.
+The mark is the `0` of the wordmark: lockup reads `[mark] FOMO`. In the app the
+feed header draws the mark (`ic_brand_mark.xml`) beside "FOMO" for the same
+reason. Where "0 FOMO" must be typeset as plain text (store listing, documents),
+the zero is a plain digit; Inter's `zero` OpenType feature gives a slashed zero
+for web copy, but its slash runs the other way, so the mark is preferred wherever
+an image is allowed.
 
 ## 3. Palette
 
@@ -56,7 +60,7 @@ never used for body text on Paper (3.1:1); use it for icons and large type only.
 
 1. Clear space around the lockup = the dot diameter on every side.
 2. Minimum lockup width 96 px; below that use the mark alone.
-3. Never rotate the mark; the opening is always at the top, the crossing at the bottom.
+3. Never rotate or mirror the mark; the opening is at the top, the crossing at the bottom, the bar runs top-left to bottom-right.
 4. On light backgrounds the volt arm becomes Void (see
    `branding/zero-fomo-logo-light.svg`); Volt never sits on Paper.
 5. No drop shadows, gradients, or outlines on the mark.
@@ -80,31 +84,30 @@ Anchor the prompt on the mark spec so the model explores around the idea instead
 of inventing a different symbol.
 
 ```
-modern minimalist logo for "0 FOMO", a local events discovery app. Concept:
-embracing fear. The zero is formed by two thick rounded arms that wrap around a
-small flame at the centre and overlap at the bottom like a hug; the arms are
-open at the top. Left arm electric lime green (#C8FF2E), right arm teal
-(#19D3C5), flame off-white, near-black background (#0B0F14). Wordmark "FOMO" in
-a bold geometric grotesque to the right, the embrace acting as the zero. Flat
-vector, geometric, no gradients, no shadows, no bevel, no extra icons, no
-texture, centred, generous negative space, brand identity presentation
---v 7 --style raw --ar 3:1 --no photorealism, 3d, gradient, glow, mockup, hands
+modern minimalist logo for "0 FOMO", a local events discovery app. Concept: FOMO
+cancelled. The zero is a thick rounded ring formed by two overlapping arms, left
+arm electric lime green (#C8FF2E), right arm teal (#19D3C5), with an off-white
+diagonal bar striking through it from top-left to bottom-right like a
+prohibition sign, all inside the ring. Wordmark "FOMO" in a bold geometric
+grotesque to the right, the struck-through ring acting as the zero. Near-black
+background (#0B0F14). Flat vector, geometric, no gradients, no shadows, no
+bevel, no extra icons, no texture, centred, generous negative space, brand
+identity presentation --v 7 --style raw --ar 3:1 --no photorealism, 3d,
+gradient, glow, mockup, hands, red
 ```
 
 Variants to request in the same session:
 
 - `--ar 1:1` mark only, no wordmark (app icon).
-- "on off-white background (#F5F4EF), near-black left arm, teal right arm,
-  near-black flame" for the light version.
-- "sticker sheet, six variations: arm thickness, size of the opening, flame
-  with and without inner counter" to explore.
-- "the flame replaced by a small heart" and "the flame replaced by a spark" as
-  alternates for the fear element; keep the arms unchanged.
+- "on off-white background (#F5F4EF), near-black left arm and bar, teal right
+  arm" for the light version.
+- "sticker sheet, six variations: bar thickness, bar length, single-colour ring"
+  to explore.
 
-Reject any output where the arms become literal hands, where the flame is missing,
-or where a second symbol appears. Redraw the chosen direction as clean vectors (the
-SVGs here are the starting point) and never ship the raster straight from the
-generator.
+Reject any output where the bar runs bottom-left to top-right, where the bar
+turns red (that is the road-sign, not the brand), or where a second symbol
+appears. Redraw the chosen direction as clean vectors (the SVGs here are the
+starting point) and never ship the raster straight from the generator.
 
 ## 8. Naming in code
 

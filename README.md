@@ -37,7 +37,7 @@ Room cache, polymorphic island/postal/admin LocationEngine (offline Bahamian
 gazetteer), date + island + category + keyword filtering, calendar export
 (Google / Outlook / .ics), saved-event reminders.
 
-## Cloud feed (enable when ready)
+## Cloud feed (live at https://0fomo.app/events.json)
 
 Push this repo to GitHub, enable **Settings → Pages → Source: GitHub Actions**,
 and `.github/workflows/scrape-and-publish.yml` scrapes every 6 hours and

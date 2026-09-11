@@ -20,7 +20,7 @@ says **CI** or **done** is automated or already in the repo.
 | App name | `0 FOMO: Local Events` |
 | Package | `com.arctechnology.zerofomo` |
 | Category | Events |
-| Privacy policy URL | `https://arctechnology-hq.github.io/zero-fomo/privacy.html` (becomes `https://0fomo.app/privacy.html` once DNS is live) |
+| Privacy policy URL | `https://0fomo.app/privacy.html` |
 
 ## 1. D-U-N-S number (you, day 1, free, 5–30 business days)
 
@@ -83,7 +83,7 @@ App, Free. Declarations: no ads; not designed for children; no government app.
 |---|---|
 | App icon 512×512 | `store/graphics/icon-512.png` |
 | Feature graphic 1024×500 | `store/graphics/feature-graphic-1024x500.png` |
-| Phone screenshots (2–8) | `store/graphics/screenshots/phone/` (pending: needs a device or emulator) |
+| Phone screenshots (4) | `store/graphics/screenshots/phone/` (Galaxy S24+, 1080×2340) |
 | Title | `store/listing/en-US/title.txt` |
 | Short description | `store/listing/en-US/short_description.txt` |
 | Full description | `store/listing/en-US/full_description.txt` |
@@ -126,9 +126,9 @@ Expected rating: Everyone / PEGI 3.
 ## 9. Blockers cleared in this repo
 
 - [x] Target API 36 (AGP 8.11.2, Gradle 8.13, Kotlin 2.1.21).
-- [x] Privacy policy page served from the Pages site.
+- [x] Privacy policy page served from the Pages site at https://0fomo.app/privacy.html (DNS: 4 apex A records + www CNAME, DNS-only, added 2026-09-11).
 - [x] Store icon + feature graphic rendered from the mark.
 - [x] Listing copy.
-- [ ] Phone screenshots.
+- [x] Phone screenshots (4, Galaxy S24+).
 - [ ] Crash reporting (Crashlytics) — not required for submission; planned before
       the 50 % rollout step.

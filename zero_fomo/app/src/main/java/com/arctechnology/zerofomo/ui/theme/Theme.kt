@@ -15,62 +15,69 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arctechnology.zerofomo.model.EventCategory
 
-// Bahamian flag palette: aquamarine, gold, black — plus conch-shell coral.
-val Aquamarine = Color(0xFF00778B)
-val AquamarineLight = Color(0xFF4FA8B8)
-val AquaDeep = Color(0xFF00505E)
-val Gold = Color(0xFFFFC72C)
-val GoldDark = Color(0xFFB8860B)
-val Coral = Color(0xFFB3574A)
-val CoralLight = Color(0xFFE8A398)
-val Sand = Color(0xFFFAF6EE)
-val SandDim = Color(0xFFEFE8DA)
-val Charcoal = Color(0xFF121417)
+// 0 FOMO brand palette (docs/BRAND.md): Void, Volt, Aqua, Paper, Coral, Graphite.
+// The value names are kept from the first release so screens compile unchanged;
+// the colours behind them are the brand tokens.
+val Aquamarine = Color(0xFF0E9A90)        // Aqua, darkened for light ground
+val AquamarineLight = Color(0xFF19D3C5)   // Aqua
+val AquaDeep = Color(0xFF0B0F14)          // Void (header gradient start, dark ground)
+val Gold = Color(0xFFC8FF2E)              // Volt (saved / live signals on dark)
+val GoldDark = Color(0xFF9CCB00)          // Volt, darkened for light ground
+val Coral = Color(0xFFC8433E)             // Coral, darkened for light ground
+val CoralLight = Color(0xFFFF5C5C)        // Coral
+val Sand = Color(0xFFF5F4EF)              // Paper
+val SandDim = Color(0xFFECEBE4)           // Paper, dimmed
+val Charcoal = Color(0xFF0B0F14)          // Void
+val Graphite = Color(0xFF141C26)          // elevated surfaces on Void
 
 private val LightColors = lightColorScheme(
     primary = Aquamarine,
     onPrimary = Color.White,
-    primaryContainer = Color(0xFFB7E7EF),
-    onPrimaryContainer = AquaDeep,
-    secondary = GoldDark,
+    primaryContainer = Color(0xFFBDF1EB),
+    onPrimaryContainer = Color(0xFF00332F),
+    secondary = Color(0xFF4A5A00),
     onSecondary = Color.White,
-    secondaryContainer = Color(0xFFFFE7A3),
-    onSecondaryContainer = Color(0xFF4A3A00),
+    secondaryContainer = Gold,
+    onSecondaryContainer = Charcoal,
     tertiary = Coral,
     onTertiary = Color.White,
-    tertiaryContainer = Color(0xFFFFDAD3),
-    onTertiaryContainer = Color(0xFF5C1A10),
+    tertiaryContainer = Color(0xFFFFDAD6),
+    onTertiaryContainer = Color(0xFF5C1210),
     background = Sand,
-    onBackground = Color(0xFF1B1D1E),
+    onBackground = Charcoal,
     surface = Color.White,
-    onSurface = Color(0xFF1B1D1E),
+    onSurface = Charcoal,
     surfaceVariant = SandDim,
-    onSurfaceVariant = Color(0xFF49484A),
-    outline = Color(0xFF7A797B),
-    outlineVariant = Color(0xFFDCD5C8),
+    onSurfaceVariant = Color(0xFF3D4650),
+    outline = Color(0xFF6B7680),
+    outlineVariant = Color(0xFFD8D7CF),
+    error = Coral,
+    onError = Color.White,
 )
 
 private val DarkColors = darkColorScheme(
-    primary = AquamarineLight,
-    onPrimary = Color(0xFF00363F),
-    primaryContainer = AquaDeep,
-    onPrimaryContainer = Color(0xFFB7E7EF),
-    secondary = Gold,
-    onSecondary = Color(0xFF3D2F00),
-    secondaryContainer = Color(0xFF574400),
-    onSecondaryContainer = Color(0xFFFFE7A3),
+    primary = Gold,
+    onPrimary = Charcoal,
+    primaryContainer = Color(0xFF3F5200),
+    onPrimaryContainer = Color(0xFFE6FF9A),
+    secondary = AquamarineLight,
+    onSecondary = Color(0xFF00332F),
+    secondaryContainer = Color(0xFF0E5F58),
+    onSecondaryContainer = Color(0xFFBDF1EB),
     tertiary = CoralLight,
-    onTertiary = Color(0xFF44160D),
-    tertiaryContainer = Color(0xFF7A3A2E),
-    onTertiaryContainer = Color(0xFFFFDAD3),
+    onTertiary = Color(0xFF4A0A0A),
+    tertiaryContainer = Color(0xFF7A2A26),
+    onTertiaryContainer = Color(0xFFFFDAD6),
     background = Charcoal,
-    onBackground = Color(0xFFE3E2E4),
-    surface = Color(0xFF1B1E22),
-    onSurface = Color(0xFFE3E2E4),
-    surfaceVariant = Color(0xFF25292E),
-    onSurfaceVariant = Color(0xFFC6C5C8),
-    outline = Color(0xFF909092),
-    outlineVariant = Color(0xFF3A3E44),
+    onBackground = Sand,
+    surface = Graphite,
+    onSurface = Sand,
+    surfaceVariant = Color(0xFF1C2631),
+    onSurfaceVariant = Color(0xFFC3C8CE),
+    outline = Color(0xFF8B949E),
+    outlineVariant = Color(0xFF223040),
+    error = CoralLight,
+    onError = Color(0xFF4A0A0A),
 )
 
 /** Rounded, friendly geometry: chips stay pill-ish, cards get soft corners. */

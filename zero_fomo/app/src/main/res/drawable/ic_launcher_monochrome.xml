@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Themed-icon (API 33+) layer: the Loop mark in a single tintable color. -->
+<!-- Themed-icon (API 33+) layer: the Embrace mark in a single tintable color. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp" android:height="108dp"
     android:viewportWidth="108" android:viewportHeight="108">
-    <path android:strokeColor="#FFFFFF" android:strokeWidth="8"
+    <path android:strokeColor="#FFFFFF" android:strokeWidth="7.5"
         android:strokeLineCap="round" android:fillColor="#00000000"
-        android:pathData="M73.94,44.70 A22,22 0 1 1 63.30,34.06" />
+        android:pathData="M46.48,33.33 A22,22 0 1 0 68.14,70.85" />
+    <path android:strokeColor="#FFFFFF" android:strokeWidth="7.5"
+        android:strokeLineCap="round" android:fillColor="#00000000"
+        android:pathData="M61.52,33.33 A22,22 0 1 1 39.86,70.85" />
     <path android:fillColor="#FFFFFF"
-        android:pathData="M54,54 m-6,0 a6,6 0 1,1 12,0 a6,6 0 1,1 -12,0" />
+        android:pathData="M54,46 C57.5,50.4 59.3,54 58.4,57.5 C57.5,61 50.5,61 49.6,57.5 C48.7,54 50.5,50.4 54,46 Z" />
 </vector>

@@ -18,11 +18,12 @@ android {
         versionCode = 8
         versionName = "0.7.0"
 
-        // Live feed: GitHub Pages, republished every 6 hours by
+        // Live feed: GitHub Pages on arctechnology-hq/zero-fomo, republished every 6 hours by
+        // (moves to https://feeds.0fomo.app/ once the Cloudflare CNAME exists)
         // .github/workflows/scrape-and-publish.yml (directory that CONTAINS
         // events.json, trailing slash required).
         buildConfigField("String", "FEED_BASE_URL",
-            "\"https://rgr1686.github.io/wah-gwaan/\"")
+            "\"https://arctechnology-hq.github.io/zero-fomo/\"")
     }
 
     // Release signing is injected by CI (.github/workflows/android-ci.yml).

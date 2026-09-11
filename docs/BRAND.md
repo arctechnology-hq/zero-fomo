@@ -1,6 +1,7 @@
 # 0 FOMO — Brand Identity Brief
 
-Renamed from **wah gwaan** on 2026-09-11. Publisher: **ARC Technology**.
+Renamed from **wah gwaan** on 2026-09-11. Publisher: **ARC Technology**
+(GitHub: `arctechnology-hq/zero-fomo`). Mark v2 "The Embrace" replaced v1 "The Loop" the same day.
 
 ## 1. Positioning
 
@@ -13,27 +14,32 @@ Renamed from **wah gwaan** on 2026-09-11. Publisher: **ARC Technology**.
 | Audience | 18–40, mobile-first, locals and visitors in the Caribbean and US cities. |
 | Voice | Short sentences. Second person. No exclamation marks in UI copy. |
 
-## 2. The mark: "The Loop"
+## 2. The mark: "The Embrace"
 
-A bold zero drawn as a ring with a deliberate gap at one o'clock, and a solid dot at
-its centre.
+The brand idea is **embracing fear**: FOMO is not something to cancel, it is
+something to hold. The zero is drawn as two arms that wrap around a small flame
+and cross at the bottom.
 
-- **Ring** = the `0`, and a radar sweep / the loop you are in.
-- **Gap** = the opening you came through. It also makes the ring read as motion, not a
-  full stop.
-- **Dot** = you, already inside.
+- **Arms** = the `0`. Two arcs (volt on the left, aqua on the right) start at the
+  top with a small opening between them, sweep down, and overlap at the bottom.
+  The overlap is the embrace; the opening at the top is the way in.
+- **Flame** = the fear. Small, centred, held. It is the only warm-shaped element in
+  the system and it never grows larger than a third of the ring.
+- The two-colour arms read as motion and as two people; in one colour (themed
+  icons, notifications) the crossing still reads because the arm ends overlap.
 
 The mark is the `0` of the wordmark: lockup reads `[mark] FOMO`. It must survive at
-16 px (favicon, notification icon) and in one colour (Android themed icons).
+16 px (favicon, notification icon) and in one colour (Android themed icons). At
+24 dp the flame is a solid teardrop with no inner counter.
 
 ## 3. Palette
 
 | Token | Hex | Use |
 |---|---|---|
 | Void | `#0B0F14` | Primary background (dark-first product) |
-| Volt | `#C8FF2E` | The ring, primary CTA, live/“happening now” signals |
+| Volt | `#C8FF2E` | Left arm of the mark, primary CTA, live/“happening now” signals |
 | Paper | `#F5F4EF` | Text on dark, light-mode background |
-| Aqua | `#19D3C5` | Secondary accent, the dot on light backgrounds, links |
+| Aqua | `#19D3C5` | Right arm of the mark, secondary accent, links |
 | Coral | `#FF5C5C` | Destructive / sold-out / errors |
 | Graphite | `#141C26` | Cards and elevated surfaces on Void |
 
@@ -50,9 +56,9 @@ never used for body text on Paper (3.1:1); use it for icons and large type only.
 
 1. Clear space around the lockup = the dot diameter on every side.
 2. Minimum lockup width 96 px; below that use the mark alone.
-3. Never rotate the gap; it always sits at one o'clock.
-4. Never put the Volt ring on a light background (use Void ring + Aqua dot, see
-   `branding/zero-fomo-logo-light.svg`).
+3. Never rotate the mark; the opening is always at the top, the crossing at the bottom.
+4. On light backgrounds the volt arm becomes Void (see
+   `branding/zero-fomo-logo-light.svg`); Volt never sits on Paper.
 5. No drop shadows, gradients, or outlines on the mark.
 
 ## 6. Files in `branding/`
@@ -70,29 +76,35 @@ before sending to print or to the Play / App Store listing generators.
 
 ## 7. Generative prompt (Midjourney v7 / Ideogram / Imagen)
 
-Use the mark spec as the anchor so the model does not invent a different symbol.
+Anchor the prompt on the mark spec so the model explores around the idea instead
+of inventing a different symbol.
 
 ```
-minimalist app logo for "0 FOMO", a local events discovery app. The zero is a thick
-geometric ring with a small gap at the one o'clock position and a solid dot at its
-centre, like a radar loop or a "you are here" pin. Wordmark "FOMO" in a bold
-geometric grotesque typeface to the right of the ring, the ring acting as the zero.
-Electric lime green ring (#C8FF2E) on near-black background (#0B0F14), off-white
-text. Flat vector, no gradients, no shadows, no bevel, no extra icons, no
-background texture, centred, generous negative space, brand identity presentation
---v 7 --style raw --ar 3:1 --no photorealism, 3d, gradient, glow, mockup
+modern minimalist logo for "0 FOMO", a local events discovery app. Concept:
+embracing fear. The zero is formed by two thick rounded arms that wrap around a
+small flame at the centre and overlap at the bottom like a hug; the arms are
+open at the top. Left arm electric lime green (#C8FF2E), right arm teal
+(#19D3C5), flame off-white, near-black background (#0B0F14). Wordmark "FOMO" in
+a bold geometric grotesque to the right, the embrace acting as the zero. Flat
+vector, geometric, no gradients, no shadows, no bevel, no extra icons, no
+texture, centred, generous negative space, brand identity presentation
+--v 7 --style raw --ar 3:1 --no photorealism, 3d, gradient, glow, mockup, hands
 ```
 
 Variants to request in the same session:
 
 - `--ar 1:1` mark only, no wordmark (app icon).
-- Same prompt with "on off-white background (#F5F4EF), near-black ring, teal dot
-  (#19D3C5)" for the light version.
-- Add "sticker sheet, six variations of the gap width and dot size" to explore.
+- "on off-white background (#F5F4EF), near-black left arm, teal right arm,
+  near-black flame" for the light version.
+- "sticker sheet, six variations: arm thickness, size of the opening, flame
+  with and without inner counter" to explore.
+- "the flame replaced by a small heart" and "the flame replaced by a spark" as
+  alternates for the fear element; keep the arms unchanged.
 
-Reject any output where the gap moves, the dot is missing, or a second symbol appears.
-Then redraw the chosen direction as clean vectors (the SVGs here are the starting
-point) — never ship the raster straight from the generator.
+Reject any output where the arms become literal hands, where the flame is missing,
+or where a second symbol appears. Redraw the chosen direction as clean vectors (the
+SVGs here are the starting point) and never ship the raster straight from the
+generator.
 
 ## 8. Naming in code
 

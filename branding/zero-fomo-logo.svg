@@ -6,8 +6,10 @@
     </style>
   </defs>
   <rect width="480" height="160" fill="#0B0F14"/>
-  <!-- The mark doubles as the "0" of the wordmark -->
-  <path d="M127.13,58.02 A52,52 0 1 1 101.98,32.87" fill="none" stroke="#C8FF2E" stroke-width="18" stroke-linecap="round"/>
-  <circle cx="80" cy="80" r="14" fill="#F5F4EF"/>
+  <!-- The Embrace mark doubles as the "0" of the wordmark -->
+  <path d="M62.90,33.02 A50,50 0 1 0 112.14,118.30" fill="none" stroke="#C8FF2E" stroke-width="16" stroke-linecap="round"/>
+  <path d="M97.10,33.02 A50,50 0 1 1 47.86,118.30" fill="none" stroke="#19D3C5" stroke-width="16" stroke-linecap="round"/>
+  <path d="M80,64 C88,74 92,82 90,90 C88,98 72,98 70,90 C68,82 72,74 80,64 Z" fill="#F5F4EF"/>
+  <path d="M80,80 C84,85 85,89 83,92 C81,95 77,95 76,92 C75,89 76,85 80,80 Z" fill="#0B0F14"/>
   <text class="word" x="158" y="117">FOMO</text>
 </svg>

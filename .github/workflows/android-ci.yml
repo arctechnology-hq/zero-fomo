@@ -93,7 +93,14 @@ jobs:
         with:
           name: zero-fomo-release-aab
           path: zero_fomo/app/build/outputs/bundle/release/*.aab
+      - name: Check Play credentials
+        id: play
+        run: |
+          if [ -n "$PLAY_JSON" ]; then echo "present=true" >> "$GITHUB_OUTPUT"; else echo "present=false" >> "$GITHUB_OUTPUT"; echo "::notice::PLAY_SERVICE_ACCOUNT_JSON not set; skipping Play upload (download the AAB from the GitHub Release instead)"; fi
+        env:
+          PLAY_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
       - name: Upload to Play internal track
+        if: steps.play.outputs.present == 'true'
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}

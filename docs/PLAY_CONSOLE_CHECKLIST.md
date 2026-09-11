@@ -56,7 +56,7 @@ says **CI** or **done** is automated or already in the repo.
    `PLAY_SERVICE_ACCOUNT_JSON` (the file contents). The four signing secrets are
    set by `Set-ZeroFomoSecrets.ps1` (see Signing below).
 
-## 4. Signing (done locally, secrets pending)
+## 4. Signing (done; secrets set 2026-09-11)
 
 - Upload keystore generated 2026-09-11:
   `%LOCALAPPDATA%\FIE\secrets\zerofomo\zerofomo-upload.jks`, alias
@@ -64,10 +64,14 @@ says **CI** or **done** is automated or already in the repo.
   `zerofomo-upload.dpapi` (Windows DPAPI, this user on RR-002 only).
 - Vault it: `pwsh ./_FIE/FIE_KeyVault.ps1 -Encrypt` after adding the two files to
   the vault manifest, then `-SyncToCloud`.
-- GitHub secrets: run `pwsh %LOCALAPPDATA%\FIE\secrets\zerofomo\Set-ZeroFomoSecrets.ps1`
-  from a shell where `gh` is signed in as an admin of the repo
-  (`arctechnologyhq`). It sets `ZEROFOMO_UPLOAD_KEYSTORE_B64`,
-  `ZEROFOMO_KEYSTORE_PASSWORD`, `ZEROFOMO_KEY_ALIAS`, `ZEROFOMO_KEY_PASSWORD`.
+- GitHub secrets `ZEROFOMO_UPLOAD_KEYSTORE_B64`, `ZEROFOMO_KEYSTORE_PASSWORD`,
+  `ZEROFOMO_KEY_ALIAS`, `ZEROFOMO_KEY_PASSWORD` are set (re-run
+  `Set-ZeroFomoSecrets.ps1` to rotate). Environment `play-internal` requires
+  approval from the org owner and only accepts `v*` tags.
+- Until `PLAY_SERVICE_ACCOUNT_JSON` exists, the release job still builds and
+  signs the AAB and attaches it to a GitHub Release; upload that file in Play
+  Console by hand for the first release (this is also where Play App Signing is
+  enrolled).
 - On first upload choose **Play App Signing** (Google-managed signing key). Then
   copy the *app signing* SHA-256 from Console → Setup → App signing into
   `site/assetlinks.json` and commit.

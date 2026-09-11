@@ -116,9 +116,11 @@ Expected rating: Everyone / PEGI 3.
 
 ## 8. Release (CI + you)
 
-1. Tag `v0.8.0` on `main` → CI builds the signed AAB and uploads to **Internal
-   testing** (`android-ci.yml`), gated by the `play-internal` environment
-   approval.
+1. Done for `v0.8.1` (versionCode 10): CI built the signed AAB and attached it
+   to https://github.com/arctechnology-hq/zero-fomo/releases/tag/v0.8.1 .
+   Upload that `app-release.aab` in Play Console for the first internal-testing
+   release (enrol in Play App Signing when prompted). Later tags upload
+   automatically once `PLAY_SERVICE_ACCOUNT_JSON` is set.
 2. Console → Testing → Internal → add testers (up to 100 emails) → copy the
    opt-in link → install on a phone → run the on-device checklist in
    `docs/RELEASE_PLAYBOOK.md` A4.

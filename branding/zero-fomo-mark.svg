@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160" role="img" aria-label="0 FOMO mark">
+  <title>0 FOMO mark</title>
+  <!-- The Loop: a bold zero, open at 1 o'clock, with a "you are here" core.
+       Ring = the 0 and a radar sweep; dot = you, already inside the loop. -->
+  <rect width="160" height="160" rx="36" fill="#0B0F14"/>
+  <path d="M127.13,58.02 A52,52 0 1 1 101.98,32.87" fill="none" stroke="#C8FF2E" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="80" cy="80" r="14" fill="#F5F4EF"/>
+</svg>

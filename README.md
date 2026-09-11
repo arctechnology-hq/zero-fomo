@@ -1,6 +1,6 @@
-# wah gwaan 🇧🇸 — Bahamas Events Platform
+# 0 FOMO — Local Events Platform (launch market: Bahamas)
 
-Monorepo for the **wah gwaan** Android events app and its data pipeline,
+Monorepo for the **0 FOMO** Android events app and its data pipeline,
 covering New Providence, Bahamas (rolling two-year window).
 
 ```
@@ -8,7 +8,7 @@ comprehensive_bahamas_scraper.py   ETL pipeline: 11 sources -> dedup -> feed
 manual_events.json                 Hand-curated events (social-media-only promos)
 scrape_and_publish.ps1             Daily scheduled scrape (Windows task, 6 AM)
 .github/workflows/                 Cloud scrape + GitHub Pages feed publishing
-wah_gwaan/                         Android app (Kotlin, Jetpack Compose)
+zero_fomo/                         Android app (Kotlin, Jetpack Compose)
 ```
 
 ## Data pipeline
@@ -31,7 +31,7 @@ publish it as `events.json` on any static host.
 
 ## Android app
 
-See [`wah_gwaan/README.md`](wah_gwaan/README.md) for the full architecture
+See [`zero_fomo/README.md`](zero_fomo/README.md) for the full architecture
 map, build instructions, and v1 scope decisions. Highlights: offline-first
 Room cache, polymorphic island/postal/admin LocationEngine (offline Bahamian
 gazetteer), date + island + category + keyword filtering, calendar export
@@ -42,6 +42,19 @@ gazetteer), date + island + category + keyword filtering, calendar export
 Push this repo to GitHub, enable **Settings → Pages → Source: GitHub Actions**,
 and `.github/workflows/scrape-and-publish.yml` scrapes every 6 hours and
 publishes the feed to `https://<user>.github.io/<repo>/events.json`.
-Then point `FEED_BASE_URL` in `wah_gwaan/app/build.gradle.kts` at it.
+Then point `FEED_BASE_URL` in `zero_fomo/app/build.gradle.kts` at it.
 Note: Pages on a **private** repo requires a paid GitHub plan — either make
 the repo public or use another static host.
+
+## Planning docs
+
+| Doc | Contents |
+|---|---|
+| [`docs/ROADMAP.md`](docs/ROADMAP.md) | Phased execution roadmap, framework decision (KMP + Compose Multiplatform) |
+| [`docs/CLOUD_ARCHITECTURE.md`](docs/CLOUD_ARCHITECTURE.md) | GCP core + OCI standby/scrapers + Backblaze B2 media, market/region model |
+| [`docs/RELEASE_PLAYBOOK.md`](docs/RELEASE_PLAYBOOK.md) | Google Play (publisher ARC Technology) then App Store, step by step |
+| [`docs/BRAND.md`](docs/BRAND.md) | Identity brief, palette, generative-AI logo prompt; assets in `branding/` |
+
+CI: `.github/workflows/android-ci.yml` runs unit tests, lint and a debug APK on
+every PR/push; a `v*` tag builds the signed AAB and ships it to the Play internal
+track.

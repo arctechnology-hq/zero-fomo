@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 160" width="480" height="160" role="img" aria-label="0 FOMO">
+  <title>0 FOMO horizontal lockup (light)</title>
+  <defs>
+    <style>
+      .word { font-family: 'Space Grotesk','Inter Tight','Inter','Helvetica Neue',Arial,sans-serif; font-weight: 700; font-size: 104px; letter-spacing: 0.02em; fill: #0B0F14; }
+    </style>
+  </defs>
+  <rect width="480" height="160" fill="#F5F4EF"/>
+  <path d="M127.13,58.02 A52,52 0 1 1 101.98,32.87" fill="none" stroke="#0B0F14" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="80" cy="80" r="14" fill="#19D3C5"/>
+  <text class="word" x="158" y="117">FOMO</text>
+</svg>

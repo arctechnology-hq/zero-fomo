@@ -1,0 +1,56 @@
+# 0 FOMO
+
+Android events app for New Providence, Bahamas (2026) — the client for the
+`comprehensive_bahamas_scraper.py` ETL pipeline.
+
+## Stack
+Kotlin · Jetpack Compose (Material 3) · MVVM with unidirectional state ·
+Hilt · Room (offline-first single source of truth) · Retrofit +
+kotlinx.serialization · WorkManager (6-hour feed sync) · min SDK 26.
+
+## v1 scope decisions (locked 2026-07-27)
+- **Feed**: static `events.json` on a CDN/static host — no app server.
+- **Auth**: none; favorites are local (Room `favorites` table).
+- **Location**: Bahamas-only via the offline `BahamianIsland` gazetteer
+  (Type A). Type B (postal) and Type C (admin area) resolution seams exist
+  behind `GeocodingService`; v1 binds `NoOpGeocoder`. To go global, bind a
+  real geocoder in `LocationModule` — nothing else changes.
+
+## Wiring the feed
+1. Run the pipeline: `python comprehensive_bahamas_scraper.py`
+   → produces `New_Providence_Events_2026.json` (the app feed) alongside
+   the Excel/CSV outputs.
+2. Upload it as `events.json` to any static host (GitHub Pages, Cloudflare
+   Pages, Firebase Hosting). Re-upload on every pipeline run — a cron or CI
+   job doing `scrape → upload` is the whole "backend".
+3. Set the host in `app/build.gradle.kts`:
+   `buildConfigField("String", "FEED_BASE_URL", "\"https://<your-host>/<path>/\"")`
+   (the directory that contains `events.json`, trailing slash required).
+
+## Building
+Open the `zero_fomo/` folder in Android Studio (Koala or newer). First build
+downloads the Gradle wrapper if prompted; or install Gradle 8.7+ and run:
+
+    gradle :app:assembleDebug
+    gradle :app:testDebugUnitTest      # LocationEngine classification tests
+
+## Architecture map
+```
+model/            Event, BahamianIsland (gazetteer), LocationQuery/Filter,
+                  DateRangeFilter — pure Kotlin, no Android deps
+data/location/    LocationEngine: classify() + polymorphic resolve()
+data/db/          Room: events + favorites, the two query shapes
+data/network/     Retrofit DTOs ↔ entity mapping (defensive, row-level)
+data/             EventRepository — offline-first orchestration
+data/sync/        SyncWorker (Hilt + WorkManager, fails soft offline)
+ui/feed/          Home: date chips, island chips, grouped event list
+ui/detail/        Event page: Add to Calendar sheet, Get Tickets, Share
+ui/calendar/      CalendarExporter: ACTION_INSERT / Outlook deep link / .ics
+ui/saved/         Local favorites (fully offline)
+```
+
+## Before Play Store release
+- Replace the placeholder vector launcher icon with adaptive mipmaps.
+- Add real App Links (`https://` domain) alongside the `zerofomo://` scheme.
+- Turn on crash reporting of your choice and write a privacy policy
+  (trivial: no accounts, no PII, no location permission).

@@ -20,12 +20,12 @@ context/
 device.db*
 screen*.png
 
-# Android build outputs live outside the repo (see wah_gwaan/build.gradle.kts),
+# Android build outputs live outside the repo (see zero_fomo/build.gradle.kts),
 # but belt-and-braces:
-wah_gwaan/build/
-wah_gwaan/app/build/
-wah_gwaan/.gradle/
-wah_gwaan/local.properties
+zero_fomo/build/
+zero_fomo/app/build/
+zero_fomo/.gradle/
+zero_fomo/local.properties
 
 # FIE bookkeeping (machine-local paths)
 .fie_state.json

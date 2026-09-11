@@ -1656,7 +1656,7 @@ def _split_price_label(label) -> tuple[Optional[float], Optional[float], bool]:
 
 
 def _feed_record(row: dict) -> dict:
-    """One master-sheet row -> one app-feed event (the wah gwaan contract)."""
+    """One master-sheet row -> one app-feed event (the 0 FOMO contract)."""
     name = str(row.get("Event Name") or "")
     date = str(row.get("Date") or "")
     t_start, t_end = _split_time_label(row.get("Time"))
@@ -1719,7 +1719,7 @@ class Exporter:
                  self.xlsx_path, self.csv_path, self.json_path)
 
     def export_json(self, master: pd.DataFrame) -> None:
-        """Emit the wah gwaan Android app feed (schema_version 1). Upload
+        """Emit the 0 FOMO Android app feed (schema_version 1). Upload
         this file as events.json to the static host the app points at."""
         records = ([] if master.empty
                    else [_feed_record(r) for r in master.to_dict(orient="records")])

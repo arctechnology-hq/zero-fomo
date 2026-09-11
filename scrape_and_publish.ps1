@@ -1,11 +1,11 @@
 # =============================================================================
-# scrape_and_publish.ps1 — daily automated scrape for the wah gwaan app
+# scrape_and_publish.ps1 — daily automated scrape for the 0 FOMO app
 #
 # Runs the full aggregation pipeline, then publishes the fresh feed:
 #   1. -> android-dev\feed\events.json   (local device testing via adb reverse)
 #   2. -> optional: push to your CDN/static host (uncomment one option below)
 #
-# Registered as Windows scheduled task "WahGwaanFeedScrape" (daily 06:00).
+# Registered as Windows scheduled task "ZeroFomoFeedScrape" (daily 06:00).
 # Run manually any time:  pwsh -NoProfile -File scrape_and_publish.ps1
 # =============================================================================
 $ErrorActionPreference = "Stop"
@@ -45,7 +45,7 @@ try {
     # Push a phone alert when FIE notify infra is present (status text only).
     $notify = "C:\Users\rhanrichardson\OneDrive - National Health Insurance Authority\Documents\AI_Workspaces\_FIE\Notify.ps1"
     if (Test-Path $notify) {
-        try { & $notify -Title "wah gwaan scrape FAILED" -Message "$_" -Priority high } catch {}
+        try { & $notify -Title "0 FOMO scrape FAILED" -Message "$_" -Priority high } catch {}
     }
     throw
 }

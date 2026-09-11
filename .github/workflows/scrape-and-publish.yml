@@ -1,5 +1,5 @@
 # =============================================================================
-# wah gwaan — cloud auto-scrape (activates the moment this folder is pushed
+# 0 FOMO — cloud auto-scrape (activates the moment this folder is pushed
 # to a GitHub repo with Pages enabled).
 #
 # Every 6 hours: run the aggregation pipeline, publish events.json to GitHub

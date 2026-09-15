@@ -46,6 +46,13 @@ and `SEATGEEK_CLIENT_ID` (+ optional `SEATGEEK_CLIENT_SECRET`) and skip cleanly
 when unset. The app fetches `feeds/markets.json` and syncs the nearest markets to
 the user's city; see `docs/GLOBAL_DESIGN.md`.
 
+Two producers feed Pages. GitHub Actions runs every market every 6 hours, but
+Eventbrite refuses runner IPs, so `scrape_and_publish.ps1` (Windows task
+`ZeroFomoFeedScrape`, daily 06:00, `-Register` to install) runs the same markets
+from a residential IP and pushes `feeds/` as the single-commit branch
+`feed-data`; the workflow merges the two per market (`merge_feeds.py`: richer
+and not older than 36 h wins).
+
 ## Android app
 
 See [`zero_fomo/README.md`](zero_fomo/README.md) for the full architecture

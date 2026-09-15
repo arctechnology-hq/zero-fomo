@@ -71,10 +71,15 @@ app: EventRepository         per-market replace (never touches other markets or 
 
 Keys are optional: a keyed source without its secret reports `skipped` and the
 market still publishes from its other sources. Eventbrite answers GitHub's
-runner IPs with HTTP 405 (it did for the Nassau run before G2 too), so the
-adapter falls back to a rendered Playwright session, the same route that gets
-Bandsintown through Cloudflare from CI; from a residential IP the plain request
-still works. Rows without coordinates get the
+runner IPs with HTTP 405 (it did for the Nassau run before G2 too), and a
+rendered Playwright session is refused as well (verified 2026-09-15, run
+34991978083). From a residential IP the plain request works, so
+`scrape_and_publish.ps1` on RR-002 (task `ZeroFomoFeedScrape`, daily 06:00)
+runs every market and force-pushes `feeds/` as the single-commit branch
+`feed-data`; the Pages workflow checks that branch out and `merge_feeds.py`
+takes, per market, the richer feed that is not older than 36 h. The
+Ticketmaster and SeatGeek APIs remain the sustainable route for US markets
+once their keys are registered as repo secrets. Rows without coordinates get the
 market centroid outside the Bahamas so "Near <city>" still finds them.
 
 Known follow-ups: the category taxonomy is Bahamas-flavoured ("Junkanoo /

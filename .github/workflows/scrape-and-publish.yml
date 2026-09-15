@@ -66,7 +66,22 @@ jobs:
             python comprehensive_bahamas_scraper.py --market "$m" --delay 2.0 --no-details               || echo "::warning::market $m did not pass (see log)"
             echo "::endgroup::"
           done
-          python build_markets_manifest.py
+
+      # Residential-IP feeds: RR-002's daily scrape_and_publish.ps1 pushes its
+      # per-market feeds to the orphan `feed-data` branch, because Eventbrite
+      # refuses GitHub's runner IPs (HTTP 405, even rendered). Per market, the
+      # richer / fresher of the two feeds wins.
+      - uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          ref: feed-data
+          path: feed-data
+
+      - name: Merge residential feeds
+        run: python merge_feeds.py feed-data/feeds feeds
+
+      - name: Build markets manifest
+        run: python build_markets_manifest.py
 
       - name: Stage feed for Pages
         run: |

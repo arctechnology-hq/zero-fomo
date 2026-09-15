@@ -153,10 +153,12 @@ user who opens the app in Lisbon.
 
 ## 6. Next slices
 
-1. ~~Global sources~~ shipped as G2 (above). Still open from it: register the
-   Ticketmaster and SeatGeek keys as repo secrets, and a geo-API fallback for
-   users outside every curated market (needs the Cloud Run proxy from
-   `CLOUD_ARCHITECTURE.md`).
+1. ~~Global sources~~ shipped as G2 (above); keys live since 2026-09-15 (US
+   markets ~1,000 events each; Ticketmaster and SeatGeek return nothing for
+   the Caribbean, which stays Eventbrite + forwarding). Still open: a geo-API
+   fallback for users outside every curated market (needs the Cloud Run proxy
+   from `CLOUD_ARCHITECTURE.md`), and raising the per-market page cap once the
+   app paginates (SeatGeek is capped at 600 by `--max-pages`).
 2. **Forwarding**: share-sheet intent, `/inbox` on Cloud Run, extraction worker
    on the FIE tiers, review queue.
 3. **Telegram/Discord bots** and **Instagram hashtag** ingestion.

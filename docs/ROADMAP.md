@@ -62,9 +62,12 @@ Decisions and design in `GLOBAL_DESIGN.md`. Shipped on the Android codebase:
       updated for approximate location.
 - [x] G2 Global sources (2026-09-15): Ticketmaster + SeatGeek adapters,
       `markets/*.json` (11 first-wave markets), per-market feeds + manifest on
-      Pages, app multi-feed client (nearest ≤ 3 markets). Open: register
-      `TICKETMASTER_API_KEY` / `SEATGEEK_CLIENT_ID` repo secrets; geo-API
-      fallback beyond curated markets waits for the Cloud Run proxy.
+      Pages, app multi-feed client (nearest ≤ 3 markets). Keys registered
+      2026-09-15 (repo secrets + RR-002 env + FIE manifest); first keyed run:
+      Miami 1,065 / Fort Lauderdale 1,006 / Orlando 991 / Atlanta 1,320
+      events. Open: geo-API fallback beyond curated markets waits for the
+      Cloud Run proxy; Caribbean markets have no Ticketmaster/SeatGeek
+      coverage and rely on Eventbrite + forwarding (G3).
 - [ ] G3 Forwarding: share-sheet intent → `/inbox` → FIE-tier extraction →
       review queue (the WhatsApp / Instagram / TikTok answer).
 - [ ] G4 Telegram + Discord bots, Instagram hashtag search, Reddit.

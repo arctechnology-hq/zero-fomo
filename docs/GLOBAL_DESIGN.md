@@ -70,7 +70,11 @@ app: EventRepository         per-market replace (never touches other markets or 
 ```
 
 Keys are optional: a keyed source without its secret reports `skipped` and the
-market still publishes from its other sources. Rows without coordinates get the
+market still publishes from its other sources. Eventbrite answers GitHub's
+runner IPs with HTTP 405 (it did for the Nassau run before G2 too), so the
+adapter falls back to a rendered Playwright session, the same route that gets
+Bandsintown through Cloudflare from CI; from a residential IP the plain request
+still works. Rows without coordinates get the
 market centroid outside the Bahamas so "Near <city>" still finds them.
 
 Known follow-ups: the category taxonomy is Bahamas-flavoured ("Junkanoo /

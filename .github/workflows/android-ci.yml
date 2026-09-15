@@ -91,6 +91,7 @@ jobs:
           ZEROFOMO_KEYSTORE_PASSWORD: ${{ secrets.ZEROFOMO_KEYSTORE_PASSWORD }}
           ZEROFOMO_KEY_ALIAS: ${{ secrets.ZEROFOMO_KEY_ALIAS }}
           ZEROFOMO_KEY_PASSWORD: ${{ secrets.ZEROFOMO_KEY_PASSWORD }}
+          ZEROFOMO_INBOX_TOKEN: ${{ secrets.ZEROFOMO_INBOX_TOKEN }}
       - uses: actions/upload-artifact@v4
         with:
           name: zero-fomo-release-aab

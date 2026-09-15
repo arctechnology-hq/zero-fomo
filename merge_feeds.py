@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-"""Merge per-market feeds from a second producer (the residential-IP scrape
+"""Union per-market feeds from a second producer (the residential-IP scrape
 pushed to the `feed-data` branch) into the CI-built feeds/ tree.
 
     python merge_feeds.py <incoming_feeds_dir> <target_feeds_dir>
 
-Per market: the incoming feed replaces the target when the target is missing
-or empty, or when the incoming one has more events and is not older than
-36 hours (a stale residential run must not shadow a live CI scrape)."""
+Per market: every incoming event whose id is not already in the target feed
+is appended (ids are sha1(title|date), so cross-producer duplicates collapse).
+An incoming feed older than 36 hours is ignored so a stale residential run
+never resurrects events a fresh CI scrape dropped. The merged feed carries the
+newer generated_at."""
 from __future__ import annotations
 
 import json
@@ -45,29 +47,38 @@ def main() -> int:
         print(f"no incoming feeds at {src}; nothing merged")
         return 0
     now = datetime.now(timezone.utc)
-    merged = 0
+    touched = 0
     for market in sorted(os.listdir(src)):
-        inc_path = os.path.join(src, market, "events.json")
-        inc = load(inc_path)
+        inc = load(os.path.join(src, market, "events.json"))
         if not inc:
             continue
-        inc_n = len(inc.get("events") or [])
         inc_at = generated_at(inc)
         if inc_at is None or now - inc_at > MAX_AGE:
             print(f"{market}: incoming feed too old ({inc.get('generated_at')}); skipped")
             continue
+        inc_events = inc.get("events") or []
         tgt_path = os.path.join(dst, market, "events.json")
         tgt = load(tgt_path)
-        tgt_n = len((tgt or {}).get("events") or [])
-        if tgt_n == 0 or inc_n > tgt_n:
-            os.makedirs(os.path.dirname(tgt_path), exist_ok=True)
-            with open(tgt_path, "w", encoding="utf-8") as fh:
-                json.dump(inc, fh, ensure_ascii=False, indent=1)
-            print(f"{market}: took residential feed ({inc_n} events, CI had {tgt_n})")
-            merged += 1
-        else:
-            print(f"{market}: kept CI feed ({tgt_n} events, residential {inc_n})")
-    print(f"merged {merged} market feed(s)")
+        if not tgt:
+            tgt = dict(inc, events=[])
+        tgt_events = list(tgt.get("events") or [])
+        seen = {e.get("id") for e in tgt_events}
+        added = [e for e in inc_events if e.get("id") not in seen]
+        if not added and tgt.get("events"):
+            print(f"{market}: CI feed already covers the residential feed ({len(tgt_events)} events)")
+            continue
+        merged = tgt_events + added
+        merged.sort(key=lambda e: (e.get("date") or "", e.get("time_start") or "", e.get("name") or ""))
+        tgt["events"] = merged
+        tgt_at = generated_at(tgt)
+        if tgt_at is None or inc_at > tgt_at:
+            tgt["generated_at"] = inc["generated_at"]
+        os.makedirs(os.path.dirname(tgt_path), exist_ok=True)
+        with open(tgt_path, "w", encoding="utf-8") as fh:
+            json.dump(tgt, fh, ensure_ascii=False, indent=1)
+        print(f"{market}: {len(tgt_events)} CI + {len(added)} residential -> {len(merged)} events")
+        touched += 1
+    print(f"merged {touched} market feed(s)")
     return 0
 
 

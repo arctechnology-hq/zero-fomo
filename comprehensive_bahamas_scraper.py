@@ -1224,20 +1224,19 @@ class EventbriteScraper(BaseScraper):
 
         listing = None
         for candidate in self.LISTINGS:
-            resp = self.engine.get(candidate)
-            if resp is not None:
+            html = self._fetch_listing_html(candidate)
+            if html is not None:
                 listing = candidate
-                events.extend(self._parse_listing_response(resp.text, candidate))
+                events.extend(self._parse_listing_response(html, candidate))
                 self.status.pages_fetched += 1
                 break
 
         if listing:
             for page in range(2, self.max_pages + 1):
-                resp = self.engine.get(f"{listing}?page={page}", referer=listing)
-                if resp is None:
+                html = self._fetch_listing_html(f"{listing}?page={page}", referer=listing)
+                if html is None:
                     break
-                page_events = self._parse_listing_response(resp.text,
-                                                           f"{listing}?page={page}")
+                page_events = self._parse_listing_response(html, f"{listing}?page={page}")
                 if not page_events:
                     break
                 before = len({e.source_url for e in events})
@@ -1247,13 +1246,29 @@ class EventbriteScraper(BaseScraper):
                     break
 
         for extra in self.EXTRA_LISTINGS:
-            resp = self.engine.get(extra, referer=self.BASE)
-            if resp is None:
+            html = self._fetch_listing_html(extra, referer=self.BASE)
+            if html is None:
                 continue
-            events.extend(self._parse_listing_response(resp.text, extra))
+            events.extend(self._parse_listing_response(html, extra))
             self.status.pages_fetched += 1
 
         return dedupe_by_url(events)
+
+    def _fetch_listing_html(self, url: str, referer: Optional[str] = None) -> Optional[str]:
+        """Plain GET first; Eventbrite answers datacenter IPs (GitHub runners)
+        with 405, so fall back to a rendered browser session, which is what
+        already gets Bandsintown through Cloudflare from CI. The rendered DOM
+        still carries window.__SERVER_DATA__, so parsing is unchanged."""
+        resp = self.engine.get(url, referer=referer)
+        if resp is not None:
+            return resp.text
+        if not self.allow_js:
+            return None
+        html = render_page_html(url, wait_ms=4000)
+        if html and "__SERVER_DATA__" in html:
+            self.status.note = (self.status.note or "rendered via Playwright")
+            return html
+        return None
 
     def _parse_listing_response(self, html: str, url: str) -> list[Event]:
         events: list[Event] = []

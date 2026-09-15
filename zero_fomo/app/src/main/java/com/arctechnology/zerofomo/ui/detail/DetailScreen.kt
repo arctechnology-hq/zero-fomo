@@ -139,7 +139,7 @@ fun DetailScreen(
                 if (ev.venue.isNotBlank()) {
                     Spacer(Modifier.width(4.dp))
                     TextButton(onClick = {
-                        val q = Uri.encode("${ev.venue}, Bahamas")
+                        val q = Uri.encode("${ev.venue}, ${ev.countryName}")
                         context.startSafely(
                             Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=$q")))
                     }) { Text("Directions") }

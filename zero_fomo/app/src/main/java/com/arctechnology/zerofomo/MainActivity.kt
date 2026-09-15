@@ -38,7 +38,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.arctechnology.zerofomo.data.location.UserLocationStore
 import com.arctechnology.zerofomo.ui.detail.DetailScreen
+import javax.inject.Inject
 import com.arctechnology.zerofomo.ui.feed.FeedScreen
 import com.arctechnology.zerofomo.ui.saved.SavedScreen
 import com.arctechnology.zerofomo.ui.theme.ZeroFomoTheme
@@ -46,6 +49,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject lateinit var locationStore: UserLocationStore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Every screen puts dark masthead/hero color under the status bar, so
@@ -54,7 +59,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT))
         setContent {
-            ZeroFomoTheme {
+            // The selected country tints the mark and accents app-wide.
+            val userLocation by locationStore.state.collectAsStateWithLifecycle()
+            ZeroFomoTheme(country = userLocation?.country) {
                 ZeroFomoNavHost()
             }
         }

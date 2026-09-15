@@ -5,8 +5,10 @@ import androidx.room.Room
 import com.arctechnology.zerofomo.BuildConfig
 import com.arctechnology.zerofomo.data.db.EventDao
 import com.arctechnology.zerofomo.data.db.ZeroFomoDatabase
+import com.arctechnology.zerofomo.data.location.Gazetteer
 import com.arctechnology.zerofomo.data.location.GeocodingService
-import com.arctechnology.zerofomo.data.location.NoOpGeocoder
+import com.arctechnology.zerofomo.data.location.PhotonApi
+import com.arctechnology.zerofomo.data.location.PhotonGeocoder
 import com.arctechnology.zerofomo.data.network.EventsApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Binds
@@ -65,9 +67,31 @@ object AppModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
+object GeoModule {
+    /** Offline world gazetteer from the bundled assets. */
+    @Provides
+    @Singleton
+    fun gazetteer(@ApplicationContext context: Context): Gazetteer =
+        Gazetteer { path -> context.assets.open(path) }
+
+    @Provides
+    @Singleton
+    fun photonApi(client: OkHttpClient): PhotonApi {
+        val json = Json { ignoreUnknownKeys = true; coerceInputValues = true }
+        return Retrofit.Builder()
+            .baseUrl("https://photon.komoot.io/")
+            .client(client)
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .build()
+            .create(PhotonApi::class.java)
+    }
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
 abstract class LocationModule {
-    /** v1: offline island gazetteer only. Swap this binding for a real
-     *  geocoder implementation to light up Type B/C globally. */
+    /** Postal codes and admin areas the offline gazetteer cannot answer go
+     *  to Photon (OSM). Bind [NoOpGeocoder] instead for a fully offline build. */
     @Binds
-    abstract fun geocoder(impl: NoOpGeocoder): GeocodingService
+    abstract fun geocoder(impl: PhotonGeocoder): GeocodingService
 }

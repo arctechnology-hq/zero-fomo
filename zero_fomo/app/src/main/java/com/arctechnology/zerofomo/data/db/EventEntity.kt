@@ -11,7 +11,7 @@ import java.time.LocalTime
 
 @Entity(
     tableName = "events",
-    indices = [Index("epochDay"), Index("islandTag"), Index("category")],
+    indices = [Index("epochDay"), Index("islandTag"), Index("category"), Index("countryCode")],
 )
 data class EventEntity(
     @PrimaryKey val id: String,
@@ -30,6 +30,8 @@ data class EventEntity(
     val category: String,     // EventCategory.slug
     val sourceUrl: String,
     val description: String,
+    val countryCode: String = "BS",   // ISO 3166-1 alpha-2 (feed schema v2)
+    val market: String? = null,       // e.g. "bs-nassau" (feed schema v2)
 )
 
 @Entity(tableName = "favorites")
@@ -54,5 +56,6 @@ fun EventEntity.toDomain(isSaved: Boolean = false): Event = Event(
     category = EventCategory.fromSlug(category),
     sourceUrl = sourceUrl,
     description = description,
+    countryCode = countryCode,
     isSaved = isSaved,
 )

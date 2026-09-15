@@ -32,10 +32,11 @@ publish it as `events.json` on any static host.
 ## Android app
 
 See [`zero_fomo/README.md`](zero_fomo/README.md) for the full architecture
-map, build instructions, and v1 scope decisions. Highlights: offline-first
-Room cache, polymorphic island/postal/admin LocationEngine (offline Bahamian
-gazetteer), date + island + category + keyword filtering, calendar export
-(Google / Outlook / .ics), saved-event reminders.
+map, build instructions, and scope decisions. Highlights: offline-first
+Room cache; offline world gazetteer (252 countries, 12.5k places) plus the
+Bahamian island gazetteer; approximate device location matched on-device;
+country-tinted mark and accents; date + place + category + keyword filtering;
+calendar export (Google / Outlook / .ics); saved-event reminders.
 
 ## Cloud feed (live at https://0fomo.app/events.json)
 
@@ -50,6 +51,7 @@ the repo public or use another static host.
 
 | Doc | Contents |
 |---|---|
+| [`docs/GLOBAL_DESIGN.md`](docs/GLOBAL_DESIGN.md) | Going global: location model, country colours, source matrix (APIs / scraping / forwarding / bots), market model |
 | [`docs/ROADMAP.md`](docs/ROADMAP.md) | Phased execution roadmap, framework decision (KMP + Compose Multiplatform) |
 | [`docs/CLOUD_ARCHITECTURE.md`](docs/CLOUD_ARCHITECTURE.md) | GCP core + OCI standby/scrapers + Backblaze B2 media, market/region model |
 | [`docs/RELEASE_PLAYBOOK.md`](docs/RELEASE_PLAYBOOK.md) | Google Play (publisher ARC Technology) then App Store, step by step |

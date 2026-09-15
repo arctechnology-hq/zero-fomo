@@ -32,6 +32,13 @@ interface EventDao {
 
     @Query(
         """SELECT * FROM events
+           WHERE countryCode = :countryCode
+             AND epochDay BETWEEN :fromDay AND :toDay
+           ORDER BY epochDay, timeStart""")
+    fun byCountry(countryCode: String, fromDay: Long, toDay: Long): Flow<List<EventEntity>>
+
+    @Query(
+        """SELECT * FROM events
            WHERE epochDay BETWEEN :fromDay AND :toDay
            ORDER BY epochDay, timeStart""")
     fun allBetween(fromDay: Long, toDay: Long): Flow<List<EventEntity>>

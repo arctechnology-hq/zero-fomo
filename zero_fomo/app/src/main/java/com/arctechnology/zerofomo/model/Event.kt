@@ -22,8 +22,13 @@ data class Event(
     val category: EventCategory,
     val sourceUrl: String,
     val description: String,
+    val countryCode: String = "BS",
     val isSaved: Boolean = false,
 ) {
+    /** Localised country name from the ISO code, no gazetteer needed. */
+    val countryName: String
+        get() = Locale("", countryCode).displayCountry.ifBlank { countryCode }
+
     val priceLabel: String
         get() = when {
             isFree -> "Free"

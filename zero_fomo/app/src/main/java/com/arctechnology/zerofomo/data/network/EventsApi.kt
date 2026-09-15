@@ -38,6 +38,10 @@ data class EventDto(
     val category: String = "GENERAL",
     @SerialName("source_url") val sourceUrl: String = "",
     val description: String = "",
+    // schema_version 2 (optional; v1 feeds default to the launch market)
+    val country: String? = null,                         // ISO 3166-1 alpha-2
+    val market: String? = null,                          // e.g. "bs-nassau"
+    val tz: String? = null,                              // IANA zone
 )
 
 /** Defensive mapping: a single malformed feed row must never poison a sync,
@@ -70,5 +74,7 @@ fun EventDto.toEntity(): EventEntity? {
         category = category,
         sourceUrl = sourceUrl,
         description = description,
+        countryCode = country?.trim()?.takeIf { it.length == 2 }?.uppercase() ?: "BS",
+        market = market?.trim()?.ifBlank { null },
     )
 }

@@ -8,7 +8,10 @@ import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import com.arctechnology.zerofomo.model.Country
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -108,17 +111,38 @@ private val ZeroFomoTypography = Typography(
         lineHeight = 16.sp, letterSpacing = 0.4.sp),
 )
 
+/**
+ * [country] tints the mark's arms and the primary/secondary accents with the
+ * selected country's flag colours (contrast-checked in [countryPalette]);
+ * null keeps the plain brand palette. Ground, surfaces, error and type never
+ * change with the country.
+ */
 @Composable
 fun ZeroFomoTheme(
+    country: Country? = null,
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
-    MaterialTheme(
-        colorScheme = if (darkTheme) DarkColors else LightColors,
-        shapes = ZeroFomoShapes,
-        typography = ZeroFomoTypography,
-        content = content,
+    val accents = remember(country, darkTheme) { countryPalette(country, darkTheme).toAccents() }
+    val onDark = remember(country) { countryPalette(country, dark = true).toAccents() }
+    val base = if (darkTheme) DarkColors else LightColors
+    val scheme = if (country == null) base else base.copy(
+        primary = accents.primary,
+        onPrimary = accents.onPrimary,
+        secondary = accents.secondary,
+        onSecondary = accents.onSecondary,
     )
+    CompositionLocalProvider(
+        LocalCountryAccents provides accents,
+        LocalCountryAccentsOnDark provides onDark,
+    ) {
+        MaterialTheme(
+            colorScheme = scheme,
+            shapes = ZeroFomoShapes,
+            typography = ZeroFomoTypography,
+            content = content,
+        )
+    }
 }
 
 /** Stable per-category accent used by cards, chips and detail headers. */

@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [EventEntity::class, FavoriteEntity::class],
-    version = 1,
+    version = 2,   // v2: countryCode + market (cache DB, destructive migration is fine)
     exportSchema = true,
 )
 abstract class ZeroFomoDatabase : RoomDatabase() {

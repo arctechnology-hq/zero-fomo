@@ -29,3 +29,6 @@ zero_fomo/local.properties
 
 # FIE bookkeeping (machine-local paths)
 .fie_state.json
+
+# Session checklist, not source
+plan.md

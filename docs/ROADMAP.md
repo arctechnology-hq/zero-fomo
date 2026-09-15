@@ -47,6 +47,25 @@ Gate: signed build on Production, staged to 100 %.
 6. Register the local Windows scheduled task under its new name
    (`ZeroFomoFeedScrape`) on RR-002; it is a fallback only once Phase 2 lands.
 
+## Phase G1 — Global client foundation (done 2026-09-15, v0.9.0)
+
+Decisions and design in `GLOBAL_DESIGN.md`. Shipped on the Android codebase:
+
+- [x] Offline world gazetteer (252 countries with flag colours, 12.5k places);
+      device approximate location (coarse, matched on-device); typed search
+      with country hints; Photon (OSM) for postal codes / admin areas.
+- [x] Country-tinted mark and accents (`BrandMark`, `countryPalette`),
+      contrast-checked for every country in both themes.
+- [x] Feed header with location pill; location sheet (use my location / city
+      search / country list); Near-city / All-country chips outside the Bahamas.
+- [x] Feed schema v2 (`country`, `market`, `tz`), Room v2, privacy policy
+      updated for approximate location.
+- [ ] G2 Global sources: Ticketmaster + SeatGeek adapters, per-market YAML,
+      per-market feeds, multi-feed client + geo-API fallback.
+- [ ] G3 Forwarding: share-sheet intent → `/inbox` → FIE-tier extraction →
+      review queue (the WhatsApp / Instagram / TikTok answer).
+- [ ] G4 Telegram + Discord bots, Instagram hashtag search, Reddit.
+
 ## Phase 2 — Backend v1 on GCP + OCI + B2 (weeks 2–7, overlaps Phase 1)
 
 Gate: `feeds.0fomo.app/bs-nassau/events.json` served from GCS via Cloudflare,
@@ -89,8 +108,8 @@ push in production.
 2. First wave: `bs-freeport`, `jm-kingston`, `jm-montego-bay`,
    `tt-port-of-spain`, `bb-bridgetown`, `ky-george-town`, `us-miami`,
    `us-fort-lauderdale`, `us-orlando`, `us-atlanta`.
-3. Market picker + auto-detect (coarse location or IP region; still no precise
-   location permission).
+3. Market picker + auto-detect: done in G1 (coarse location, on-device match;
+   precise location is never requested).
 4. Firebase Auth (Google + Apple + email link), saved-event sync, server-side
    reminders via FCM/APNs; Sign in with Apple ships with Google login.
 5. Cloud SQL → regional HA + `us-central1` replica; Cloud Run in two regions;

@@ -1,11 +1,13 @@
 package com.arctechnology.zerofomo.data
 
 import com.arctechnology.zerofomo.data.db.EventDao
+import com.arctechnology.zerofomo.data.db.EventEntity
 import com.arctechnology.zerofomo.data.db.FavoriteEntity
 import com.arctechnology.zerofomo.data.db.toDomain
 import com.arctechnology.zerofomo.data.network.EventsApi
 import com.arctechnology.zerofomo.data.network.toEntity
 import com.arctechnology.zerofomo.model.BahamianIsland
+import com.arctechnology.zerofomo.model.BoundingBox
 import com.arctechnology.zerofomo.model.DateRangeFilter
 import com.arctechnology.zerofomo.model.Event
 import com.arctechnology.zerofomo.model.LocationFilter
@@ -60,19 +62,9 @@ class EventRepository @Inject constructor(
             is LocationFilter.IslandTag ->
                 dao.byIslands(listOf(location.island.name), from, to)
 
-            is LocationFilter.Bounds -> {
-                // v1 dataset is island-tagged but rarely has raw coordinates,
-                // so a bounding box matches any island whose box intersects
-                // it — the island centroid stands in for missing lat/lng.
-                val islands = BahamianIsland.entries
-                    .filter { it.bounds.intersects(location.box) }
-                    .map { it.name }
-                if (islands.isNotEmpty()) dao.byIslands(islands, from, to)
-                else dao.byBounds(
-                    location.box.minLat, location.box.maxLat,
-                    location.box.minLng, location.box.maxLng, from, to)
-            }
-
+            is LocationFilter.Bounds -> byBox(location.box, from, to)
+            is LocationFilter.Near -> byBox(location.box, from, to)
+            is LocationFilter.CountryTag -> dao.byCountry(location.countryCode, from, to)
             LocationFilter.Everywhere -> dao.allBetween(from, to)
         }
 
@@ -80,6 +72,17 @@ class EventRepository @Inject constructor(
             val favs = favIds.toSet()
             list.map { it.toDomain(isSaved = it.id in favs) }
         }
+    }
+
+    /** Bahamas rows are island-tagged and rarely carry coordinates, so a box
+     *  that touches an island matches that island's tag (the island stands in
+     *  for the missing lat/lng); anywhere else it is a plain range query. */
+    private fun byBox(box: BoundingBox, from: Long, to: Long): Flow<List<EventEntity>> {
+        val islands = BahamianIsland.entries
+            .filter { it.bounds.intersects(box) }
+            .map { it.name }
+        return if (islands.isNotEmpty()) dao.byIslands(islands, from, to)
+        else dao.byBounds(box.minLat, box.maxLat, box.minLng, box.maxLng, from, to)
     }
 
     fun observeEvent(id: String): Flow<Event?> =

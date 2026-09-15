@@ -1655,6 +1655,15 @@ def _split_price_label(label) -> tuple[Optional[float], Optional[float], bool]:
     return min(amounts), max(amounts), False
 
 
+# Market identity stamped on every feed record (schema_version 2). One
+# pipeline run = one market; the global layout (docs/GLOBAL_DESIGN.md) runs
+# this per market with these three overridden.
+FEED_COUNTRY = "BS"
+FEED_MARKET = "bs-nassau"
+FEED_TZ = "America/Nassau"
+FEED_SCHEMA_VERSION = 2
+
+
 def _feed_record(row: dict) -> dict:
     """One master-sheet row -> one app-feed event (the 0 FOMO contract)."""
     name = str(row.get("Event Name") or "")
@@ -1684,6 +1693,10 @@ def _feed_record(row: dict) -> dict:
                        if str(row.get("Source URL") or "").startswith("http") else ""),
         "description": "" if pd.isna(row.get("Description", "")) else strip_html(
             row.get("Description") or ""),
+        # schema_version 2: market identity (docs/GLOBAL_DESIGN.md)
+        "country": FEED_COUNTRY,
+        "market": FEED_MARKET,
+        "tz": FEED_TZ,
     }
 
 
@@ -1719,12 +1732,15 @@ class Exporter:
                  self.xlsx_path, self.csv_path, self.json_path)
 
     def export_json(self, master: pd.DataFrame) -> None:
-        """Emit the 0 FOMO Android app feed (schema_version 1). Upload
-        this file as events.json to the static host the app points at."""
+        """Emit the 0 FOMO app feed (schema_version 2; v1 clients ignore the
+        extra keys). Upload this file as events.json to the static host."""
         records = ([] if master.empty
                    else [_feed_record(r) for r in master.to_dict(orient="records")])
         feed = {
-            "schema_version": 1,
+            "schema_version": FEED_SCHEMA_VERSION,
+            "market": FEED_MARKET,
+            "country": FEED_COUNTRY,
+            "tz": FEED_TZ,
             "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "events": records,
         }

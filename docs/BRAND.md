@@ -109,7 +109,24 @@ turns red (that is the road-sign, not the brand), or where a second symbol
 appears. Redraw the chosen direction as clean vectors (the SVGs here are the
 starting point) and never ship the raster straight from the generator.
 
-## 8. Naming in code
+## 8. Country colour (in-app, 2026-09-15)
+
+Inside the app the mark's two arms and the primary/secondary accents take the
+selected country's two flag colours (`assets/geo/countries.json`; a = dominant,
+b = second). Rules, enforced by `CountryThemeTest` for all 252 countries:
+
+1. Arms ≥ 3:1 and accents ≥ 4.5:1 against the ground (Void dark / Paper light).
+   Only lightness moves; the hue is the country's identity.
+2. A white/black/grey flag colour stays where it already contrasts (a white arm
+   on Void) and otherwise gives way to the brand accent. Grey is never an accent.
+3. If both arms collapse into one colour, the right arm falls back to Aqua.
+4. The bar is always Paper. Ground, surfaces, Coral, type and every asset
+   outside the app (icon, notification glyph, store art, site) stay Volt/Aqua.
+
+The Bahamas (aqua `#00778B`, gold `#FFC72C`) is the launch default, which is
+why the in-app look barely moves for the home market.
+
+## 9. Naming in code
 
 | Surface | Value |
 |---|---|

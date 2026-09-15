@@ -11,10 +11,13 @@ kotlinx.serialization · WorkManager (6-hour feed sync) · min SDK 26.
 ## v1 scope decisions (locked 2026-07-27)
 - **Feed**: static `events.json` on a CDN/static host — no app server.
 - **Auth**: none; favorites are local (Room `favorites` table).
-- **Location**: Bahamas-only via the offline `BahamianIsland` gazetteer
-  (Type A). Type B (postal) and Type C (admin area) resolution seams exist
-  behind `GeocodingService`; v1 binds `NoOpGeocoder`. To go global, bind a
-  real geocoder in `LocationModule` — nothing else changes.
+- **Location** (global since v0.9.0, see `docs/GLOBAL_DESIGN.md`): the
+  offline `BahamianIsland` gazetteer keeps first refusal; then postal
+  patterns; then the offline world `Gazetteer` (`assets/geo/`); then Photon
+  (OSM) via `GeocodingService` for whatever is left. Device location is
+  approximate only (`ACCESS_COARSE_LOCATION`), matched to the nearest
+  gazetteer place on-device; `UserLocationStore` persists the choice and
+  `ZeroFomoTheme(country)` tints the mark and accents with the flag colours.
 
 ## Wiring the feed
 1. Run the pipeline: `python comprehensive_bahamas_scraper.py`
@@ -36,9 +39,12 @@ downloads the Gradle wrapper if prompted; or install Gradle 8.7+ and run:
 
 ## Architecture map
 ```
-model/            Event, BahamianIsland (gazetteer), LocationQuery/Filter,
-                  DateRangeFilter — pure Kotlin, no Android deps
-data/location/    LocationEngine: classify() + polymorphic resolve()
+model/            Event, Country, Place/Geo, BahamianIsland (gazetteer),
+                  LocationQuery/Filter, DateRangeFilter — pure Kotlin, no Android deps
+data/location/    LocationEngine: classify() + polymorphic resolve();
+                  Gazetteer (offline world), DeviceLocationProvider (coarse),
+                  UserLocationStore (persisted choice), PhotonGeocoder (online)
+ui/theme/         Theme + CountryTheme/ContrastMath (flag palette), BrandMark
 data/db/          Room: events + favorites, the two query shapes
 data/network/     Retrofit DTOs ↔ entity mapping (defensive, row-level)
 data/             EventRepository — offline-first orchestration

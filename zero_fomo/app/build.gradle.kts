@@ -15,8 +15,8 @@ android {
         applicationId = "com.arctechnology.zerofomo"
         minSdk = 26
         targetSdk = 36
-        versionCode = 10
-        versionName = "0.8.1"
+        versionCode = 11
+        versionName = "0.9.0"
 
         // Live feed: GitHub Pages (arctechnology-hq/zero-fomo) on the custom domain 0fomo.app,
         // republished every 6 hours by
@@ -98,7 +98,9 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.androidx.work.runtime)
+    implementation(libs.play.services.location)
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
 }

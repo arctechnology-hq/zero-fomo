@@ -24,6 +24,11 @@ android {
         // events.json, trailing slash required).
         buildConfigField("String", "FEED_BASE_URL",
             "\"https://0fomo.app/\"")
+        // "Share to 0 FOMO" receiver (inbox/server.py on fie-worker-1). The
+        // token is an abuse deterrent, not a secret: it ships in the APK.
+        buildConfigField("String", "INBOX_BASE_URL", "\"https://inbox.0fomo.app/\"")
+        buildConfigField("String", "INBOX_TOKEN",
+            "\"" + (System.getenv("ZEROFOMO_INBOX_TOKEN") ?: "") + "\"")
     }
 
     // Release signing is injected by CI (.github/workflows/android-ci.yml).

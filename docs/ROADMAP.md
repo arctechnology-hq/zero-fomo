@@ -68,8 +68,11 @@ Decisions and design in `GLOBAL_DESIGN.md`. Shipped on the Android codebase:
       events. Open: geo-API fallback beyond curated markets waits for the
       Cloud Run proxy; Caribbean markets have no Ticketmaster/SeatGeek
       coverage and rely on Eventbrite + forwarding (G3).
-- [ ] G3 Forwarding: share-sheet intent → `/inbox` → FIE-tier extraction →
-      review queue (the WhatsApp / Instagram / TikTok answer).
+- [x] G3 Forwarding (2026-09-15): "Send to 0 FOMO" share target → queued
+      upload → `inbox/server.py` → Gemini/DeepSeek extraction → review CLI →
+      `community` pipeline source. Deploy to fie-worker-1 as
+      `inbox.0fomo.app` (DNS + certbot) is the remaining step; see
+      `inbox/deploy/`.
 - [ ] G4 Telegram + Discord bots, Instagram hashtag search, Reddit.
 
 ## Phase 2 — Backend v1 on GCP + OCI + B2 (weeks 2–7, overlaps Phase 1)

@@ -35,3 +35,7 @@ plan.md
 
 # Per-market feed outputs (built by CI / scrape runs)
 feeds/
+
+# Community inbox runtime data (submissions + images) — never source
+inbox/data/
+inbox/.server.log

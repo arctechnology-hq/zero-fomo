@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import com.arctechnology.zerofomo.BuildConfig
 import com.arctechnology.zerofomo.data.db.EventDao
+import com.arctechnology.zerofomo.data.db.SubmissionDao
 import com.arctechnology.zerofomo.data.db.ZeroFomoDatabase
+import com.arctechnology.zerofomo.data.inbox.InboxApi
 import com.arctechnology.zerofomo.data.location.Gazetteer
 import com.arctechnology.zerofomo.data.location.GeocodingService
 import com.arctechnology.zerofomo.data.location.PhotonApi
@@ -37,6 +39,22 @@ object AppModule {
 
     @Provides
     fun eventDao(db: ZeroFomoDatabase): EventDao = db.eventDao()
+
+    @Provides
+    fun submissionDao(db: ZeroFomoDatabase): SubmissionDao = db.submissionDao()
+
+    /** "Share to 0 FOMO" receiver (inbox/server.py behind inbox.0fomo.app). */
+    @Provides
+    @Singleton
+    fun inboxApi(client: OkHttpClient): InboxApi {
+        val json = Json { ignoreUnknownKeys = true; coerceInputValues = true; encodeDefaults = true }
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.INBOX_BASE_URL)
+            .client(client)
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .build()
+            .create(InboxApi::class.java)
+    }
 
     @Provides
     @Singleton

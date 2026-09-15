@@ -1681,6 +1681,53 @@ class SeatGeekScraper(BaseScraper):
         return ev if ev.is_plausible() else None
 
 
+class CommunityEventsScraper(BaseScraper):
+    """Events forwarded by users through "Share to 0 FOMO", extracted by
+    inbox/extract.py and approved by inbox/review.py into
+    inbox/approved/<market>.json (docs/GLOBAL_DESIGN.md §3)."""
+    name = "community"
+
+    def scrape(self) -> list[Event]:
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            "inbox", "approved", f"{self.market.id}.json")
+        if not os.path.exists(path):
+            self.status.note = "no approved submissions yet"
+            return []
+        with open(path, encoding="utf-8") as fh:
+            rows = json.load(fh)
+        events: list[Event] = []
+        for d in rows:
+            date_iso, raw = parse_date_iso(str(d.get("date", "")))
+            t = _fmt_24h(d.get("time_start") or "")
+            t_end = _fmt_24h(d.get("time_end") or "")
+            ev = Event(
+                name=clean_text(d.get("name")),
+                date=date_iso or str(d.get("date", "")),
+                raw_date=raw or str(d.get("date", "")),
+                time=(f"{t} - {t_end}" if t and t_end else t),
+                venue=clean_text(d.get("venue")),
+                price=clean_text(d.get("price")),
+                category=(CATEGORY_SLUG_TO_LABEL.get(str(d.get("category") or "").upper())
+                          or infer_category(str(d.get("name")), str(d.get("description")))),
+                source_url=clean_text(d.get("source_url"))
+                    or f"community://{d.get('submission', '')}",
+                description=clean_text(d.get("description")),
+                source_name=self.name,
+            )
+            if ev.is_plausible():
+                events.append(ev)
+        return events
+
+
+# Slug -> label so approved community rows (app taxonomy) map back onto the
+# pipeline's labels; the feed exporter re-slugs them.
+CATEGORY_SLUG_TO_LABEL = {
+    re.sub(r"[^A-Za-z0-9]+", "_", label).strip("_").upper(): label
+    for label, _ in CATEGORY_RULES
+}
+CATEGORY_SLUG_TO_LABEL.setdefault("GENERAL", DEFAULT_CATEGORY)
+
+
 class ManualEventsScraper(BaseScraper):
     name = "manual"
     FILENAME = "manual_events.json"
@@ -2052,6 +2099,7 @@ SCRAPER_REGISTRY: dict[str, type[BaseScraper]] = {
     "reggaeville": ReggaevilleScraper,
     "ticketmaster": TicketmasterScraper,
     "seatgeek": SeatGeekScraper,
+    "community": CommunityEventsScraper,
     "manual": ManualEventsScraper,
 }
 

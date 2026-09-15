@@ -34,6 +34,26 @@
             </intent-filter>
         </activity>
 
+        <!-- "Share to 0 FOMO": flyers, captions and links forwarded from any app
+             land in the review inbox (docs/GLOBAL_DESIGN.md §3). -->
+        <activity
+            android:name=".ui.share.ShareActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:label="Send to 0 FOMO"
+            android:theme="@style/Theme.ZeroFomo.Transparent">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
+
         <!-- Shares generated .ics files (universal iCal/Outlook export) -->
         <provider
             android:name="androidx.core.content.FileProvider"

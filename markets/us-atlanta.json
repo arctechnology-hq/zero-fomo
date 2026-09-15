@@ -12,6 +12,7 @@
     "seatgeek": {},
     "eventbrite": {
       "slug": "ga--atlanta"
-    }
+    },
+    "community": {}
   }
 }

@@ -1,0 +1,24 @@
+[Unit]
+Description=0 FOMO inbox (Share to 0 FOMO receiver)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=zerofomo
+Group=zerofomo
+WorkingDirectory=/opt/zerofomo-inbox
+EnvironmentFile=-/etc/zerofomo-inbox.env
+Environment=INBOX_DATA_DIR=/var/lib/zerofomo-inbox
+Environment=INBOX_PORT=8787
+ExecStart=/usr/bin/python3 /opt/zerofomo-inbox/server.py
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/zerofomo-inbox
+
+[Install]
+WantedBy=multi-user.target

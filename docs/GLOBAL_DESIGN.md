@@ -87,6 +87,34 @@ Cultural" fires on "heritage" in Miami); rename to "Culture / Heritage" when the
 app and pipeline can roll a slug change together. Bandsintown, Songkick and the
 Bahamian ticketing sites remain Nassau-only source adapters.
 
+## 2c. What shipped in slice 3 (G3 forwarding, 2026-09-15)
+
+```
+app: ShareActivity           SEND target for text/plain + image/* ("Send to 0 FOMO" in every share sheet);
+                             shows source app, market, optional note; queues locally
+app: InboxRepository         Room `submissions` (v3), image re-encoded <= 1600 px JPEG in app storage,
+                             UploadWorker (WorkManager, network constraint, backoff) -> POST /submit;
+                             file deleted after upload; anonymous per-install device id for rate limits
+inbox/server.py              stdlib HTTP receiver: POST /submit, GET /health; validates market/kind,
+                             30/device/hour, 6 MB cap, optional X-Inbox-Token; stores
+                             data/<market>/<id>/{submission.json,image.jpg}
+inbox/extract.py             Gemini (vision + text, JSON mode) -> extracted.json with confidence;
+                             DeepSeek text fallback when Gemini is overloaded; images wait for Gemini
+inbox/review.py              list / show / approve [--set field=value] / reject / auto (>= 0.85,
+                             dated, venued) -> inbox/approved/<market>.json
+pipeline `community` source  CommunityEventsScraper ingests inbox/approved/<market>.json per market;
+                             community rows dedupe against scraped/API rows like any other source
+inbox/deploy/                systemd unit, Apache vhost (inbox.0fomo.app -> 127.0.0.1:8787), install.sh
+```
+
+Operational loop (RR-002, alongside the 06:00 scrape): pull `data/` from the
+node, run `extract.py`, `review.py auto` for the confident ones, eyeball the
+rest with `review.py list` / `show` / `approve`, and the next feed build
+carries them. Verified on a synthetic WhatsApp flyer: image → "Sunset Soca
+Cruise, 2026-10-03 17:00, Arawak Cay Docks, $65–$80, Nightlife" at confidence
+1.0 → auto-approved → in the Nassau feed. Chat noise ("did you see that
+meme") extracts to zero events.
+
 ## 3. Source matrix
 
 Legend: **API** = official, keyed, in-terms. **Scrape** = public pages, no login,

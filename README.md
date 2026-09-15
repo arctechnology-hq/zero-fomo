@@ -53,6 +53,22 @@ from a residential IP and pushes `feeds/` as the single-commit branch
 `feed-data`; the workflow merges the two per market (`merge_feeds.py`: richer
 and not older than 36 h wins).
 
+### Community inbox ("Share to 0 FOMO")
+
+`inbox/` is the forwarding pipeline (docs/GLOBAL_DESIGN.md §2c, §3): the app's
+share target posts flyers, captions and links to `inbox/server.py`
+(stdlib, runs on fie-worker-1 as `inbox.0fomo.app`), `inbox/extract.py` turns
+them into event records with Gemini (DeepSeek fallback for text), and
+`inbox/review.py` approves them into `inbox/approved/<market>.json`, which the
+pipeline's `community` source ingests.
+
+```
+python inbox/extract.py                 # every pending submission -> extracted.json
+python inbox/review.py list             # what is waiting
+python inbox/review.py auto             # approve confident, dated, venued events
+python inbox/review.py approve <id> --set venue="Fish Fry, Arawak Cay"
+```
+
 ## Android app
 
 See [`zero_fomo/README.md`](zero_fomo/README.md) for the full architecture

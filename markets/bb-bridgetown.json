@@ -1,0 +1,15 @@
+{
+  "id": "bb-bridgetown",
+  "name": "Bridgetown",
+  "country": "BB",
+  "tz": "America/Barbados",
+  "lat": 13.097,
+  "lng": -59.617,
+  "radius_km": 30,
+  "currency": "BBD",
+  "sources": {
+    "eventbrite": {
+      "slug": "barbados--bridgetown"
+    }
+  }
+}

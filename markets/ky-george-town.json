@@ -1,0 +1,15 @@
+{
+  "id": "ky-george-town",
+  "name": "George Town",
+  "country": "KY",
+  "tz": "America/Cayman",
+  "lat": 19.287,
+  "lng": -81.367,
+  "radius_km": 30,
+  "currency": "KYD",
+  "sources": {
+    "eventbrite": {
+      "slug": "cayman-islands--george-town"
+    }
+  }
+}

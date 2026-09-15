@@ -133,6 +133,63 @@ log = logging.getLogger("bahamas_scraper")
 HORIZON_DAYS = 730           # rolling window: today -> +2 years
 OUTPUT_BASENAME = "New_Providence_Events"
 
+
+# =============================================================================
+# MARKETS (docs/GLOBAL_DESIGN.md §4) — one pipeline run = one market
+# =============================================================================
+
+@dataclass
+class Market:
+    """A city/island cluster with its own sources, timezone and feed."""
+    id: str                       # "bs-nassau", "us-miami"
+    name: str
+    country: str                  # ISO 3166-1 alpha-2
+    tz: str                       # IANA zone
+    lat: float
+    lng: float
+    radius_km: int = 50
+    currency: str = "USD"
+    island_filter: bool = False   # Bahamas-only New Providence verdicting
+    min_events: int = 0           # dead-man floor for this market
+    sources: dict = field(default_factory=dict)   # {source_key: params}
+
+    @property
+    def feed_dir(self) -> str:
+        return os.path.join("feeds", self.id)
+
+
+DEFAULT_MARKET = Market(
+    id="bs-nassau", name="Nassau, New Providence", country="BS",
+    tz="America/Nassau", lat=25.06, lng=-77.345, radius_km=40, currency="BSD",
+    island_filter=True, min_events=15,
+    sources={k: {} for k in ("ticket-flare", "eticketslive", "bahaevents",
+                             "bid-bahamas", "eventbrite", "allevents.in",
+                             "bahamaslocal", "bandsintown", "songkick",
+                             "reggaeville", "manual")},
+)
+
+MARKETS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "markets")
+
+
+def load_market(market_id: str) -> Market:
+    path = os.path.join(MARKETS_DIR, f"{market_id}.json")
+    with open(path, encoding="utf-8") as fh:
+        d = json.load(fh)
+    return Market(
+        id=d["id"], name=d["name"], country=d["country"].upper(), tz=d["tz"],
+        lat=float(d["lat"]), lng=float(d["lng"]),
+        radius_km=int(d.get("radius_km", 50)), currency=d.get("currency", "USD"),
+        island_filter=bool(d.get("island_filter", False)),
+        min_events=int(d.get("min_events", 0)),
+        sources=dict(d.get("sources") or {}),
+    )
+
+
+def list_markets() -> list[str]:
+    if not os.path.isdir(MARKETS_DIR):
+        return []
+    return sorted(f[:-5] for f in os.listdir(MARKETS_DIR) if f.endswith(".json"))
+
 # Keywords that positively identify New Providence
 NEW_PROVIDENCE_KEYWORDS = [
     "nassau", "new providence", "paradise island", "cable beach", "baha mar",
@@ -274,6 +331,8 @@ class Event:
     description: str = ""
     source_name: str = ""
     raw_date: str = ""        # original date text, kept for auditability
+    lat: Optional[float] = None   # venue coordinates when the source has them
+    lng: Optional[float] = None
 
     def completeness(self) -> int:
         return sum(
@@ -359,11 +418,13 @@ class RequestEngine:
         self._last_hit[domain] = time.time()
 
     def get(self, url: str, referer: Optional[str] = None,
-            as_json: bool = False, quiet: bool = False):
+            as_json: bool = False, quiet: bool = False,
+            params: Optional[dict] = None):
         """GET a URL. Returns Response (or parsed JSON if as_json) or None."""
         self._throttle(url)
         try:
             resp = self.session.get(url, headers=self._headers(referer),
+                                    params=params,
                                     timeout=self.timeout, allow_redirects=True)
             if resp.status_code == 404:
                 if not quiet:
@@ -810,12 +871,15 @@ class BaseScraper:
 
     def __init__(self, engine: RequestEngine, max_pages: int = 6,
                  fetch_details: bool = True, detail_cap: int = 40,
-                 allow_js: bool = False):
+                 allow_js: bool = False, market: "Optional[Market]" = None,
+                 params: Optional[dict] = None):
         self.engine = engine
         self.max_pages = max_pages
         self.fetch_details = fetch_details
         self.detail_cap = detail_cap
         self.allow_js = allow_js
+        self.market = market or DEFAULT_MARKET
+        self.params = params or {}
         self.status = SourceStatus(name=self.name)
 
     def scrape(self) -> list[Event]:  # pragma: no cover - abstract
@@ -1145,6 +1209,14 @@ class EventbriteScraper(BaseScraper):
     def scrape(self) -> list[Event]:
         events: list[Event] = []
 
+        # Per-market listing: markets/<id>.json gives the Eventbrite location
+        # slug ("fl--miami", "jamaica--kingston"); the Bahamas defaults stay.
+        slug = str(self.params.get("slug", "")).strip("/")
+        if slug:
+            self.LISTINGS = [f"{self.BASE}/d/{slug}/events/",
+                             f"{self.BASE}/d/{slug}/all-events/"]
+            self.EXTRA_LISTINGS = [f"{self.BASE}/d/{slug}/business--events/"]
+
         # Optional: official API when a private token is provided.
         token = os.environ.get("EVENTBRITE_API_TOKEN", "").strip()
         if token:
@@ -1425,6 +1497,175 @@ class ReggaevilleScraper(BaseScraper):
 #     promotions that no indexable site lists yet. Edit manual_events.json.)
 # -----------------------------------------------------------------------------
 
+# -----------------------------------------------------------------------------
+# GLOBAL API SOURCES (official, keyed; skip cleanly when the key is absent)
+# -----------------------------------------------------------------------------
+
+def _api_category(segment: str, genre: str, fallback_text: str) -> str:
+    """Map Ticketmaster/SeatGeek taxonomy onto the 0 FOMO categories; keyword
+    inference wins when it finds something specific (comedy, festival)."""
+    inferred = infer_category(fallback_text)
+    if inferred != DEFAULT_CATEGORY:
+        return inferred
+    seg, gen = segment.lower(), genre.lower()
+    if "comedy" in gen or "comedy" in seg:
+        return "Comedy"
+    if "music" in seg or "concert" in seg:
+        return "Festival" if "festival" in gen else "Concert / Live Music"
+    if "sport" in seg:
+        return "Sports & Fitness"
+    if "theat" in seg or "arts" in seg or "dance" in gen or "opera" in gen:
+        return "Arts & Theatre"
+    if "family" in seg or "fair" in gen:
+        return "Fair / Popup"
+    return DEFAULT_CATEGORY
+
+
+class TicketmasterScraper(BaseScraper):
+    """Ticketmaster Discovery API v2 — free key, geo search, US/CA/UK/IE/EU/
+    AU/NZ/MX coverage. Env TICKETMASTER_API_KEY; 5,000 calls/day default."""
+    name = "ticketmaster"
+    URL = "https://app.ticketmaster.com/discovery/v2/events.json"
+
+    def scrape(self) -> list[Event]:
+        key = os.environ.get("TICKETMASTER_API_KEY", "").strip()
+        if not key:
+            self.status.note = "skipped: TICKETMASTER_API_KEY not set"
+            return []
+        events: list[Event] = []
+        radius = int(self.params.get("radius_km", self.market.radius_km))
+        page, size = 0, 200
+        while page < max(self.max_pages, 5):
+            resp = self.engine.get(self.URL, params={
+                "apikey": key,
+                "latlong": f"{self.market.lat},{self.market.lng}",
+                "radius": radius, "unit": "km",
+                "size": size, "page": page, "sort": "date,asc",
+                "startDateTime": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            })
+            if resp is None:
+                break
+            self.status.pages_fetched += 1
+            data = resp.json()
+            items = (data.get("_embedded") or {}).get("events") or []
+            for it in items:
+                ev = self._to_event(it)
+                if ev is not None:
+                    events.append(ev)
+            total_pages = int((data.get("page") or {}).get("totalPages") or 0)
+            page += 1
+            if page >= total_pages or not items:
+                break
+        return events
+
+    def _to_event(self, it: dict) -> Optional[Event]:
+        start = (it.get("dates") or {}).get("start") or {}
+        date = str(start.get("localDate") or "")
+        t = str(start.get("localTime") or "")
+        venue = ((it.get("_embedded") or {}).get("venues") or [{}])[0]
+        venue_name = clean_text(venue.get("name"))
+        city = clean_text((venue.get("city") or {}).get("name"))
+        loc = venue.get("location") or {}
+        price = ""
+        pr = (it.get("priceRanges") or [{}])[0]
+        if pr.get("min") is not None:
+            lo, hi = float(pr["min"]), float(pr.get("max") or pr["min"])
+            price = f"${lo:.2f}" if hi <= lo else f"${lo:.2f} - ${hi:.2f}"
+        cls = (it.get("classifications") or [{}])[0]
+        seg = str((cls.get("segment") or {}).get("name") or "")
+        gen = str((cls.get("genre") or {}).get("name") or "")
+        name = clean_text(it.get("name"))
+        desc = clean_text(it.get("info") or it.get("pleaseNote") or "")
+        ev = Event(
+            name=name[:200], date=date, raw_date=date,
+            time=_fmt_24h(t) if t else "",
+            venue=", ".join(x for x in (venue_name, city) if x),
+            price=price,
+            category=_api_category(seg, gen, f"{name} {gen} {desc}"),
+            source_url=str(it.get("url") or ""),
+            description=desc[:600],
+            source_name=self.name,
+            lat=float(loc["latitude"]) if loc.get("latitude") else None,
+            lng=float(loc["longitude"]) if loc.get("longitude") else None,
+        )
+        return ev if ev.is_plausible() else None
+
+
+class SeatGeekScraper(BaseScraper):
+    """SeatGeek Platform API — free client id, geo search, US/CA/UK.
+    Env SEATGEEK_CLIENT_ID (+ optional SEATGEEK_CLIENT_SECRET)."""
+    name = "seatgeek"
+    URL = "https://api.seatgeek.com/2/events"
+    TYPE_CATEGORY = {
+        "concert": "Concert / Live Music", "music_festival": "Festival",
+        "comedy": "Comedy", "theater": "Arts & Theatre", "dance_performance_tour":
+        "Arts & Theatre", "classical": "Arts & Theatre", "family": "Fair / Popup",
+    }
+
+    def scrape(self) -> list[Event]:
+        cid = os.environ.get("SEATGEEK_CLIENT_ID", "").strip()
+        if not cid:
+            self.status.note = "skipped: SEATGEEK_CLIENT_ID not set"
+            return []
+        events: list[Event] = []
+        radius = int(self.params.get("radius_km", self.market.radius_km))
+        page, per_page = 1, 100
+        while page <= max(self.max_pages, 5):
+            params = {
+                "client_id": cid, "lat": self.market.lat, "lon": self.market.lng,
+                "range": f"{radius}km", "per_page": per_page, "page": page,
+                "sort": "datetime_local.asc",
+            }
+            secret = os.environ.get("SEATGEEK_CLIENT_SECRET", "").strip()
+            if secret:
+                params["client_secret"] = secret
+            resp = self.engine.get(self.URL, params=params)
+            if resp is None:
+                break
+            self.status.pages_fetched += 1
+            data = resp.json()
+            items = data.get("events") or []
+            for it in items:
+                ev = self._to_event(it)
+                if ev is not None:
+                    events.append(ev)
+            total = int((data.get("meta") or {}).get("total") or 0)
+            if page * per_page >= total or not items:
+                break
+            page += 1
+        return events
+
+    def _to_event(self, it: dict) -> Optional[Event]:
+        dt = str(it.get("datetime_local") or "")
+        date, t = (dt.split("T") + [""])[:2] if dt else ("", "")
+        if it.get("time_tbd"):
+            t = ""
+        venue = it.get("venue") or {}
+        loc = venue.get("location") or {}
+        stats = it.get("stats") or {}
+        price = ""
+        if stats.get("lowest_price"):
+            lo = float(stats["lowest_price"]); hi = float(stats.get("highest_price") or lo)
+            price = f"${lo:.2f}" if hi <= lo else f"${lo:.2f} - ${hi:.2f}"
+        name = clean_text(it.get("title"))
+        typ = str(it.get("type") or "")
+        seg = "sports" if typ not in self.TYPE_CATEGORY and typ else ""
+        cat = self.TYPE_CATEGORY.get(typ) or _api_category(seg, typ, name)
+        ev = Event(
+            name=name[:200], date=date, raw_date=dt,
+            time=_fmt_24h(t[:5]) if t else "",
+            venue=", ".join(x for x in (clean_text(venue.get("name")),
+                                        clean_text(venue.get("city"))) if x),
+            price=price, category=cat,
+            source_url=str(it.get("url") or ""),
+            description=clean_text(it.get("description") or "")[:600],
+            source_name=self.name,
+            lat=float(loc["lat"]) if loc.get("lat") is not None else None,
+            lng=float(loc["lon"]) if loc.get("lon") is not None else None,
+        )
+        return ev if ev.is_plausible() else None
+
+
 class ManualEventsScraper(BaseScraper):
     name = "manual"
     FILENAME = "manual_events.json"
@@ -1551,6 +1792,8 @@ class Deduplicator:
             master.category = other.category
         if len(other.name) > len(master.name):
             master.name = other.name
+        if master.lat is None and other.lat is not None:
+            master.lat, master.lng = other.lat, other.lng
 
 
 # =============================================================================
@@ -1562,11 +1805,13 @@ MASTER_COLUMNS = ["Event Name", "Date", "Time", "Venue/Location",
 
 
 class TransformEngine:
-    def __init__(self, horizon_days: int, strict_island_filter: bool):
+    def __init__(self, horizon_days: int, strict_island_filter: bool,
+                 market: Optional[Market] = None):
         self.window_start = datetime.now().strftime("%Y-%m-%d")
         self.window_end = (datetime.now()
                            + pd.Timedelta(days=horizon_days)).strftime("%Y-%m-%d")
         self.strict_island_filter = strict_island_filter
+        self.market = market or DEFAULT_MARKET
 
     def build_frames(
         self, clusters: list[tuple[Event, list[str], int]]
@@ -1574,7 +1819,10 @@ class TransformEngine:
         """Returns (master_2026_df, needs_review_df)."""
         master_rows, review_rows = [], []
         for ev, sources, count in clusters:
-            verdict = location_verdict(ev.venue, ev.description, ev.name)
+            # The New Providence verdict only makes sense for the Bahamas
+            # market; API-sourced markets are geo-bounded at the source.
+            verdict = (location_verdict(ev.venue, ev.description, ev.name)
+                       if self.market.island_filter else "np")
             row = {
                 "Event Name": ev.name,
                 "Date": ev.date,
@@ -1586,8 +1834,16 @@ class TransformEngine:
                 "Description": ev.description,
                 "All Sources": " | ".join(sources),
                 "Listings Merged": count,
-                "Island Match": {"np": "New Providence", "other": "Other Island",
-                                 "unknown": "Unverified"}[verdict],
+                "Island Match": ({"np": "New Providence", "other": "Other Island",
+                                  "unknown": "Unverified"}[verdict]
+                                 if self.market.island_filter else self.market.name),
+                # Scraped rows rarely carry coordinates; outside the Bahamas
+                # (where islands stand in for geography) the market centroid
+                # keeps them inside the app's "Near <city>" radius filter.
+                "Lat": ev.lat if ev.lat is not None or self.market.island_filter
+                       else self.market.lat,
+                "Lng": ev.lng if ev.lng is not None or self.market.island_filter
+                       else self.market.lng,
             }
             # ISO date strings compare lexicographically == chronologically
             in_window = bool(ev.date) and self.window_start <= ev.date <= self.window_end
@@ -1671,7 +1927,14 @@ def _feed_record(row: dict) -> dict:
     t_start, t_end = _split_time_label(row.get("Time"))
     p_min, p_max, is_free = _split_price_label(row.get("Ticket Price (USD)"))
     island = ("NEW_PROVIDENCE"
-              if str(row.get("Island Match") or "") == "New Providence" else None)
+              if FEED_COUNTRY == "BS" and
+              str(row.get("Island Match") or "") == "New Providence" else None)
+
+    def _num(v) -> Optional[float]:
+        try:
+            return None if v is None or pd.isna(v) else round(float(v), 5)
+        except (TypeError, ValueError):
+            return None
     return {
         "id": hashlib.sha1(f"{normalize_title(name)}|{date}".encode()).hexdigest()[:12],
         "name": name,
@@ -1681,8 +1944,8 @@ def _feed_record(row: dict) -> dict:
         "venue": str(row.get("Venue/Location") or "") if not pd.isna(
             row.get("Venue/Location", "")) else "",
         "island": island,
-        "lat": None,
-        "lng": None,
+        "lat": _num(row.get("Lat")),
+        "lng": _num(row.get("Lng")),
         "price_min": p_min,
         "price_max": p_max,
         "is_free": is_free,
@@ -1701,7 +1964,9 @@ def _feed_record(row: dict) -> dict:
 
 
 class Exporter:
-    def __init__(self, out_dir: str, basename: str):
+    def __init__(self, out_dir: str, basename: str, workbook: bool = True):
+        os.makedirs(out_dir, exist_ok=True)
+        self.workbook = workbook
         self.xlsx_path = os.path.join(out_dir, f"{basename}.xlsx")
         self.csv_path = os.path.join(out_dir, f"{basename}.csv")
         self.json_path = os.path.join(out_dir, f"{basename}.json")
@@ -1713,6 +1978,13 @@ class Exporter:
                 return pd.DataFrame(columns=MASTER_COLUMNS)
             extras = [c for c in df.columns if c not in MASTER_COLUMNS]
             return df[[c for c in MASTER_COLUMNS if c in df.columns] + extras]
+
+        if not self.workbook:
+            # Per-market runs: feed JSON + a CSV for humans, no workbook.
+            ordered(master).to_csv(self.csv_path, index=False, encoding="utf-8-sig")
+            self.export_json(master)
+            log.info("Wrote %s and %s (app feed)", self.csv_path, self.json_path)
+            return
 
         with pd.ExcelWriter(self.xlsx_path, engine="openpyxl") as writer:
             ordered(master).to_excel(writer, sheet_name="Events", index=False)
@@ -1763,16 +2035,42 @@ SCRAPER_REGISTRY: dict[str, type[BaseScraper]] = {
     "bandsintown": BandsintownScraper,
     "songkick": SongkickScraper,
     "reggaeville": ReggaevilleScraper,
+    "ticketmaster": TicketmasterScraper,
+    "seatgeek": SeatGeekScraper,
     "manual": ManualEventsScraper,
 }
 
 
 def run_pipeline(args: argparse.Namespace) -> int:
-    out_dir = os.path.dirname(os.path.abspath(__file__))
+    global FEED_COUNTRY, FEED_MARKET, FEED_TZ
+    here = os.path.dirname(os.path.abspath(__file__))
     engine = RequestEngine(base_delay=args.delay)
 
-    wanted = ([s.strip().lower() for s in args.sources.split(",")]
-              if args.sources else list(SCRAPER_REGISTRY))
+    # Market mode: markets/<id>.json chooses sources, geo centre and feed dir.
+    # No --market = the legacy Nassau run with its workbook outputs at the root.
+    market: Optional[Market] = None
+    if args.market:
+        try:
+            market = load_market(args.market)
+        except FileNotFoundError:
+            log.error("Unknown market %r. Available: %s",
+                      args.market, ", ".join(list_markets()) or "(none)")
+            return 2
+        FEED_COUNTRY, FEED_MARKET, FEED_TZ = market.country, market.id, market.tz
+        out_dir = os.path.join(here, market.feed_dir)
+        output_basename = "events"
+        min_events = args.min_events if args.min_events is not None else market.min_events
+    else:
+        out_dir = here
+        output_basename = args.output
+        min_events = args.min_events if args.min_events is not None else 15
+
+    if args.sources:
+        wanted = [s.strip().lower() for s in args.sources.split(",")]
+    elif market is not None:
+        wanted = list(market.sources)
+    else:
+        wanted = list(SCRAPER_REGISTRY)
     unknown = [s for s in wanted if s not in SCRAPER_REGISTRY]
     if unknown:
         log.error("Unknown source(s): %s. Valid: %s",
@@ -1791,6 +2089,8 @@ def run_pipeline(args: argparse.Namespace) -> int:
             fetch_details=not args.no_details,
             detail_cap=args.detail_cap,
             allow_js=allow_js,
+            market=market,
+            params=(market.sources.get(key) if market else None),
         )
         all_events.extend(scraper.run())   # error-isolated internally
         statuses.append(scraper.status)
@@ -1803,7 +2103,8 @@ def run_pipeline(args: argparse.Namespace) -> int:
              "(%d duplicate listing(s) merged)", len(clusters), dedup.merged_away)
 
     transform = TransformEngine(args.horizon_days,
-                                strict_island_filter=args.strict_island)
+                                strict_island_filter=args.strict_island,
+                                market=market)
     master, review = transform.build_frames(clusters)
 
     per_source = pd.DataFrame([{
@@ -1824,19 +2125,21 @@ def run_pipeline(args: argparse.Namespace) -> int:
         {"Metric": "Records needing review", "Value": len(review)},
         {"Metric": "Similarity threshold", "Value": args.similarity},
         {"Metric": "Sources run", "Value": ", ".join(wanted)},
+        {"Metric": "Market", "Value": FEED_MARKET},
     ])
 
-    Exporter(out_dir, args.output).export(master, review, per_source, summary)
+    Exporter(out_dir, output_basename, workbook=market is None).export(
+        master, review, per_source, summary)
 
     print("\n" + "=" * 62)
-    print(" PIPELINE COMPLETE")
+    print(f" PIPELINE COMPLETE  [{FEED_MARKET}]")
     print("=" * 62)
     print(per_source.to_string(index=False))
     print("-" * 62)
     print(f" Window: {transform.window_start} -> {transform.window_end}")
     print(f" Unique events exported     : {len(master)}")
     print(f" Records parked for review  : {len(review)}")
-    print(f" Workbook: {os.path.join(out_dir, args.output + '.xlsx')}")
+    print(f" Feed: {os.path.join(out_dir, output_basename + '.json')}")
     print("=" * 62)
 
     # Dead-man's switch: per-source error isolation means a broken parser
@@ -1846,11 +2149,11 @@ def run_pipeline(args: argparse.Namespace) -> int:
     if zero_sources:
         logging.warning("Sources returning ZERO events: %s",
                         ", ".join(zero_sources))
-    if len(master) < args.min_events:
+    if len(master) < min_events:
         logging.error(
             "FLOOR BREACH: only %d event(s) exported (floor %d) — refusing "
             "to bless this run. Feed files were still written for inspection.",
-            len(master), args.min_events)
+            len(master), min_events)
         return 2
     return 0
 
@@ -1880,12 +2183,22 @@ def main() -> int:
     ap.add_argument("--strict-island", action="store_true",
                     help="Hard-drop events confidently on other islands "
                          "(default: park them in Needs Review)")
-    ap.add_argument("--min-events", type=int, default=15,
+    ap.add_argument("--min-events", type=int, default=None,
                     help="Exit 2 if fewer unique events are exported "
-                         "(dead-man's switch for silent scraper decay)")
+                         "(dead-man's switch; default 15, or the market's "
+                         "min_events when --market is given)")
+    ap.add_argument("--market", default="",
+                    help="Run one market from markets/<id>.json (sources, geo "
+                         "centre, tz); writes feeds/<id>/events.json. "
+                         f"Available: {', '.join(list_markets()) or '(none)'}")
+    ap.add_argument("--list-markets", action="store_true",
+                    help="Print the market ids and exit")
     ap.add_argument("--verbose", "-v", action="store_true",
                     help="Debug logging")
     args = ap.parse_args()
+    if args.list_markets:
+        print("\n".join(list_markets()))
+        return 0
 
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.INFO,

@@ -4,8 +4,13 @@ import com.arctechnology.zerofomo.data.db.EventDao
 import com.arctechnology.zerofomo.data.db.EventEntity
 import com.arctechnology.zerofomo.data.db.FavoriteEntity
 import com.arctechnology.zerofomo.data.db.toDomain
+import com.arctechnology.zerofomo.data.location.UserLocationStore
 import com.arctechnology.zerofomo.data.network.EventsApi
 import com.arctechnology.zerofomo.data.network.toEntity
+import com.arctechnology.zerofomo.data.network.toModel
+import com.arctechnology.zerofomo.model.Market
+import com.arctechnology.zerofomo.model.MarketSelector
+import java.time.LocalDate
 import com.arctechnology.zerofomo.model.BahamianIsland
 import com.arctechnology.zerofomo.model.BoundingBox
 import com.arctechnology.zerofomo.model.DateRangeFilter
@@ -32,6 +37,7 @@ class EventRepository @Inject constructor(
     private val dao: EventDao,
     private val api: EventsApi,
     private val prefs: SharedPreferences,
+    private val locationStore: UserLocationStore,
 ) {
     private val _lastSyncEpochMs =
         MutableStateFlow(prefs.getLong(KEY_LAST_SYNC, 0L))
@@ -98,11 +104,70 @@ class EventRepository @Inject constructor(
         else dao.addFavorite(FavoriteEntity(event.id))
     }
 
-    /** Pull the feed and atomically replace the cache. Throws on network
-     *  failure — callers decide whether that is a toast or a silent retry. */
+    /** Market ids synced by the last successful refresh (for change detection). */
+    private val syncedMarkets: Set<String>
+        get() = prefs.getString(KEY_SYNCED_MARKETS, "")!!.split(',').filter { it.isNotBlank() }.toSet()
+
+    /**
+     * Pull the feeds for the markets nearest the user and replace those
+     * markets' rows. Throws on network failure; callers decide whether that
+     * is a toast or a silent retry. Falls back to the legacy single feed when
+     * the manifest is unreachable, so an old host layout still works.
+     */
     suspend fun refresh() {
+        val manifest = try {
+            api.fetchMarkets().markets.map { it.toModel() }
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
+        } catch (_: Exception) {
+            emptyList()
+        }
+        if (manifest.isEmpty()) { refreshLegacy(); return }
+
+        val place = locationStore.state.value?.place
+        val selected = MarketSelector.select(manifest, place?.lat, place?.lng)
+        if (selected.isEmpty()) { refreshLegacy(); return }
+
+        val savedBefore = dao.favorites().first()
+        var anyWritten = false
+        val allNewIds = HashSet<String>()
+        for (market in selected) {
+            val feed = api.fetchMarketFeed(market.id)
+            val entities = feed.events.mapNotNull {
+                it.toEntity(feedMarket = feed.market ?: market.id,
+                    feedCountry = feed.country ?: market.country)
+            }
+            // An empty feed for a curated market is a real state (no events
+            // listed yet), so it still replaces stale rows.
+            dao.replaceMarket(market.id, entities)
+            entities.mapTo(allNewIds) { it.id }
+            anyWritten = true
+        }
+        if (!anyWritten) return
+        dao.deletePastOutsideMarkets(selected.map { it.id }, LocalDate.now().toEpochDay())
+        if (dao.purgeOrphanFavorites() > 0) {
+            recordPurgedSaved(savedBefore.filter { it.id !in allNewIds }.map { it.name })
+        }
+        markSynced(selected.map { it.id }.toSet())
+    }
+
+    /** True when the user's location now maps to a different market set than
+     *  the last sync covered; the view model then triggers a refresh. */
+    suspend fun needsResyncFor(lat: Double?, lng: Double?): Boolean {
+        val manifest = try {
+            api.fetchMarkets().markets.map { it.toModel() }
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
+        } catch (_: Exception) {
+            return false
+        }
+        val wanted = MarketSelector.select(manifest, lat, lng).map { it.id }.toSet()
+        return wanted.isNotEmpty() && wanted != syncedMarkets
+    }
+
+    private suspend fun refreshLegacy() {
         val feed = api.fetchFeed()
-        val entities = feed.events.mapNotNull { it.toEntity() }
+        val entities = feed.events.mapNotNull { it.toEntity(feed.market, feed.country) }
         if (entities.isNotEmpty()) {
             // Names must be captured while the old event rows still exist —
             // after the replace, an orphaned favorite is just an id.
@@ -113,10 +178,17 @@ class EventRepository @Inject constructor(
                 recordPurgedSaved(savedBefore.filter { it.id !in newIds }
                     .map { it.name })
             }
-            val now = System.currentTimeMillis()
-            prefs.edit { putLong(KEY_LAST_SYNC, now) }
-            _lastSyncEpochMs.value = now
+            markSynced(setOf(Market.LAUNCH_ID))
         }
+    }
+
+    private fun markSynced(markets: Set<String>) {
+        val now = System.currentTimeMillis()
+        prefs.edit {
+            putLong(KEY_LAST_SYNC, now)
+            putString(KEY_SYNCED_MARKETS, markets.joinToString(","))
+        }
+        _lastSyncEpochMs.value = now
     }
 
     private fun recordPurgedSaved(names: List<String>) {
@@ -128,6 +200,7 @@ class EventRepository @Inject constructor(
 
     private companion object {
         const val KEY_LAST_SYNC = "last_sync_epoch_ms"
+        const val KEY_SYNCED_MARKETS = "synced_markets"
         const val KEY_PURGED_SAVED = "purged_saved_names"
         const val PURGE_SEP = "\u0001"   // never appears in an event name
     }

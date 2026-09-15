@@ -1,0 +1,17 @@
+{
+  "id": "us-fort-lauderdale",
+  "name": "Fort Lauderdale",
+  "country": "US",
+  "tz": "America/New_York",
+  "lat": 26.122,
+  "lng": -80.137,
+  "radius_km": 35,
+  "currency": "USD",
+  "sources": {
+    "ticketmaster": {},
+    "seatgeek": {},
+    "eventbrite": {
+      "slug": "fl--fort-lauderdale"
+    }
+  }
+}

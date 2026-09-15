@@ -1,0 +1,17 @@
+{
+  "id": "us-atlanta",
+  "name": "Atlanta",
+  "country": "US",
+  "tz": "America/New_York",
+  "lat": 33.749,
+  "lng": -84.388,
+  "radius_km": 50,
+  "currency": "USD",
+  "sources": {
+    "ticketmaster": {},
+    "seatgeek": {},
+    "eventbrite": {
+      "slug": "ga--atlanta"
+    }
+  }
+}

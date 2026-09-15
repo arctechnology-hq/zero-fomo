@@ -1,0 +1,15 @@
+{
+  "id": "tt-port-of-spain",
+  "name": "Port of Spain",
+  "country": "TT",
+  "tz": "America/Port_of_Spain",
+  "lat": 10.667,
+  "lng": -61.517,
+  "radius_km": 40,
+  "currency": "TTD",
+  "sources": {
+    "eventbrite": {
+      "slug": "trinidad-and-tobago--port-of-spain"
+    }
+  }
+}

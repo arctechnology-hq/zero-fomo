@@ -1,0 +1,25 @@
+{
+  "id": "bs-nassau",
+  "name": "Nassau, New Providence",
+  "country": "BS",
+  "tz": "America/Nassau",
+  "lat": 25.06,
+  "lng": -77.345,
+  "radius_km": 40,
+  "currency": "BSD",
+  "island_filter": true,
+  "min_events": 15,
+  "sources": {
+    "ticket-flare": {},
+    "eticketslive": {},
+    "bahaevents": {},
+    "bid-bahamas": {},
+    "eventbrite": {},
+    "allevents.in": {},
+    "bahamaslocal": {},
+    "bandsintown": {},
+    "songkick": {},
+    "reggaeville": {},
+    "manual": {}
+  }
+}

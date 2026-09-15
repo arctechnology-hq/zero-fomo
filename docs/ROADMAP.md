@@ -60,8 +60,11 @@ Decisions and design in `GLOBAL_DESIGN.md`. Shipped on the Android codebase:
       search / country list); Near-city / All-country chips outside the Bahamas.
 - [x] Feed schema v2 (`country`, `market`, `tz`), Room v2, privacy policy
       updated for approximate location.
-- [ ] G2 Global sources: Ticketmaster + SeatGeek adapters, per-market YAML,
-      per-market feeds, multi-feed client + geo-API fallback.
+- [x] G2 Global sources (2026-09-15): Ticketmaster + SeatGeek adapters,
+      `markets/*.json` (11 first-wave markets), per-market feeds + manifest on
+      Pages, app multi-feed client (nearest ≤ 3 markets). Open: register
+      `TICKETMASTER_API_KEY` / `SEATGEEK_CLIENT_ID` repo secrets; geo-API
+      fallback beyond curated markets waits for the Cloud Run proxy.
 - [ ] G3 Forwarding: share-sheet intent → `/inbox` → FIE-tier extraction →
       review queue (the WhatsApp / Instagram / TikTok answer).
 - [ ] G4 Telegram + Discord bots, Instagram hashtag search, Reddit.

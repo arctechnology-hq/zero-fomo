@@ -50,6 +50,34 @@ Location resolution order, unchanged in spirit from v1: Bahamas islands (offline
 `CountryThemeTest` runs every bundled country through both grounds and fails the
 build if any rule is violated.
 
+## 2b. What shipped in slice 2 (G2, 2026-09-15)
+
+```
+markets/<id>.json            11 first-wave markets: bs-nassau, bs-freeport, jm-kingston,
+                             jm-montego-bay, tt-port-of-spain, bb-bridgetown, ky-george-town,
+                             us-miami, us-fort-lauderdale, us-orlando, us-atlanta
+scraper --market <id>        per-market run: sources + params from the JSON, geo centre, tz;
+                             writes feeds/<id>/events.json (+ csv); --list-markets
+TicketmasterScraper          Discovery API v2, geo search (TICKETMASTER_API_KEY)
+SeatGeekScraper              Platform API, geo search (SEATGEEK_CLIENT_ID [+ _SECRET])
+EventbriteScraper            per-market location slug ("fl--miami", "jamaica--kingston")
+build_markets_manifest.py    feeds/markets.json: id, name, country, centroid, radius, availability
+scrape-and-publish.yml       Nassau strict, every other market best-effort, manifest, feeds/ on Pages
+app: Market + MarketSelector nearest <= 3 markets within radius + 250 km (else nearest 1);
+                             legacy single feed when the manifest is unreachable
+app: EventRepository         per-market replace (never touches other markets or favourites),
+                             past rows of unsynced markets purged, resync when the city changes
+```
+
+Keys are optional: a keyed source without its secret reports `skipped` and the
+market still publishes from its other sources. Rows without coordinates get the
+market centroid outside the Bahamas so "Near <city>" still finds them.
+
+Known follow-ups: the category taxonomy is Bahamas-flavoured ("Junkanoo /
+Cultural" fires on "heritage" in Miami); rename to "Culture / Heritage" when the
+app and pipeline can roll a slug change together. Bandsintown, Songkick and the
+Bahamian ticketing sites remain Nassau-only source adapters.
+
 ## 3. Source matrix
 
 Legend: **API** = official, keyed, in-terms. **Scrape** = public pages, no login,
@@ -116,8 +144,10 @@ user who opens the app in Lisbon.
 
 ## 6. Next slices
 
-1. **Global sources**: Ticketmaster + SeatGeek adapters, per-market YAML, feed
-   builder per market, the app's multi-feed client and the geo-API fallback.
+1. ~~Global sources~~ shipped as G2 (above). Still open from it: register the
+   Ticketmaster and SeatGeek keys as repo secrets, and a geo-API fallback for
+   users outside every curated market (needs the Cloud Run proxy from
+   `CLOUD_ARCHITECTURE.md`).
 2. **Forwarding**: share-sheet intent, `/inbox` on Cloud Run, extraction worker
    on the FIE tiers, review queue.
 3. **Telegram/Discord bots** and **Instagram hashtag** ingestion.

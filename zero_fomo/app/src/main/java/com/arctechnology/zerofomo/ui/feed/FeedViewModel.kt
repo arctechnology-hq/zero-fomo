@@ -131,6 +131,8 @@ class FeedViewModel @Inject constructor(
             locationStore.state.filterNotNull().collect { ul ->
                 nearbyPlaces.value = gazetteer.placesIn(ul.country.code, limit = 8)
                 if (!locationPinned) filters.update { it.copy(location = defaultFilterFor(ul)) }
+                // A new city may map to different market feeds: sync them.
+                if (repository.needsResyncFor(ul.place?.lat, ul.place?.lng)) refresh()
             }
         }
         viewModelScope.launch {

@@ -42,13 +42,37 @@ jobs:
           # source silently yields zero events.
           playwright install --with-deps chromium
 
-      - name: Run aggregation pipeline
+      - name: Run aggregation pipeline (launch market, strict floor)
         run: python comprehensive_bahamas_scraper.py --delay 2.0
+
+      # Every other market is best-effort: a broken city never blocks the
+      # Nassau feed. Keys are optional; keyed sources skip cleanly without them.
+      - name: Run per-market pipelines
+        env:
+          TICKETMASTER_API_KEY: ${{ secrets.TICKETMASTER_API_KEY }}
+          SEATGEEK_CLIENT_ID: ${{ secrets.SEATGEEK_CLIENT_ID }}
+          SEATGEEK_CLIENT_SECRET: ${{ secrets.SEATGEEK_CLIENT_SECRET }}
+        run: |
+          mkdir -p feeds/bs-nassau
+          python - <<'PY'
+          import json
+          f = json.load(open("New_Providence_Events.json", encoding="utf-8"))
+          json.dump(f, open("feeds/bs-nassau/events.json", "w", encoding="utf-8"),
+                    ensure_ascii=False, indent=1)
+          PY
+          for m in $(python comprehensive_bahamas_scraper.py --list-markets); do
+            [ "$m" = "bs-nassau" ] && continue
+            echo "::group::market $m"
+            python comprehensive_bahamas_scraper.py --market "$m" --delay 2.0 --no-details               || echo "::warning::market $m did not pass (see log)"
+            echo "::endgroup::"
+          done
+          python build_markets_manifest.py
 
       - name: Stage feed for Pages
         run: |
           mkdir -p _site/.well-known
           cp New_Providence_Events.json _site/events.json
+          cp -r feeds _site/feeds
           cp site/privacy.html _site/privacy.html
           cp site/index.html _site/index.html
           cp site/assetlinks.json _site/.well-known/assetlinks.json

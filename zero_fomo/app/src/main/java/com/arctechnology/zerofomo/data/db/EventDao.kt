@@ -83,6 +83,21 @@ interface EventDao {
     @Query("DELETE FROM events")
     suspend fun deleteAllEvents()
 
+    @Query("DELETE FROM events WHERE market = :market")
+    suspend fun deleteMarket(market: String)
+
+    /** Events of markets no longer synced, once they are in the past: the
+     *  cache never grows unbounded when the user travels. */
+    @Query("DELETE FROM events WHERE market NOT IN (:keep) AND epochDay < :today")
+    suspend fun deletePastOutsideMarkets(keep: List<String>, today: Long)
+
+    /** Replace one market's rows without touching other markets or favorites. */
+    @Transaction
+    suspend fun replaceMarket(market: String, events: List<EventEntity>) {
+        deleteMarket(market)
+        upsertAll(events)
+    }
+
     // Delete-then-insert (not NOT IN (:ids)) on purpose: binding one SQLite
     // variable per id hits the 999-variable cap once the two-year feed grows.
     // Favorites live in their own table, so a full replace loses nothing.

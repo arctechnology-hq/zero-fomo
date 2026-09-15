@@ -32,3 +32,6 @@ zero_fomo/local.properties
 
 # Session checklist, not source
 plan.md
+
+# Per-market feed outputs (built by CI / scrape runs)
+feeds/

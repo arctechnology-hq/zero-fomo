@@ -26,8 +26,25 @@ python comprehensive_bahamas_scraper.py
 ```
 
 Outputs: `New_Providence_Events.xlsx` (+ CSV) for humans,
-`New_Providence_Events.json` (schema_version 1) as the app feed —
+`New_Providence_Events.json` (schema_version 2) as the app feed —
 publish it as `events.json` on any static host.
+
+### Markets (global, since 2026-09-15)
+
+One pipeline run = one market. `markets/<id>.json` declares the sources (with
+per-source params such as the Eventbrite location slug), the geo centre and
+radius for the API sources, timezone and currency:
+
+```
+python comprehensive_bahamas_scraper.py --list-markets
+python comprehensive_bahamas_scraper.py --market us-miami          # -> feeds/us-miami/events.json
+python build_markets_manifest.py                                    # -> feeds/markets.json
+```
+
+Keyed global sources (`ticketmaster`, `seatgeek`) read `TICKETMASTER_API_KEY`
+and `SEATGEEK_CLIENT_ID` (+ optional `SEATGEEK_CLIENT_SECRET`) and skip cleanly
+when unset. The app fetches `feeds/markets.json` and syncs the nearest markets to
+the user's city; see `docs/GLOBAL_DESIGN.md`.
 
 ## Android app
 

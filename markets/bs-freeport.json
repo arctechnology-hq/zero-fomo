@@ -1,0 +1,15 @@
+{
+  "id": "bs-freeport",
+  "name": "Freeport, Grand Bahama",
+  "country": "BS",
+  "tz": "America/Nassau",
+  "lat": 26.533,
+  "lng": -78.7,
+  "radius_km": 40,
+  "currency": "BSD",
+  "sources": {
+    "eventbrite": {
+      "slug": "bahamas--freeport"
+    }
+  }
+}

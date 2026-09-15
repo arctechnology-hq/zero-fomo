@@ -1,0 +1,17 @@
+{
+  "id": "jm-kingston",
+  "name": "Kingston",
+  "country": "JM",
+  "tz": "America/Jamaica",
+  "lat": 17.997,
+  "lng": -76.794,
+  "radius_km": 40,
+  "currency": "JMD",
+  "sources": {
+    "ticketmaster": {},
+    "seatgeek": {},
+    "eventbrite": {
+      "slug": "jamaica--kingston"
+    }
+  }
+}

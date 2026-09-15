@@ -1,0 +1,17 @@
+{
+  "id": "us-orlando",
+  "name": "Orlando",
+  "country": "US",
+  "tz": "America/New_York",
+  "lat": 28.538,
+  "lng": -81.379,
+  "radius_km": 50,
+  "currency": "USD",
+  "sources": {
+    "ticketmaster": {},
+    "seatgeek": {},
+    "eventbrite": {
+      "slug": "fl--orlando"
+    }
+  }
+}

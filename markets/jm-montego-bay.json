@@ -1,0 +1,15 @@
+{
+  "id": "jm-montego-bay",
+  "name": "Montego Bay",
+  "country": "JM",
+  "tz": "America/Jamaica",
+  "lat": 18.471,
+  "lng": -77.919,
+  "radius_km": 40,
+  "currency": "JMD",
+  "sources": {
+    "eventbrite": {
+      "slug": "jamaica--montego-bay"
+    }
+  }
+}

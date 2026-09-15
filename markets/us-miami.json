@@ -1,0 +1,17 @@
+{
+  "id": "us-miami",
+  "name": "Miami",
+  "country": "US",
+  "tz": "America/New_York",
+  "lat": 25.774,
+  "lng": -80.194,
+  "radius_km": 50,
+  "currency": "USD",
+  "sources": {
+    "ticketmaster": {},
+    "seatgeek": {},
+    "eventbrite": {
+      "slug": "fl--miami"
+    }
+  }
+}

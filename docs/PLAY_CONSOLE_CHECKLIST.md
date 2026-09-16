@@ -38,7 +38,11 @@ address #22 Denice Cay, Venice Bay, Nassau, New Providence; TIN certificate
 (Form 18A) uploaded as tax registration; CIAL Business Information Report
 workbook completed and uploaded (copy in the FIE secrets folder next to the
 keystore). Plan: "Access" (free). Expect the number by email within 30 business
-days (target ~2026-10-23); D&B may phone +1 242 804 9467 to validate.
+days; D&B may phone +1 242 804 9467 to validate.
+**Status 2026-09-16:** Dunsguide My Account shows reference **210745**,
+"Delivery in progress", estimated delivery **2026-10-26** (39 days). A paid
+plan promises 2 business days if the Play submission can't wait. Check at
+https://www.dunsguide.com/my-account (CIAL login as rhan.richardson@arctechnologyhq.com).
 
 ## 2. Play Console account (you, ~20 min + verification)
 

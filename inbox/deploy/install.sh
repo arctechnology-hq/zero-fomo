@@ -29,8 +29,14 @@ if [ -f "/etc/letsencrypt/live/$HOST/fullchain.pem" ]; then
   a2ensite -q "$HOST.conf" >/dev/null
 else
   a2dissite -q "$HOST.conf" >/dev/null 2>&1 || true
-  echo "TLS cert missing. After the DNS record resolves here, run:"
-  echo "  certbot certonly --webroot -w /var/www/acme -d $HOST --non-interactive --agree-tos --register-unsafely-without-email"
+  # Port 80 is closed on fie-worker-1 (host firewall + OCI security list only
+  # pass 443), so HTTP-01 through Cloudflare returns 522. Validate over DNS with
+  # a token scoped to the 0fomo.app zone (/root/.secrets/cloudflare-0fomo.ini,
+  # "dns_cloudflare_api_token = ..."). Let's Encrypt caches NXDOMAIN for the
+  # zone's negative TTL, so keep the propagation wait generous.
+  echo "TLS cert missing. With the 0fomo.app token in /root/.secrets/cloudflare-0fomo.ini, run:"
+  echo "  certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/.secrets/cloudflare-0fomo.ini \\"
+  echo "    --dns-cloudflare-propagation-seconds 120 -d $HOST --non-interactive --agree-tos --register-unsafely-without-email"
   echo "  a2ensite $HOST.conf && apache2ctl configtest && systemctl reload apache2"
 fi
 if apache2ctl configtest >/dev/null 2>&1; then

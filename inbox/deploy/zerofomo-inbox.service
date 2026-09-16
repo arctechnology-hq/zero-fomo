@@ -11,6 +11,7 @@ WorkingDirectory=/opt/zerofomo-inbox
 EnvironmentFile=-/etc/zerofomo-inbox.env
 Environment=INBOX_DATA_DIR=/var/lib/zerofomo-inbox
 Environment=INBOX_PORT=8787
+Environment=PYTHONUNBUFFERED=1
 ExecStart=/usr/bin/python3 /opt/zerofomo-inbox/server.py
 Restart=always
 RestartSec=3

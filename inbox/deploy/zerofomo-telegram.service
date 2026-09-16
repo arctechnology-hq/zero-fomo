@@ -10,6 +10,7 @@ Group=zerofomo
 WorkingDirectory=/var/lib/zerofomo-inbox
 EnvironmentFile=/etc/zerofomo-inbox.env
 Environment=INBOX_URL=http://127.0.0.1:8787
+Environment=PYTHONUNBUFFERED=1
 Environment=TELEGRAM_STATE=/var/lib/zerofomo-inbox/.telegram.offset
 ExecStart=/usr/bin/python3 /opt/zerofomo-inbox/telegram_bridge.py
 Restart=always

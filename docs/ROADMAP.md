@@ -73,9 +73,12 @@ Decisions and design in `GLOBAL_DESIGN.md`. Shipped on the Android codebase:
       `community` pipeline source. Live at `https://inbox.0fomo.app`
       (fie-worker-1, 2026-09-16; DNS-validated cert, port 80 stays closed).
       RR-002's 06:00 run pulls, extracts and auto-approves submissions.
-- [ ] G4 Bots + social: Telegram bridge shipped (2026-09-16, staged on the
-      node until a BotFather token is added to `/etc/zerofomo-inbox.env`);
-      Discord bot, Instagram hashtag search, Reddit still to build.
+- [ ] G4 Bots + social: Telegram @zerofomo_app_bot LIVE (2026-09-16).
+      Discord (REST polling) and Instagram (hashtag search) bridges written
+      and staged on the node; each starts when its credentials land in
+      `/etc/zerofomo-inbox.env` (Discord: bot token + Message Content intent
+      + channel map; Instagram: Meta app review, business account, long-lived
+      token, hashtag map). Reddit still to build.
 
 ## Phase 2 — Backend v1 on GCP + OCI + B2 (weeks 2–7, overlaps Phase 1)
 

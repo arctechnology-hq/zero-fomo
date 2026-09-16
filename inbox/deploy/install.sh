@@ -12,12 +12,23 @@ install -d -m 0755 /opt/zerofomo-inbox
 install -m 0644 "$SRC/server.py" /opt/zerofomo-inbox/server.py
 install -m 0644 "$SRC/telegram_bridge.py" /opt/zerofomo-inbox/telegram_bridge.py
 install -m 0644 "$SRC/deploy/zerofomo-telegram.service" /etc/systemd/system/zerofomo-telegram.service
-# The Telegram bridge only starts once TELEGRAM_BOT_TOKEN is in /etc/zerofomo-inbox.env.
-if grep -q '^TELEGRAM_BOT_TOKEN=.\+' /etc/zerofomo-inbox.env 2>/dev/null; then
-  systemctl enable --now zerofomo-telegram; systemctl restart zerofomo-telegram
-else
-  echo "telegram bridge staged; add TELEGRAM_BOT_TOKEN=<BotFather token> to /etc/zerofomo-inbox.env and run: systemctl enable --now zerofomo-telegram"
-fi
+install -m 0644 "$SRC/discord_bridge.py" /opt/zerofomo-inbox/discord_bridge.py
+install -m 0644 "$SRC/deploy/zerofomo-discord.service" /etc/systemd/system/zerofomo-discord.service
+install -m 0644 "$SRC/instagram_bridge.py" /opt/zerofomo-inbox/instagram_bridge.py
+install -m 0644 "$SRC/deploy/zerofomo-instagram.service" /etc/systemd/system/zerofomo-instagram.service
+systemctl daemon-reload
+# Each bridge only starts once its credentials are in /etc/zerofomo-inbox.env.
+stage() {  # $1 unit, $2 required env var, $3 hint
+  if grep -q "^$2=.\+" /etc/zerofomo-inbox.env 2>/dev/null; then
+    systemctl enable --now "$1" >/dev/null 2>&1; systemctl restart "$1"; echo "$1: running"
+  else
+    systemctl disable --now "$1" >/dev/null 2>&1 || true
+    echo "$1 staged; add $2=... ($3) to /etc/zerofomo-inbox.env, then: systemctl enable --now $1"
+  fi
+}
+stage zerofomo-telegram  TELEGRAM_BOT_TOKEN "BotFather token"
+stage zerofomo-discord   DISCORD_BOT_TOKEN  "Discord bot token + DISCORD_CHANNEL_MARKETS=channel_id=market,..."
+stage zerofomo-instagram IG_ACCESS_TOKEN    "long-lived token + IG_USER_ID + IG_HASHTAGS=tag=market,..."
 [ -f /etc/zerofomo-inbox.env ] || { echo "INBOX_TOKEN=$(head -c 24 /dev/urandom | base64 | tr -d '/+=' )" > /etc/zerofomo-inbox.env; chmod 0600 /etc/zerofomo-inbox.env; }
 install -m 0644 "$SRC/deploy/zerofomo-inbox.service" /etc/systemd/system/zerofomo-inbox.service
 systemctl daemon-reload

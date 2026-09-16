@@ -105,8 +105,12 @@ inbox/review.py              list / show / approve [--set field=value] / reject 
                              dated, venued) -> inbox/approved/<market>.json
 pipeline `community` source  CommunityEventsScraper ingests inbox/approved/<market>.json per market;
                              community rows dedupe against scraped/API rows like any other source
-inbox/telegram_bridge.py     G4: long-polling bot -> /submit for groups that add it (photos + posts,
-                             /market <id> by admins); staged until TELEGRAM_BOT_TOKEN is set
+inbox/telegram_bridge.py     G4: long-polling bot @zerofomo_app_bot -> /submit for groups that add it
+                             (photos + posts, /market <id> by admins); LIVE 2026-09-16
+inbox/discord_bridge.py      G4: REST-polls listed channels (DISCORD_CHANNEL_MARKETS) with a bot that has
+                             the Message Content intent; images + posts -> /submit; staged until token
+inbox/instagram_bridge.py    G4: Graph API hashtag search (Business account, IG_HASHTAGS=tag=market);
+                             public images -> flyers, videos/albums -> caption + permalink; staged
 inbox/deploy/                systemd units, Apache vhosts (port-80 redirect + TLS proxy to 127.0.0.1:8787),
                              install.sh; TLS by certbot dns-cloudflare with a 0fomo.app-scoped token
                              (port 80 is closed on fie-worker-1, so HTTP-01 cannot work there)

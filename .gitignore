@@ -39,3 +39,7 @@ feeds/
 # Community inbox runtime data (submissions + images) — never source
 inbox/data/
 inbox/.server.log
+
+# Reviewer output lives in the residential run's feeds (feed-data), never in source
+inbox/approved/
+inbox/telegram.offset*

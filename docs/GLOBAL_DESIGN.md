@@ -104,7 +104,9 @@ inbox/review.py              list / show / approve [--set field=value] / reject 
                              dated, venued) -> inbox/approved/<market>.json
 pipeline `community` source  CommunityEventsScraper ingests inbox/approved/<market>.json per market;
                              community rows dedupe against scraped/API rows like any other source
-inbox/deploy/                systemd unit, Apache vhosts (port-80 redirect + TLS proxy to 127.0.0.1:8787),
+inbox/telegram_bridge.py     G4: long-polling bot -> /submit for groups that add it (photos + posts,
+                             /market <id> by admins); staged until TELEGRAM_BOT_TOKEN is set
+inbox/deploy/                systemd units, Apache vhosts (port-80 redirect + TLS proxy to 127.0.0.1:8787),
                              install.sh; TLS by certbot dns-cloudflare with a 0fomo.app-scoped token
                              (port 80 is closed on fie-worker-1, so HTTP-01 cannot work there)
 ```

@@ -70,10 +70,12 @@ Decisions and design in `GLOBAL_DESIGN.md`. Shipped on the Android codebase:
       coverage and rely on Eventbrite + forwarding (G3).
 - [x] G3 Forwarding (2026-09-15): "Send to 0 FOMO" share target → queued
       upload → `inbox/server.py` → Gemini/DeepSeek extraction → review CLI →
-      `community` pipeline source. Deploy to fie-worker-1 as
-      `inbox.0fomo.app` (DNS + certbot) is the remaining step; see
-      `inbox/deploy/`.
-- [ ] G4 Telegram + Discord bots, Instagram hashtag search, Reddit.
+      `community` pipeline source. Live at `https://inbox.0fomo.app`
+      (fie-worker-1, 2026-09-16; DNS-validated cert, port 80 stays closed).
+      RR-002's 06:00 run pulls, extracts and auto-approves submissions.
+- [ ] G4 Bots + social: Telegram bridge shipped (2026-09-16, staged on the
+      node until a BotFather token is added to `/etc/zerofomo-inbox.env`);
+      Discord bot, Instagram hashtag search, Reddit still to build.
 
 ## Phase 2 — Backend v1 on GCP + OCI + B2 (weeks 2–7, overlaps Phase 1)
 

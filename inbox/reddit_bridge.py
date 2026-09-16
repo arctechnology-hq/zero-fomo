@@ -25,7 +25,8 @@ Env:
                             case-insensitive) or carry an event-ish flair.
                             Empty string = forward everything.
   REDDIT_POLL_SECONDS       default 600
-  REDDIT_REQUEST_GAP        seconds between subreddit requests, default 8
+  REDDIT_REQUEST_GAP        seconds between subreddit requests, default 20
+                            (8 s still drew 429s on 2026-09-16)
   REDDIT_STATE              newest created_utc per subreddit (default ./reddit.state.json)
   REDDIT_DRY_RUN            "1" prints submissions instead of POSTing them
   INBOX_URL / INBOX_TOKEN   as for the other bridges
@@ -53,7 +54,7 @@ CLIENT_ID = os.environ.get("REDDIT_CLIENT_ID", "").strip()
 CLIENT_SECRET = os.environ.get("REDDIT_CLIENT_SECRET", "").strip()
 STATE = os.environ.get("REDDIT_STATE", os.path.join(os.path.dirname(os.path.abspath(__file__)), "reddit.state.json"))
 POLL = int(os.environ.get("REDDIT_POLL_SECONDS", "600"))
-GAP = float(os.environ.get("REDDIT_REQUEST_GAP", "8"))
+GAP = float(os.environ.get("REDDIT_REQUEST_GAP", "20"))
 DRY_RUN = os.environ.get("REDDIT_DRY_RUN", "") == "1"
 UA = "zerofomo-bridge/1.0 (events inbox; https://0fomo.app; contact info@arctechnologyhq.com)"
 DEFAULT_KEYWORDS = ("event,party,concert,festival,fest,tickets,show,tonight,this weekend,live music,flyer,night,live,"
@@ -104,7 +105,7 @@ def _http(url: str, headers: dict | None = None, data: bytes | None = None, time
                 return r.read()
         except urllib.error.HTTPError as e:
             if e.code == 429 and attempt < 2:
-                time.sleep(min(float(e.headers.get("Retry-After") or 15), 120))
+                time.sleep(min(max(float(e.headers.get("Retry-After") or 0), 60.0), 180))
                 continue
             raise
     raise RuntimeError(f"gave up on {url}")
@@ -266,7 +267,7 @@ def poll_once(markets: dict[str, str], state: dict) -> int:
     use_oauth = bool(CLIENT_ID and CLIENT_SECRET)
     for i, (sub, market) in enumerate(markets.items()):
         if i:
-            time.sleep(GAP)  # Reddit 429s bursts even on RSS
+            time.sleep(GAP)  # Reddit 429s bursts even on RSS (per-IP, ~1 req / 10-20 s)
         try:
             posts = posts_via_oauth(sub) if use_oauth else posts_via_rss(sub)
             newest = max((float(p.get("created_utc") or 0) for p in posts), default=0.0)

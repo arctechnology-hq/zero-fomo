@@ -29,7 +29,7 @@ MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash")
 ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 
 CATEGORIES = [
-    "JUNKANOO_CULTURAL", "REGATTA_MARITIME", "FARMERS_CRAFT_MARKET", "FAIR_POPUP",
+    "CULTURE_HERITAGE", "REGATTA_MARITIME", "FARMERS_CRAFT_MARKET", "FAIR_POPUP",
     "FESTIVAL", "CONCERT_LIVE_MUSIC", "CLUB_PROMOTION", "NIGHTLIFE_PARTY", "BEACH_PARTY",
     "COMEDY", "PAGEANT", "FOOD_DRINK", "SPORTS_FITNESS", "ARTS_THEATRE", "CONFERENCE_EXPO",
     "BUSINESS_NETWORKING", "FAITH_COMMUNITY", "GENERAL",
@@ -106,6 +106,8 @@ def deepseek_text(prompt_text: str, api_key: str) -> dict:
 
 def normalise(ev: dict) -> dict:
     cat = str(ev.get("category") or "GENERAL").upper()
+    if cat == "JUNKANOO_CULTURAL":
+        cat = "CULTURE_HERITAGE"
     if cat not in CATEGORIES:
         cat = "GENERAL"
     conf = ev.get("confidence")

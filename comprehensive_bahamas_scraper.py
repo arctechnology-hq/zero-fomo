@@ -213,7 +213,7 @@ OTHER_ISLAND_KEYWORDS = [
 # Plain entries match as substrings; "re:" entries are regexes — use those for
 # short words ("fair") that would otherwise fire inside longer ones ("affair").
 CATEGORY_RULES: list[tuple[str, list[str]]] = [
-    ("Junkanoo / Cultural",  ["junkanoo", "heritage", "cultural", "independence",
+    ("Culture / Heritage",   ["junkanoo", "heritage", "cultural", "independence",
                               "emancipation", "goombay", "rake and scrape",
                               "rake n scrape", "rake 'n' scrape", "majority rule"]),
     ("Regatta / Maritime",   ["regatta", "sailing", "boat ride", "boat cruise",
@@ -1550,7 +1550,7 @@ class TicketmasterScraper(BaseScraper):
         events: list[Event] = []
         radius = int(self.params.get("radius_km", self.market.radius_km))
         page, size = 0, 200
-        while page < max(self.max_pages, 5):
+        while page < max(self.max_pages, 10):
             resp = self.engine.get(self.URL, params={
                 "apikey": key,
                 "latlong": f"{self.market.lat},{self.market.lng}",
@@ -1625,7 +1625,7 @@ class SeatGeekScraper(BaseScraper):
         events: list[Event] = []
         radius = int(self.params.get("radius_km", self.market.radius_km))
         page, per_page = 1, 100
-        while page <= max(self.max_pages, 5):
+        while page <= max(self.max_pages, 10):
             params = {
                 "client_id": cid, "lat": self.market.lat, "lon": self.market.lng,
                 "range": f"{radius}km", "per_page": per_page, "page": page,
@@ -1726,6 +1726,7 @@ CATEGORY_SLUG_TO_LABEL = {
     for label, _ in CATEGORY_RULES
 }
 CATEGORY_SLUG_TO_LABEL.setdefault("GENERAL", DEFAULT_CATEGORY)
+CATEGORY_SLUG_TO_LABEL.setdefault("JUNKANOO_CULTURAL", "Culture / Heritage")   # retired slug
 
 
 class ManualEventsScraper(BaseScraper):

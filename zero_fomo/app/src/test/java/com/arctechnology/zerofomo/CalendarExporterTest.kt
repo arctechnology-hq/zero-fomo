@@ -22,7 +22,7 @@ class CalendarExporterTest {
         timeStart = timeStart, timeEnd = timeEnd, venue = venue,
         island = null, lat = null, lng = null,
         priceMin = null, priceMax = null, isFree = false,
-        category = EventCategory.JUNKANOO_CULTURAL,
+        category = EventCategory.CULTURE_HERITAGE,
         sourceUrl = "https://example.com/tix", description = "Big time",
     )
 

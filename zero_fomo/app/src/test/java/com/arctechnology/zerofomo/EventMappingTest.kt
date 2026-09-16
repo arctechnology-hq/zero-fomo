@@ -93,6 +93,9 @@ class EventMappingTest {
             EventCategory.fromSlug("farmers_craft_market"))
     }
 
+    @Test fun `retired slug JUNKANOO_CULTURAL maps to Culture Heritage`() =
+        assertEquals(EventCategory.CULTURE_HERITAGE, EventCategory.fromSlug("junkanoo_cultural"))
+
     @Test fun `unknown slug degrades to UNKNOWN not a crash`() =
         assertEquals(EventCategory.UNKNOWN, EventCategory.fromSlug("HOT_AIR_BALLOON"))
 }

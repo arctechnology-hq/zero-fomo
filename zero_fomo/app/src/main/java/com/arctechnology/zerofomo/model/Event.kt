@@ -45,7 +45,7 @@ data class Event(
 /** Mirrors the ETL pipeline's category taxonomy. UNKNOWN absorbs any new
  *  slug the feed introduces before the app is updated — never crash on data. */
 enum class EventCategory(val label: String, val slug: String) {
-    JUNKANOO_CULTURAL("Junkanoo / Cultural", "JUNKANOO_CULTURAL"),
+    CULTURE_HERITAGE("Culture / Heritage", "CULTURE_HERITAGE"),   // was JUNKANOO_CULTURAL (Bahamas-only name)
     REGATTA_MARITIME("Regatta / Maritime", "REGATTA_MARITIME"),
     FARMERS_CRAFT_MARKET("Farmers / Craft Market", "FARMERS_CRAFT_MARKET"),
     FAIR_POPUP("Fair / Popup", "FAIR_POPUP"),
@@ -66,7 +66,11 @@ enum class EventCategory(val label: String, val slug: String) {
     UNKNOWN("Other", "UNKNOWN");
 
     companion object {
+        /** Old feed slugs keep resolving so a stale cache or an old feed never degrades to Other. */
+        private val ALIASES = mapOf("JUNKANOO_CULTURAL" to CULTURE_HERITAGE)
+
         fun fromSlug(slug: String?): EventCategory =
-            entries.firstOrNull { it.slug.equals(slug, ignoreCase = true) } ?: UNKNOWN
+            entries.firstOrNull { it.slug.equals(slug, ignoreCase = true) }
+                ?: ALIASES[slug?.uppercase()] ?: UNKNOWN
     }
 }

@@ -148,7 +148,7 @@ fun ZeroFomoTheme(
 /** Stable per-category accent used by cards, chips and detail headers. */
 val EventCategory.accent: Color
     get() = when (this) {
-        EventCategory.JUNKANOO_CULTURAL -> Color(0xFFE65100)
+        EventCategory.CULTURE_HERITAGE -> Color(0xFFE65100)
         EventCategory.REGATTA_MARITIME -> Color(0xFF0277BD)
         EventCategory.FARMERS_CRAFT_MARKET -> Color(0xFF558B2F)
         EventCategory.FAIR_POPUP -> Color(0xFF9E9D24)
@@ -172,7 +172,7 @@ val EventCategory.accent: Color
  *  detail hero without shipping a single image asset. */
 val EventCategory.emoji: String
     get() = when (this) {
-        EventCategory.JUNKANOO_CULTURAL -> "🥁"
+        EventCategory.CULTURE_HERITAGE -> "🥁"
         EventCategory.REGATTA_MARITIME -> "⛵"
         EventCategory.FARMERS_CRAFT_MARKET -> "🧺"
         EventCategory.FAIR_POPUP -> "🎪"

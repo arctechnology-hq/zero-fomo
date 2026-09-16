@@ -82,10 +82,11 @@ Ticketmaster and SeatGeek APIs remain the sustainable route for US markets
 once their keys are registered as repo secrets. Rows without coordinates get the
 market centroid outside the Bahamas so "Near <city>" still finds them.
 
-Known follow-ups: the category taxonomy is Bahamas-flavoured ("Junkanoo /
-Cultural" fires on "heritage" in Miami); rename to "Culture / Heritage" when the
-app and pipeline can roll a slug change together. Bandsintown, Songkick and the
-Bahamian ticketing sites remain Nassau-only source adapters.
+Taxonomy: "Junkanoo / Cultural" became "Culture / Heritage" (slug
+`CULTURE_HERITAGE`) on 2026-09-16; the app maps the retired slug so old feeds
+and caches keep their category. API sources page up to 1,000 events per market.
+Bandsintown, Songkick and the Bahamian ticketing sites remain Nassau-only
+source adapters.
 
 ## 2c. What shipped in slice 3 (G3 forwarding, 2026-09-15)
 

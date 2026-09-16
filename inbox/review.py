@@ -6,6 +6,7 @@
     python inbox/review.py approve <submission_id> [--event N] [--set field=value ...]
     python inbox/review.py reject  <submission_id> [--reason "..."]
     python inbox/review.py auto [--min-confidence 0.85]     # approve confident, dated, venued events
+    python inbox/review.py purge [--days 90]                # delete reviewed submissions older than N days
 
 Approved events are appended to inbox/approved/<market>.json, which the
 pipeline's `community` source ingests per market (comprehensive_bahamas_scraper
@@ -16,7 +17,9 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import sys
+import time
 from datetime import datetime, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -156,6 +159,21 @@ def cmd_auto(args):
     print(f"auto-approved {n} event(s)")
 
 
+def cmd_purge(args):
+    """Retention promise in site/privacy.html: forwarded posts live at most
+    --days days. Only reviewed folders go (an unreviewed one still needs eyes);
+    approved events already sit in inbox/approved/ and survive."""
+    cutoff = time.time() - args.days * 86400
+    n = 0
+    for market, sid, sdir in submissions(args.market):
+        if not load(os.path.join(sdir, "review.json")):
+            continue
+        if os.path.getmtime(os.path.join(sdir, "submission.json")) < cutoff:
+            shutil.rmtree(sdir, ignore_errors=True)
+            n += 1
+    print(f"purged {n} reviewed submission(s) older than {args.days} days")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     sp = ap.add_subparsers(dest="cmd", required=True)
@@ -164,6 +182,7 @@ def main() -> int:
     p = sp.add_parser("approve"); p.add_argument("id"); p.add_argument("--event", type=int); p.add_argument("--set", action="append"); p.set_defaults(fn=cmd_approve)
     p = sp.add_parser("reject"); p.add_argument("id"); p.add_argument("--reason", default=""); p.set_defaults(fn=cmd_reject)
     p = sp.add_parser("auto"); p.add_argument("--market", default=""); p.add_argument("--min-confidence", type=float, default=0.85); p.set_defaults(fn=cmd_auto)
+    p = sp.add_parser("purge"); p.add_argument("--market", default=""); p.add_argument("--days", type=int, default=90); p.set_defaults(fn=cmd_purge)
     args = ap.parse_args()
     args.fn(args)
     return 0

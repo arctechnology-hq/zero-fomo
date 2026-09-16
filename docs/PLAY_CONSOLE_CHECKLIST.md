@@ -108,16 +108,37 @@ App, Free. Declarations: no ads; not designed for children; no government app.
 **Content rating (IARC):** category Utility/Productivity/Communication/Other →
 no violence, no sexual content, no profanity, no controlled substances (event
 listings may link to venues that serve alcohol, but the app does not depict or
-promote it), no user interaction, no sharing of location, no purchases.
-Expected rating: Everyone / PEGI 3.
+promote it), no purchases, no sharing of location. **User interaction:** the
+"Send to 0 FOMO" share target lets users forward posts; forwarded content is
+extracted and reviewed (auto-approved only above 0.85 confidence, otherwise by
+a person) before it can appear as a listing, and users never see each other's
+raw submissions. Answer the "users can share content" questions accordingly
+(content is moderated before publication). Expected rating: Everyone / PEGI 3.
 **Target audience:** 18 and over. Not appealing to children.
-**News app:** No. **COVID-19 tracing:** No. **Data safety:**
+**News app:** No. **COVID-19 tracing:** No.
+
+**Data safety** (what the app actually does as of v0.9.x; policy text at
+`site/privacy.html` matches this table; verify against the code before the
+first submission if anything shipped since):
 
 | Question | Answer |
 |---|---|
-| Does your app collect or share any of the required user data types? | **No** |
-| Is all user data encrypted in transit? | Yes (HTTPS) |
-| Do you provide a way for users to request deletion? | Not applicable (no data collected) |
+| Does your app collect or share any of the required user data types? | **Yes** (only via "Send to 0 FOMO") |
+| Is all of the user data collected by your app encrypted in transit? | Yes (HTTPS, inbox.0fomo.app) |
+| Do you provide a way for users to request that their data is deleted? | Yes (email request; no accounts exist) |
+| Account creation / account deletion | Not applicable (no accounts) |
+
+Data types to declare (leave every other type unchecked):
+
+| Data type | Collected | Shared | Optional? | Ephemeral | Purpose | Notes |
+|---|---|---|---|---|---|---|
+| Location → Approximate location | **No** | No | — | — | — | Coarse fix is matched to the bundled gazetteer on-device; only the city name is kept and nothing is transmitted. Under Play's definition (transmitted off-device) this is not collected. Keep the `ACCESS_COARSE_LOCATION` permission declared in the permissions section only. |
+| Photos and videos → Photos | **Yes** | No | Optional (user-initiated) | No (kept ≤ 90 days) | App functionality | Flyer image the user forwards. Processed by Google Gemini API / DeepSeek API as service providers (not "sharing" under Play's definition). |
+| App activity → Other user-generated content | **Yes** | No | Optional (user-initiated) | No (kept ≤ 90 days) | App functionality | Forwarded text / link + optional note. |
+| Device or other IDs | **Yes** | No | Required for the forward feature only | No | Fraud prevention, security and compliance | Random per-install ID sent only with forwarded posts, for hourly rate limiting. Not the advertising ID, not a hardware ID. |
+| Personal info, Financial, Health, Messages, Contacts, Calendar, Files, Audio, Installed apps, Browsing, Crash logs, Diagnostics | No | No | — | — | — | Not collected. Crash reporting is planned before the 50 % rollout; add "Crash logs" + "Diagnostics" (collected, not shared, analytics) when Crashlytics lands and update the privacy page first. |
+
+**Advertising ID:** the app does not use it (declare "No").
 
 **Government apps:** No. **Financial features:** None. **Health:** None.
 **Advertising ID:** the app does not use it (declare "No").
@@ -142,7 +163,9 @@ Expected rating: Everyone / PEGI 3.
 - [x] Target API 36 (AGP 8.11.2, Gradle 8.13, Kotlin 2.1.21).
 - [x] Privacy policy page served from the Pages site at https://0fomo.app/privacy.html (DNS: 4 apex A records + www CNAME, DNS-only, added 2026-09-11).
 - [x] Store icon + feature graphic rendered from the mark.
-- [x] Listing copy.
-- [x] Phone screenshots (4, Galaxy S24+).
+- [x] Listing copy (2026-09-16: location + forwarding lines match v0.9).
+- [ ] Phone screenshots (4, Galaxy S24+) — the current set shows the OLD teal
+      theme; retake on v0.9.x with the country-themed mark before submission.
+- [x] Privacy page + Data safety answers cover "Send to 0 FOMO" (2026-09-16).
 - [ ] Crash reporting (Crashlytics) — not required for submission; planned before
       the 50 % rollout step.

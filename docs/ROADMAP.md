@@ -78,7 +78,11 @@ Decisions and design in `GLOBAL_DESIGN.md`. Shipped on the Android codebase:
       and staged on the node; each starts when its credentials land in
       `/etc/zerofomo-inbox.env` (Discord: bot token + Message Content intent
       + channel map; Instagram: Meta app review, business account, long-lived
-      token, hashtag map). Reddit still to build.
+      token, hashtag map). Land credentials with
+      `inbox/deploy/Set-BridgeSecret.ps1` (upserts the env file over SSH,
+      enables the unit, sets the local env var). Discord app "0 FOMO"
+      (id 1549801490304995423) exists with the intent on; the token is
+      still to be reset + landed (2026-09-16). Reddit still to build.
 
 ## Phase 2 — Backend v1 on GCP + OCI + B2 (weeks 2–7, overlaps Phase 1)
 

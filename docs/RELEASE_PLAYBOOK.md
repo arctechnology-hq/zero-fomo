@@ -60,8 +60,10 @@ keytool -genkeypair -v -keystore zerofomo-upload.jks -alias zerofomo-upload \
 | Category | Events |
 | Contact | `info@arctechnologyhq.com`, website, privacy policy URL |
 
-Content rating questionnaire: Events/Utility, no user-generated content, no ads.
-Data safety: no data collected or shared; optional notifications. App access:
+Content rating questionnaire: Events/Utility, forwarded posts are moderated
+before publication, no ads. Data safety: see `PLAY_CONSOLE_CHECKLIST.md` §7 —
+forwarded posts (photos + user content) and a random install ID are collected,
+nothing shared; approximate location is on-device only. App access:
 all features available without credentials. Ads: none. Target audience: 18+ (event
 listings may include bars/nightlife).
 

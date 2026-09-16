@@ -185,8 +185,14 @@ user who opens the app in Lisbon.
 - `site/privacy.html` updated 2026-09-15 to describe the coarse fix and the
   offline match.
 - Forwarded content: the sender's identity is not stored; the post content is
-  processed for event fields and the original is discarded after extraction
-  unless it is published as the event's media (organiser-uploadable later).
+  processed for event fields and the original is kept ≤ 90 days for review
+  (`review.py purge`, node-side `find -mtime +90` in the 06:00 run), then
+  deleted unless published as the event's media (organiser-uploadable later).
+- Data safety (2026-09-16): declare Photos + Other user-generated content +
+  Device or other IDs (random install id, rate limiting) as collected, not
+  shared, optional; Gemini/DeepSeek are service providers. Full table in
+  `PLAY_CONSOLE_CHECKLIST.md` §7; `site/privacy.html` has the matching
+  "Forwarding a post" section.
 
 ## 6. Next slices
 

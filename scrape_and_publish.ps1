@@ -71,6 +71,12 @@ try {
             Add-Content $log
         python "$here\inbox\extract.py" 2>&1 | Add-Content $log
         python "$here\inbox\review.py" auto 2>&1 | Add-Content $log
+        # Retention (site/privacy.html promises <= 90 days): reviewed copies here,
+        # and raw submission folders on the node once they are older than 90 days
+        # (by then they have been pulled and reviewed on this side).
+        python "$here\inbox\review.py" purge --days 90 2>&1 | Add-Content $log
+        & ssh -o BatchMode=yes fie-worker 'sudo find /var/lib/zerofomo-inbox -mindepth 2 -maxdepth 2 -type d -mtime +90 -exec rm -rf {} +' 2>&1 |
+            Add-Content $log
     } catch {
         "inbox step skipped: $_" | Add-Content $log
     }

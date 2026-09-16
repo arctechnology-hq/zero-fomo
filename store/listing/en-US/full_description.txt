@@ -10,10 +10,11 @@ WHAT YOU GET
 • Add to calendar. Google Calendar, Outlook or any calendar app that reads .ics files.
 • Get tickets. One tap to the official ticket page, never a resale middleman.
 • Share it. Send an event to a friend with a link that opens straight in the app.
+• Send it in. See a flyer or a post about an event we missed? Share it to 0 FOMO from any app and it goes to our review queue.
 
 WHAT YOU DO NOT GIVE UP
 • No account. No sign-in.
-• No location permission. You choose the island and area.
+• Location is optional and approximate. Pick your city yourself, or let the app use a coarse city-level position that never leaves your phone.
 • No ads, no tracking, no data sold. Read the privacy policy: it fits on one screen.
 
 Built in Nassau by ARC Technology. Something missing? Tell us at info@arctechnologyhq.com and we will add the source.

@@ -29,6 +29,10 @@
   Instagram: "hashtag=market,..." (no #).
   Telegram: default market id (e.g. bs-nassau); groups set theirs with /market.
   Reddit: "subreddit=market,..." is enough (RSS mode, no credentials).
+.PARAMETER Extra
+  Any additional KEY=value pairs for the env file, e.g.
+  -Extra @{ IG_APP_ID = '1601642318227085'; IG_APP_SECRET = '...' } so the
+  Instagram bridge can refresh its own long-lived token.
   -Token = REDDIT_CLIENT_SECRET with -ClientId = REDDIT_CLIENT_ID only if an
   approved Reddit app ever exists (app creation is approval-gated since 2026).
 #>
@@ -39,6 +43,7 @@ param(
     [string]$Map,
     [string]$IgUserId,
     [string]$ClientId,
+    [hashtable]$Extra,
     [string]$SshHost = 'fie-worker',
     [switch]$NoLocalEnv
 )
@@ -66,7 +71,8 @@ if ($Map) {
 }
 if ($IgUserId) { $vars['IG_USER_ID'] = $IgUserId.Trim() }
 if ($ClientId) { $vars[@{ instagram = 'IG_USER_ID'; reddit = 'REDDIT_CLIENT_ID' }[$Bridge] ?? 'CLIENT_ID'] = $ClientId.Trim() }
-if ($vars.Count -eq 0) { throw "Nothing to set: pass -Token and/or -Map." }
+foreach ($k in ($Extra ?? @{}).Keys) { if ($k -notmatch '^[A-Z][A-Z0-9_]*$') { throw "Extra key '$k' must be UPPER_SNAKE" }; $vars[$k] = [string]$Extra[$k] }
+if ($vars.Count -eq 0) { throw "Nothing to set: pass -Token, -Map and/or -Extra." }
 
 # Bash runs on the node from stdin; values travel inside the script body, so
 # they never appear in argv or in the node's shell history.

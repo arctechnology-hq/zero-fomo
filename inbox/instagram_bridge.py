@@ -18,6 +18,16 @@ Env:
   INBOX_URL / INBOX_TOKEN   as for the other bridges
   IG_STATE            last-seen media id per hashtag (default ./instagram.state.json)
   IG_POLL_SECONDS     default 1800 (30 min; rate limits are per hour)
+  IG_APP_ID / IG_APP_SECRET   optional; when set the bridge refreshes the
+                      long-lived user token itself every ~45 days
+                      (fb_exchange_token) and keeps the newest one in IG_STATE,
+                      so the 60-day expiry never silently kills the poller.
+
+Meta app "0 FOMO": app id 1601642318227085, created 2026-09-16 (Facebook-login
+path of the Instagram API use case; hashtag search needs instagram_basic +
+pages_show_list/pages_read_engagement; dev mode is enough for our own
+account, no App Review). The IG professional account must be linked to the
+Facebook Page "A.R.C Technology" (652922774570717) before a token can carry it.
 """
 from __future__ import annotations
 
@@ -30,7 +40,10 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-TOKEN = os.environ.get("IG_ACCESS_TOKEN", "").strip()
+ENV_TOKEN = os.environ.get("IG_ACCESS_TOKEN", "").strip()
+APP_ID = os.environ.get("IG_APP_ID", "").strip()
+APP_SECRET = os.environ.get("IG_APP_SECRET", "").strip()
+REFRESH_AFTER_DAYS = 45
 USER_ID = os.environ.get("IG_USER_ID", "").strip()
 VERSION = os.environ.get("IG_GRAPH_VERSION", "v21.0")
 INBOX_URL = os.environ.get("INBOX_URL", "http://127.0.0.1:8787").rstrip("/")
@@ -63,8 +76,43 @@ def save_state(st: dict) -> None:
         json.dump(st, fh)
 
 
+_tok: dict = {"token": "", "issued": 0.0}
+
+
+def current_token(state: dict) -> str:
+    """Newest token wins: one the bridge refreshed (kept in state) over the
+    env one, unless the env token changed since (operator rotated it)."""
+    saved = state.get("token") or {}
+    if saved.get("value") and saved.get("env_seed") == ENV_TOKEN:
+        return saved["value"]
+    return ENV_TOKEN
+
+
+def maybe_refresh_token(state: dict) -> None:
+    """Exchange the long-lived token for a fresh 60-day one when it is older
+    than REFRESH_AFTER_DAYS. Needs IG_APP_ID + IG_APP_SECRET; silently skips
+    otherwise (the operator then rotates by hand before day 60)."""
+    if not (APP_ID and APP_SECRET):
+        return
+    saved = state.get("token") or {}
+    issued = float(saved.get("issued") or 0)
+    if saved.get("env_seed") == ENV_TOKEN and time.time() - issued < REFRESH_AFTER_DAYS * 86400:
+        return
+    params = {"grant_type": "fb_exchange_token", "client_id": APP_ID, "client_secret": APP_SECRET,
+              "fb_exchange_token": current_token(state)}
+    try:
+        with urllib.request.urlopen(f"{GRAPH}/oauth/access_token?" + urllib.parse.urlencode(params), timeout=60) as r:
+            d = json.load(r)
+        state["token"] = {"value": d["access_token"], "issued": time.time(), "env_seed": ENV_TOKEN,
+                          "expires_in": d.get("expires_in")}
+        save_state(state)
+        print(f"token refreshed (expires_in={d.get('expires_in')})")
+    except Exception as exc:  # noqa: BLE001
+        print(f"token refresh failed: {type(exc).__name__}: {exc}", file=sys.stderr)
+
+
 def graph_get(path: str, **params):
-    params["access_token"] = TOKEN
+    params["access_token"] = _tok["token"]
     url = f"{GRAPH}/{path}?" + urllib.parse.urlencode(params)
     with urllib.request.urlopen(url, timeout=60) as r:
         return json.load(r)
@@ -106,17 +154,33 @@ def media_to_submission(media: dict, market: str, tag: str) -> dict | None:
 
 
 def main() -> int:
-    if not (TOKEN and USER_ID):
+    if not (ENV_TOKEN and USER_ID):
         print("IG_ACCESS_TOKEN / IG_USER_ID not set", file=sys.stderr)
         return 2
     tags = hashtag_markets()
     if not tags:
         print("IG_HASHTAGS not set; nothing to watch", file=sys.stderr)
         return 2
-    print(f"bridge up for {len(tags)} hashtag(s) as IG user {USER_ID} -> {INBOX_URL}")
     state = load_state()
+    if not (state.get("token") or {}).get("env_seed") == ENV_TOKEN:
+        # New env token: start its age clock now so the refresh cadence is right.
+        state["token"] = {"value": "", "issued": time.time(), "env_seed": ENV_TOKEN}
+        save_state(state)
+    maybe_refresh_token(state)
+    _tok["token"] = current_token(state)
+    try:
+        me = graph_get("me", fields="id,name")
+        print(f"bridge up for {len(tags)} hashtag(s) as {me.get('name')} / IG user {USER_ID} -> {INBOX_URL}")
+    except urllib.error.HTTPError as e:
+        print(f"token check failed: HTTP {e.code} {e.read()[:200]!r} — regenerate IG_ACCESS_TOKEN", file=sys.stderr)
+        return 3
     ids: dict[str, str] = {}
+    last_refresh_check = time.time()
     while True:
+        if time.time() - last_refresh_check > 86400:
+            maybe_refresh_token(state)
+            _tok["token"] = current_token(state)
+            last_refresh_check = time.time()
         for tag, market in tags.items():
             try:
                 if tag not in ids:

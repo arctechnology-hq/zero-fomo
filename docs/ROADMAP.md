@@ -83,8 +83,17 @@ Decisions and design in `GLOBAL_DESIGN.md`. Shipped on the Android codebase:
       with `Set-BridgeSecret.ps1 -Bridge discord -Map 'id=market,...'`;
       public servers invite via
       `discord.com/oauth2/authorize?client_id=1549801490304995423&scope=bot&permissions=66560`.
-      Instagram bridge staged (Meta app review, business account, long-lived
-      token, hashtag map). **Reddit bridge LIVE in RSS mode (2026-09-16):**
+      Instagram: Meta app "0 FOMO" (id 1601642318227085) created 2026-09-16 on
+      the Facebook-login path with instagram_basic / pages_show_list /
+      pages_read_engagement / business_management; dev mode is enough for
+      our own account (no App Review). BLOCKED on an Instagram professional
+      account linked to the Facebook Page "A.R.C Technology"
+      (652922774570717): `me/accounts` shows no instagram_business_account.
+      Once linked: re-run FB Login for Business, read the IG user id, extend
+      the token (Access Token Debugger), then
+      `Set-BridgeSecret.ps1 -Bridge instagram -Token <t> -ClientId <ig_user_id>
+      -Map 'nassauevents=bs-nassau,...' -Extra @{IG_APP_ID=..;IG_APP_SECRET=..}`
+      (the bridge then refreshes its own token every 45 days). **Reddit bridge LIVE in RSS mode (2026-09-16):**
       `inbox/reddit_bridge.py` polls `r/<sub>/new.rss` (no credentials;
       Reddit's app creation is approval-gated under its Responsible Builder
       Policy and the public `.json` listings are 403), keyword/flair

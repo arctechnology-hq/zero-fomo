@@ -164,8 +164,9 @@ Data types to declare (leave every other type unchecked):
 - [x] Privacy policy page served from the Pages site at https://0fomo.app/privacy.html (DNS: 4 apex A records + www CNAME, DNS-only, added 2026-09-11).
 - [x] Store icon + feature graphic rendered from the mark.
 - [x] Listing copy (2026-09-16: location + forwarding lines match v0.9).
-- [ ] Phone screenshots (4, Galaxy S24+) — the current set shows the OLD teal
-      theme; retake on v0.9.x with the country-themed mark before submission.
+- [x] Phone screenshots (4, Galaxy S24+, 1080×2340) retaken 2026-09-16 on
+      v0.9.0 with the Bahamas country theme (Nassau feed, detail, weekend
+      filter, saved); status bar strip flattened.
 - [x] Privacy page + Data safety answers cover "Send to 0 FOMO" (2026-09-16).
 - [ ] Crash reporting (Crashlytics) — not required for submission; planned before
       the 50 % rollout step.

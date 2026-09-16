@@ -43,3 +43,4 @@ inbox/.server.log
 # Reviewer output lives in the residential run's feeds (feed-data), never in source
 inbox/approved/
 inbox/telegram.offset*
+inbox/*.state.json

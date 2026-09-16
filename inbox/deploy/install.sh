@@ -16,6 +16,8 @@ install -m 0644 "$SRC/discord_bridge.py" /opt/zerofomo-inbox/discord_bridge.py
 install -m 0644 "$SRC/deploy/zerofomo-discord.service" /etc/systemd/system/zerofomo-discord.service
 install -m 0644 "$SRC/instagram_bridge.py" /opt/zerofomo-inbox/instagram_bridge.py
 install -m 0644 "$SRC/deploy/zerofomo-instagram.service" /etc/systemd/system/zerofomo-instagram.service
+install -m 0644 "$SRC/reddit_bridge.py" /opt/zerofomo-inbox/reddit_bridge.py
+install -m 0644 "$SRC/deploy/zerofomo-reddit.service" /etc/systemd/system/zerofomo-reddit.service
 systemctl daemon-reload
 # Each bridge only starts once its credentials are in /etc/zerofomo-inbox.env.
 stage() {  # $1 unit, $2 required env var, $3 hint
@@ -29,6 +31,7 @@ stage() {  # $1 unit, $2 required env var, $3 hint
 stage zerofomo-telegram  TELEGRAM_BOT_TOKEN "BotFather token"
 stage zerofomo-discord   DISCORD_BOT_TOKEN  "Discord bot token + DISCORD_CHANNEL_MARKETS=channel_id=market,..."
 stage zerofomo-instagram IG_ACCESS_TOKEN    "long-lived token + IG_USER_ID + IG_HASHTAGS=tag=market,..."
+stage zerofomo-reddit    REDDIT_CLIENT_SECRET "script-app secret + REDDIT_CLIENT_ID + REDDIT_SUBREDDIT_MARKETS=subreddit=market,... (public JSON is 403 since 2026-09)"
 [ -f /etc/zerofomo-inbox.env ] || { echo "INBOX_TOKEN=$(head -c 24 /dev/urandom | base64 | tr -d '/+=' )" > /etc/zerofomo-inbox.env; chmod 0600 /etc/zerofomo-inbox.env; }
 install -m 0644 "$SRC/deploy/zerofomo-inbox.service" /etc/systemd/system/zerofomo-inbox.service
 systemctl daemon-reload

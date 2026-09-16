@@ -96,7 +96,9 @@ class InboxRepository @Inject constructor(
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: retrofit2.HttpException) {
-                if (e.code() in 400..499 && e.code() != 429) {
+                // Only a rejection of the payload itself is final. 404/5xx mean
+                // the inbox is not (yet) reachable behind the host: keep trying.
+                if (e.code() in PERMANENT_HTTP || s.attempts + 1 >= MAX_ATTEMPTS) {
                     dao.update(s.id, SubmissionEntity.FAILED, s.attempts + 1, null, "HTTP ${e.code()}")
                     image?.delete()
                 } else {
@@ -142,5 +144,6 @@ class InboxRepository @Inject constructor(
         const val KEY_DEVICE = "inbox_device_id"
         const val MAX_PX = 1600
         const val MAX_ATTEMPTS = 8
+        val PERMANENT_HTTP = setOf(400, 401, 403, 413, 415, 422)
     }
 }

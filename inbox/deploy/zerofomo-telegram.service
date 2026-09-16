@@ -1,0 +1,24 @@
+[Unit]
+Description=0 FOMO Telegram bridge (groups/channels -> inbox)
+After=network-online.target zerofomo-inbox.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=zerofomo
+Group=zerofomo
+WorkingDirectory=/var/lib/zerofomo-inbox
+EnvironmentFile=/etc/zerofomo-inbox.env
+Environment=INBOX_URL=http://127.0.0.1:8787
+Environment=TELEGRAM_STATE=/var/lib/zerofomo-inbox/.telegram.offset
+ExecStart=/usr/bin/python3 /opt/zerofomo-inbox/telegram_bridge.py
+Restart=always
+RestartSec=10
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/zerofomo-inbox
+
+[Install]
+WantedBy=multi-user.target

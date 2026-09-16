@@ -10,6 +10,14 @@ id -u zerofomo >/dev/null 2>&1 || useradd --system --home /var/lib/zerofomo-inbo
 install -d -o zerofomo -g zerofomo -m 0750 /var/lib/zerofomo-inbox
 install -d -m 0755 /opt/zerofomo-inbox
 install -m 0644 "$SRC/server.py" /opt/zerofomo-inbox/server.py
+install -m 0644 "$SRC/telegram_bridge.py" /opt/zerofomo-inbox/telegram_bridge.py
+install -m 0644 "$SRC/deploy/zerofomo-telegram.service" /etc/systemd/system/zerofomo-telegram.service
+# The Telegram bridge only starts once TELEGRAM_BOT_TOKEN is in /etc/zerofomo-inbox.env.
+if grep -q '^TELEGRAM_BOT_TOKEN=.\+' /etc/zerofomo-inbox.env 2>/dev/null; then
+  systemctl enable --now zerofomo-telegram; systemctl restart zerofomo-telegram
+else
+  echo "telegram bridge staged; add TELEGRAM_BOT_TOKEN=<BotFather token> to /etc/zerofomo-inbox.env and run: systemctl enable --now zerofomo-telegram"
+fi
 [ -f /etc/zerofomo-inbox.env ] || { echo "INBOX_TOKEN=$(head -c 24 /dev/urandom | base64 | tr -d '/+=' )" > /etc/zerofomo-inbox.env; chmod 0600 /etc/zerofomo-inbox.env; }
 install -m 0644 "$SRC/deploy/zerofomo-inbox.service" /etc/systemd/system/zerofomo-inbox.service
 systemctl daemon-reload

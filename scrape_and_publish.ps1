@@ -59,6 +59,22 @@ try {
         "Published to $localFeed\events.json" | Add-Content $log
     }
 
+    # 1b. Community inbox: pull new submissions from the node, extract with the
+    #     FIE tiers, auto-approve the confident ones. Best effort — the node
+    #     being unreachable must not block the scrape. Approved rows feed the
+    #     per-market `community` source below.
+    try {
+        New-Item -ItemType Directory -Force (Join-Path $here "inbox\data") | Out-Null
+        # scp -r copies the whole tree; existing extracted/review files on this side
+        # are preserved because only submission folders live on the node.
+        & scp -q -r -o BatchMode=yes "fie-worker:/var/lib/zerofomo-inbox/*" (Join-Path $here "inbox\data\") 2>&1 |
+            Add-Content $log
+        python "$here\inbox\extract.py" 2>&1 | Add-Content $log
+        python "$here\inbox\review.py" auto 2>&1 | Add-Content $log
+    } catch {
+        "inbox step skipped: $_" | Add-Content $log
+    }
+
     # 2. Every other market, best effort: one broken city never blocks the rest.
     $markets = @(python "$here\comprehensive_bahamas_scraper.py" --list-markets)
     $failed = @()

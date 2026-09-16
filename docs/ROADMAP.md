@@ -74,15 +74,17 @@ Decisions and design in `GLOBAL_DESIGN.md`. Shipped on the Android codebase:
       (fie-worker-1, 2026-09-16; DNS-validated cert, port 80 stays closed).
       RR-002's 06:00 run pulls, extracts and auto-approves submissions.
 - [ ] G4 Bots + social: Telegram @zerofomo_app_bot LIVE (2026-09-16).
-      Discord (REST polling) and Instagram (hashtag search) bridges written
-      and staged on the node; each starts when its credentials land in
-      `/etc/zerofomo-inbox.env` (Discord: bot token + Message Content intent
-      + channel map; Instagram: Meta app review, business account, long-lived
-      token, hashtag map). Land credentials with
-      `inbox/deploy/Set-BridgeSecret.ps1` (upserts the env file over SSH,
-      enables the unit, sets the local env var). Discord app "0 FOMO"
-      (id 1549801490304995423) exists with the intent on; the token is
-      still to be reset + landed (2026-09-16). Reddit still to build.
+      **Discord LIVE (2026-09-16):** app "0 FOMO" (id 1549801490304995423,
+      account gunbarz, Message Content intent on), bot token + channel map on
+      the node via `inbox/deploy/Set-BridgeSecret.ps1`, service
+      `zerofomo-discord` active; invited (View Channels + Read Message
+      History) to the test server "0 FOMO" (guild 1549810688707526707),
+      watching #general 1549810693413539935 → bs-nassau. Add more channels
+      with `Set-BridgeSecret.ps1 -Bridge discord -Map 'id=market,...'`;
+      public servers invite via
+      `discord.com/oauth2/authorize?client_id=1549801490304995423&scope=bot&permissions=66560`.
+      Instagram bridge staged (Meta app review, business account, long-lived
+      token, hashtag map). Reddit still to build.
 
 ## Phase 2 — Backend v1 on GCP + OCI + B2 (weeks 2–7, overlaps Phase 1)
 

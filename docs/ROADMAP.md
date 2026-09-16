@@ -85,7 +85,7 @@ Decisions and design in `GLOBAL_DESIGN.md`. Shipped on the Android codebase:
       `discord.com/oauth2/authorize?client_id=1549801490304995423&scope=bot&permissions=66560`.
       Instagram: Meta app "0 FOMO" (id 1601642318227085) created 2026-09-16
       with instagram_basic / pages_show_list / pages_read_engagement /
-      business_management; IG professional account @arctechonologyhq
+      business_management; IG professional account @arctechnologyhq (renamed from the typo arctechonologyhq 2026-09-16)
       (IG user id 17841439606653137) linked to the Page "A.R.C Technology"
       (652922774570717) the same day; user token verified via `me/accounts`.
       **BLOCKED by App Review:** `ig_hashtag_search` returns error #10 —

@@ -26,7 +26,7 @@ Env:
 Meta app "0 FOMO": app id 1601642318227085, created 2026-09-16 (Facebook-login
 path of the Instagram API use case; hashtag search needs instagram_basic +
 pages_show_list/pages_read_engagement). IG professional account
-@arctechonologyhq (IG user id 17841439606653137) is linked to the Facebook
+@arctechnologyhq (renamed from the typo arctechonologyhq 2026-09-16) (IG user id 17841439606653137) is linked to the Facebook
 Page "A.R.C Technology" (652922774570717). ig_hashtag_search additionally
 needs the "Instagram Public Content Access" feature with Advanced Access —
 App Review, which Meta gates behind Tech Provider / business verification —

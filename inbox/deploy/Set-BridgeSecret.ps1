@@ -14,7 +14,7 @@
     discord    DISCORD_BOT_TOKEN + DISCORD_CHANNEL_MARKETS   zerofomo-discord
     telegram   TELEGRAM_BOT_TOKEN (+ TELEGRAM_DEFAULT_MARKET) zerofomo-telegram
     instagram  IG_ACCESS_TOKEN + IG_USER_ID + IG_HASHTAGS    zerofomo-instagram
-    reddit     REDDIT_CLIENT_SECRET + REDDIT_CLIENT_ID + REDDIT_SUBREDDIT_MARKETS zerofomo-reddit
+    reddit     REDDIT_SUBREDDIT_MARKETS (RSS; + optional REDDIT_CLIENT_ID/SECRET) zerofomo-reddit
 
 .EXAMPLE
   ./inbox/deploy/Set-BridgeSecret.ps1 -Bridge discord -Token $env:DISCORD_BOT_TOKEN_NEW `
@@ -28,9 +28,9 @@
   Discord: "channel_id=market,..." (only listed channels are read).
   Instagram: "hashtag=market,..." (no #).
   Telegram: default market id (e.g. bs-nassau); groups set theirs with /market.
-  Reddit: "subreddit=market,..." with -Token = REDDIT_CLIENT_SECRET and
-  -ClientId = REDDIT_CLIENT_ID (script app at reddit.com/prefs/apps; the
-  unauthenticated JSON path is 403 from both networks since 2026-09).
+  Reddit: "subreddit=market,..." is enough (RSS mode, no credentials).
+  -Token = REDDIT_CLIENT_SECRET with -ClientId = REDDIT_CLIENT_ID only if an
+  approved Reddit app ever exists (app creation is approval-gated since 2026).
 #>
 [CmdletBinding(SupportsShouldProcess)]
 param(
@@ -48,7 +48,7 @@ $spec = @{
     discord   = @{ unit = 'zerofomo-discord';   token = 'DISCORD_BOT_TOKEN';     map = 'DISCORD_CHANNEL_MARKETS';  required = 'DISCORD_BOT_TOKEN' }
     telegram  = @{ unit = 'zerofomo-telegram';  token = 'TELEGRAM_BOT_TOKEN';    map = 'TELEGRAM_DEFAULT_MARKET';  required = 'TELEGRAM_BOT_TOKEN' }
     instagram = @{ unit = 'zerofomo-instagram'; token = 'IG_ACCESS_TOKEN';       map = 'IG_HASHTAGS';              required = 'IG_ACCESS_TOKEN' }
-    reddit    = @{ unit = 'zerofomo-reddit';    token = 'REDDIT_CLIENT_SECRET';  map = 'REDDIT_SUBREDDIT_MARKETS'; required = 'REDDIT_CLIENT_SECRET' }
+    reddit    = @{ unit = 'zerofomo-reddit';    token = 'REDDIT_CLIENT_SECRET';  map = 'REDDIT_SUBREDDIT_MARKETS'; required = 'REDDIT_SUBREDDIT_MARKETS' }
 }[$Bridge]
 
 $vars = [ordered]@{}

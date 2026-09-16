@@ -31,7 +31,7 @@ stage() {  # $1 unit, $2 required env var, $3 hint
 stage zerofomo-telegram  TELEGRAM_BOT_TOKEN "BotFather token"
 stage zerofomo-discord   DISCORD_BOT_TOKEN  "Discord bot token + DISCORD_CHANNEL_MARKETS=channel_id=market,..."
 stage zerofomo-instagram IG_ACCESS_TOKEN    "long-lived token + IG_USER_ID + IG_HASHTAGS=tag=market,..."
-stage zerofomo-reddit    REDDIT_CLIENT_SECRET "script-app secret + REDDIT_CLIENT_ID + REDDIT_SUBREDDIT_MARKETS=subreddit=market,... (public JSON is 403 since 2026-09)"
+stage zerofomo-reddit    REDDIT_SUBREDDIT_MARKETS "subreddit=market,... (RSS mode, no creds; REDDIT_CLIENT_ID/SECRET optional for OAuth JSON)"
 [ -f /etc/zerofomo-inbox.env ] || { echo "INBOX_TOKEN=$(head -c 24 /dev/urandom | base64 | tr -d '/+=' )" > /etc/zerofomo-inbox.env; chmod 0600 /etc/zerofomo-inbox.env; }
 install -m 0644 "$SRC/deploy/zerofomo-inbox.service" /etc/systemd/system/zerofomo-inbox.service
 systemctl daemon-reload

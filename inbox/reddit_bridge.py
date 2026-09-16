@@ -1,27 +1,31 @@
 #!/usr/bin/env python3
 """Reddit -> 0 FOMO inbox bridge (docs/GLOBAL_DESIGN.md §3, source "Bot").
 
-Watches the /new listing of one subreddit per market and forwards posts that
-look like event announcements (keyword or flair prefilter) as inbox
-submissions, exactly like the Discord and Telegram bridges. Standard library
-only; plain polling; no inbound port.
+Watches one subreddit per market and forwards posts that look like event
+announcements (keyword or flair prefilter) as inbox submissions, exactly like
+the Discord and Telegram bridges. Standard library only; plain polling; no
+inbound port.
 
-Reddit access: an OAuth "script" app (client_credentials grant) is REQUIRED.
-Unauthenticated `www.reddit.com/r/<sub>/new.json` answered HTTP 403 from both
-RR-002 (residential) and fie-worker-1 (OCI) on 2026-09-16, so that path is
-kept only as a fallback when no creds are set (it logs the 403 and keeps
-polling; it never crashes). Create the app at https://www.reddit.com/prefs/apps
-(type "script", any redirect URI) under any Reddit account; the bridge uses
-`oauth.reddit.com` (100 req/10 min) and never logs in as a user.
+How it reads Reddit (2026-09-16 reality check):
+  * Creating an API app at reddit.com/prefs/apps is gated behind Reddit's
+    Responsible Builder Policy (manual approval, weeks, not guaranteed) and the
+    public `.json` listings answer 403 from both RR-002 and fie-worker-1.
+  * The Atom feeds (`www.reddit.com/r/<sub>/new.rss`) still answer 200 from
+    both networks with a descriptive User-Agent, so **RSS is the default
+    mode and needs no credentials**. Reddit rate-limits bursts (429), so
+    subreddits are polled one at a time with a pause between requests.
+  * If REDDIT_CLIENT_ID + REDDIT_CLIENT_SECRET ever exist (approved app), the
+    bridge switches to OAuth JSON automatically (richer: flair, galleries).
 
 Env:
   REDDIT_SUBREDDIT_MARKETS  "bahamas=bs-nassau,Miami=us-miami" (required: only
                             listed subreddits are read)
-  REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET   required in practice (see above)
+  REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET   optional, switches to OAuth JSON
   REDDIT_KEYWORDS           comma list; a post must contain one (title+body,
                             case-insensitive) or carry an event-ish flair.
                             Empty string = forward everything.
   REDDIT_POLL_SECONDS       default 600
+  REDDIT_REQUEST_GAP        seconds between subreddit requests, default 8
   REDDIT_STATE              newest created_utc per subreddit (default ./reddit.state.json)
   REDDIT_DRY_RUN            "1" prints submissions instead of POSTing them
   INBOX_URL / INBOX_TOKEN   as for the other bridges
@@ -40,6 +44,8 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+import xml.etree.ElementTree as ET
+from datetime import datetime
 
 INBOX_URL = os.environ.get("INBOX_URL", "http://127.0.0.1:8787").rstrip("/")
 INBOX_TOKEN = os.environ.get("INBOX_TOKEN", "").strip()
@@ -47,6 +53,7 @@ CLIENT_ID = os.environ.get("REDDIT_CLIENT_ID", "").strip()
 CLIENT_SECRET = os.environ.get("REDDIT_CLIENT_SECRET", "").strip()
 STATE = os.environ.get("REDDIT_STATE", os.path.join(os.path.dirname(os.path.abspath(__file__)), "reddit.state.json"))
 POLL = int(os.environ.get("REDDIT_POLL_SECONDS", "600"))
+GAP = float(os.environ.get("REDDIT_REQUEST_GAP", "8"))
 DRY_RUN = os.environ.get("REDDIT_DRY_RUN", "") == "1"
 UA = "zerofomo-bridge/1.0 (events inbox; https://0fomo.app; contact info@arctechnologyhq.com)"
 DEFAULT_KEYWORDS = ("event,party,concert,festival,fest,tickets,show,tonight,this weekend,live music,flyer,night,live,"
@@ -58,6 +65,10 @@ FLAIR_RX = re.compile(r"event|happening|things to do|what's on|whats on|announce
 MIN_TEXT = 25
 MAX_BODY = 3000
 IMAGE_EXT = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp"}
+ATOM = "{http://www.w3.org/2005/Atom}"
+TAG_RX = re.compile(r"<[^>]+>")
+MD_RX = re.compile(r'<div class="md">(.*?)</div>', re.S)
+LINK_RX = re.compile(r'<a href="([^"]+)">\s*\[link\]\s*</a>')
 
 _oauth: dict = {"token": "", "expires": 0.0}
 
@@ -84,60 +95,102 @@ def save_state(st: dict) -> None:
         json.dump(st, fh)
 
 
+# ---------------------------------------------------------------- transports
+def _http(url: str, headers: dict | None = None, data: bytes | None = None, timeout: int = 30) -> bytes:
+    req = urllib.request.Request(url, data=data, headers={"User-Agent": UA, **(headers or {})})
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return r.read()
+        except urllib.error.HTTPError as e:
+            if e.code == 429 and attempt < 2:
+                time.sleep(min(float(e.headers.get("Retry-After") or 15), 120))
+                continue
+            raise
+    raise RuntimeError(f"gave up on {url}")
+
+
 def _oauth_token() -> str:
     if not (CLIENT_ID and CLIENT_SECRET):
         return ""
     if _oauth["token"] and time.time() < _oauth["expires"] - 60:
         return _oauth["token"]
     cred = base64.b64encode(f"{CLIENT_ID}:{CLIENT_SECRET}".encode()).decode()
-    req = urllib.request.Request(
-        "https://www.reddit.com/api/v1/access_token",
-        data=b"grant_type=client_credentials",
-        headers={"Authorization": f"Basic {cred}", "User-Agent": UA,
-                 "Content-Type": "application/x-www-form-urlencoded"})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        d = json.load(r)
+    d = json.loads(_http("https://www.reddit.com/api/v1/access_token", data=b"grant_type=client_credentials",
+                         headers={"Authorization": f"Basic {cred}",
+                                  "Content-Type": "application/x-www-form-urlencoded"}))
     _oauth["token"] = d["access_token"]
     _oauth["expires"] = time.time() + float(d.get("expires_in", 3600))
     return _oauth["token"]
 
 
-def reddit_get(path: str, params: dict | None = None):
-    """GET a listing; OAuth host when creds exist, else the public JSON host.
-    Honors 429 Retry-After and refreshes an expired OAuth token once."""
-    params = dict(params or {})
-    params.setdefault("raw_json", "1")
-    for attempt in range(3):
-        token = _oauth_token()
-        base = "https://oauth.reddit.com" if token else "https://www.reddit.com"
-        suffix = "" if token else ".json"
-        url = f"{base}{path}{suffix}?{urllib.parse.urlencode(params)}"
-        headers = {"User-Agent": UA}
-        if token:
-            headers["Authorization"] = f"Bearer {token}"
-        try:
-            with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=30) as r:
-                return json.load(r)
-        except urllib.error.HTTPError as e:
-            if e.code == 429:
-                time.sleep(min(float(e.headers.get("Retry-After") or 10), 120))
-                continue
-            if e.code == 401 and token:
-                _oauth["token"] = ""
-                continue
+def posts_via_oauth(sub: str) -> list[dict]:
+    token = _oauth_token()
+    url = f"https://oauth.reddit.com/r/{sub}/new?" + urllib.parse.urlencode({"limit": 50, "raw_json": 1})
+    try:
+        raw = _http(url, headers={"Authorization": f"Bearer {token}"})
+    except urllib.error.HTTPError as e:
+        if e.code != 401:
             raise
-    raise RuntimeError(f"gave up on {path}")
+        _oauth["token"] = ""
+        raw = _http(url, headers={"Authorization": f"Bearer {_oauth_token()}"})
+    listing = json.loads(raw)
+    return [c["data"] for c in listing.get("data", {}).get("children", []) if c.get("kind") == "t3"]
+
+
+def atom_to_post(entry: ET.Element, sub: str) -> dict:
+    """Shape an Atom <entry> like a JSON listing post so the mapping below is
+    shared. RSS carries no flair and no gallery metadata; image posts are
+    recognised by the [link] target (i.redd.it) instead of post_hint."""
+    def text(tag: str) -> str:
+        el = entry.find(ATOM + tag)
+        return (el.text or "") if el is not None else ""
+    link_el = entry.find(ATOM + "link")
+    permalink = link_el.get("href", "") if link_el is not None else ""
+    content = html.unescape(text("content"))
+    m = MD_RX.search(content)
+    selftext = html.unescape(TAG_RX.sub(" ", m.group(1))).strip() if m else ""
+    selftext = re.sub(r"[ \t]+", " ", selftext)
+    lm = LINK_RX.search(content)
+    link = html.unescape(lm.group(1)) if lm else permalink
+    ext = os.path.splitext(urllib.parse.urlparse(link).path)[1].lower()
+    author_el = entry.find(ATOM + "author/" + ATOM + "name")
+    published = text("published")
+    try:
+        created = datetime.fromisoformat(published.replace("Z", "+00:00")).timestamp()
+    except ValueError:
+        created = 0.0
+    return {
+        "id": text("id").removeprefix("t3_"),
+        "subreddit": sub,
+        "title": html.unescape(text("title")).strip(),
+        "selftext": selftext,
+        "permalink": permalink.replace("https://www.reddit.com", ""),
+        "url": link,
+        "url_overridden_by_dest": link if link != permalink else "",
+        "is_self": link == permalink,
+        "post_hint": "image" if ext in IMAGE_EXT else "",
+        "created_utc": created,
+        "author": (author_el.text or "").strip().removeprefix("/u/") if author_el is not None else "",
+        "link_flair_text": "",
+    }
+
+
+def posts_via_rss(sub: str) -> list[dict]:
+    raw = _http(f"https://www.reddit.com/r/{sub}/new.rss")
+    root = ET.fromstring(raw)
+    return [atom_to_post(e, sub) for e in root.findall(ATOM + "entry")]
 
 
 def fetch(url: str) -> bytes:
-    with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=60) as r:
-        return r.read()
+    return _http(url, timeout=60)
 
 
+# ------------------------------------------------------------------ mapping
 def submit(market: str, kind: str, device: str, text: str = "", url: str = "",
            image: tuple[bytes, str] | None = None, hint: str = "Reddit") -> dict:
     body = {"market": market, "kind": kind, "device": device, "text": text, "url": url,
-            "source_hint": hint, "app_version": "reddit-bridge/1"}
+            "source_hint": hint, "app_version": "reddit-bridge/2"}
     if image is not None:
         body["image_base64"] = base64.b64encode(image[0]).decode()
         body["image_type"] = image[1]
@@ -186,7 +239,7 @@ def post_to_submission(post: dict, market: str) -> dict | None:
     sub = post.get("subreddit") or "?"
     title = html.unescape(post.get("title") or "").strip()
     body = html.unescape(post.get("selftext") or "").strip()
-    if body.lower() == "[removed]" or body.lower() == "[deleted]":
+    if body.lower() in ("[removed]", "[deleted]"):
         body = ""
     text = (title + ("\n\n" + body if body else "")).strip()[:MAX_BODY]
     permalink = "https://www.reddit.com" + (post.get("permalink") or "")
@@ -207,12 +260,15 @@ def post_to_submission(post: dict, market: str) -> dict | None:
     return None
 
 
+# --------------------------------------------------------------------- loop
 def poll_once(markets: dict[str, str], state: dict) -> int:
     n = 0
-    for sub, market in markets.items():
+    use_oauth = bool(CLIENT_ID and CLIENT_SECRET)
+    for i, (sub, market) in enumerate(markets.items()):
+        if i:
+            time.sleep(GAP)  # Reddit 429s bursts even on RSS
         try:
-            listing = reddit_get(f"/r/{sub}/new", {"limit": 50})
-            posts = [c["data"] for c in listing.get("data", {}).get("children", []) if c.get("kind") == "t3"]
+            posts = posts_via_oauth(sub) if use_oauth else posts_via_rss(sub)
             newest = max((float(p.get("created_utc") or 0) for p in posts), default=0.0)
             last = state.get(sub)
             if last is None:
@@ -237,8 +293,6 @@ def poll_once(markets: dict[str, str], state: dict) -> int:
                 state[sub] = max(float(state.get(sub) or 0), created)
             save_state(state)
         except urllib.error.HTTPError as exc:
-            # 403 = Reddit refusing this network unauthenticated; keep polling,
-            # the operator sees it in the journal and can add OAuth creds.
             print(f"r/{sub}: HTTP {exc.code} {exc.reason}", file=sys.stderr)
         except Exception as exc:  # noqa: BLE001
             print(f"r/{sub}: {type(exc).__name__}: {exc}", file=sys.stderr)
@@ -250,7 +304,7 @@ def main(argv: list[str]) -> int:
     if not markets:
         print("REDDIT_SUBREDDIT_MARKETS not set; nothing to watch", file=sys.stderr)
         return 2
-    mode = "oauth" if (CLIENT_ID and CLIENT_SECRET) else "public-json"
+    mode = "oauth-json" if (CLIENT_ID and CLIENT_SECRET) else "rss"
     print(f"bridge up ({mode}{', dry-run' if DRY_RUN else ''}) watching {len(markets)} subreddit(s) -> {INBOX_URL}")
     state = load_state()
     if "--once" in argv:

@@ -84,13 +84,16 @@ Decisions and design in `GLOBAL_DESIGN.md`. Shipped on the Android codebase:
       public servers invite via
       `discord.com/oauth2/authorize?client_id=1549801490304995423&scope=bot&permissions=66560`.
       Instagram bridge staged (Meta app review, business account, long-lived
-      token, hashtag map). **Reddit bridge built + staged (2026-09-16):**
-      `inbox/reddit_bridge.py` (subreddit /new → keyword/flair prefilter →
-      inbox; text, link and image/gallery posts), unit `zerofomo-reddit` on
-      the node. Unauthenticated JSON is 403 from both RR-002 and the node, so
-      it needs a Reddit "script" app (reddit.com/prefs/apps) →
-      `Set-BridgeSecret.ps1 -Bridge reddit -Token <secret> -ClientId <id>
-      -Map 'bahamas=bs-nassau,Jamaica=jm-kingston,Miami=us-miami,...'`.
+      token, hashtag map). **Reddit bridge LIVE in RSS mode (2026-09-16):**
+      `inbox/reddit_bridge.py` polls `r/<sub>/new.rss` (no credentials;
+      Reddit's app creation is approval-gated under its Responsible Builder
+      Policy and the public `.json` listings are 403), keyword/flair
+      prefilter, text / link / image posts → inbox; unit `zerofomo-reddit`
+      watching bahamas, Jamaica, Miami, fortlauderdale, orlando, Atlanta,
+      Barbados, TrinidadandTobago, CaymanIslands (8 s gap between requests,
+      10-min poll). Switches to OAuth JSON automatically if
+      REDDIT_CLIENT_ID/SECRET ever exist. Adjust the map with
+      `Set-BridgeSecret.ps1 -Bridge reddit -Map 'sub=market,...'`.
 
 ## Phase 2 — Backend v1 on GCP + OCI + B2 (weeks 2–7, overlaps Phase 1)
 

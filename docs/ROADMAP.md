@@ -97,7 +97,10 @@ Decisions and design in `GLOBAL_DESIGN.md`. Shipped on the Android codebase:
       that is done). Decision pending: go through business verification +
       App Review (days–weeks, needs legal docs for A.R.C Technology and a
       screencast of the hashtag flow), or park Instagram and rely on the
-      share-sheet forwarding that is already live. Once approved:
+      share-sheet forwarding that is already live. **2026-09-17: PURSUE.**
+      Business verification submitted (licence + email code, ~2 business
+      days); app now owned by the ARC portfolio; full submission package in
+      docs/META_APP_REVIEW.md. Once approved:
       Access Token Debugger → Extend, then `Set-BridgeSecret.ps1 -Bridge
       instagram -Token <t> -ClientId 17841439606653137 -Map
       'nassauevents=bs-nassau,...' -Extra @{IG_APP_ID=..;IG_APP_SECRET=..}`.

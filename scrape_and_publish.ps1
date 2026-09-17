@@ -22,9 +22,14 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $here
 
 if ($Register) {
+    # Headless host (2026-09-17): run under `conhost.exe --headless`. Windows 11
+    # makes Windows Terminal the default console, so a plain pwsh task action
+    # opens a visible Terminal window at 06:00 (or at logon, via
+    # StartWhenAvailable) and closing it kills the scrape (0xC000013A).
     $pwsh = (Get-Command pwsh).Source
-    $action = New-ScheduledTaskAction -Execute $pwsh `
-        -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`""
+    $conhost = Join-Path $env:SystemRoot "System32\conhost.exe"
+    $action = New-ScheduledTaskAction -Execute $conhost `
+        -Argument "--headless `"$pwsh`" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$PSCommandPath`""
     $trigger = New-ScheduledTaskTrigger -Daily -At 06:00
     $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable `
         -ExecutionTimeLimit (New-TimeSpan -Hours 2) -MultipleInstances IgnoreNew

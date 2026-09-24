@@ -183,6 +183,8 @@ def main() -> int:
     p = sp.add_parser("reject"); p.add_argument("id"); p.add_argument("--reason", default=""); p.set_defaults(fn=cmd_reject)
     p = sp.add_parser("auto"); p.add_argument("--market", default=""); p.add_argument("--min-confidence", type=float, default=0.85); p.set_defaults(fn=cmd_auto)
     p = sp.add_parser("purge"); p.add_argument("--market", default=""); p.add_argument("--days", type=int, default=90); p.set_defaults(fn=cmd_purge)
+    for stream in (sys.stdout, sys.stderr):   # cp1252 console/pipe cannot print event names
+        stream.reconfigure(encoding="utf-8", errors="replace")
     args = ap.parse_args()
     args.fn(args)
     return 0

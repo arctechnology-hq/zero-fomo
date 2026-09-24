@@ -10,11 +10,12 @@
 #      machine, so the residential run is where most non-API events come from.
 #
 # Scheduled task "ZeroFomoFeedScrape" (daily 06:00):  -Register creates it.
-# Run manually any time:  pwsh -NoProfile -File scrape_and_publish.ps1 [-MarketsOnly] [-NoPublish]
+# Run manually any time:  pwsh -NoProfile -File scrape_and_publish.ps1 [-MarketsOnly] [-NoPublish] [-PublishOnly]
 # =============================================================================
 param(
     [switch]$MarketsOnly,   # skip the Nassau workbook run; bs-nassau runs as a market
     [switch]$NoPublish,     # build feeds/ but do not push the feed-data branch
+    [switch]$PublishOnly,   # skip every scrape step; push the feeds/ already on disk
     [switch]$Register       # (re)create the daily scheduled task and exit
 )
 $ErrorActionPreference = "Stop"
@@ -47,7 +48,7 @@ try {
     $feedsDir = Join-Path $here "feeds"
 
     # 1. Nassau: the strict, workbook-producing run (floor enforced).
-    if (-not $MarketsOnly) {
+    if (-not $MarketsOnly -and -not $PublishOnly) {
         python "$here\comprehensive_bahamas_scraper.py" --delay 1.5 2>&1 | Add-Content $log
         if ($LASTEXITCODE -ne 0) {
             throw "Scraper exit $LASTEXITCODE (floor breach or hard failure) - see $log"
@@ -64,6 +65,7 @@ try {
         "Published to $localFeed\events.json" | Add-Content $log
     }
 
+    if (-not $PublishOnly) {
     # 1b. Community inbox: pull new submissions from the node, extract with the
     #     FIE tiers, auto-approve the confident ones. Best effort — the node
     #     being unreachable must not block the scrape. Approved rows feed the
@@ -87,7 +89,7 @@ try {
     }
 
     # 2. Every other market, best effort: one broken city never blocks the rest.
-    $markets = @(python "$here\comprehensive_bahamas_scraper.py" --list-markets)
+    $markets = @(python "$here\comprehensive_bahamas_scraper.py" --list-markets 2>$null)
     $failed = @()
     foreach ($m in $markets) {
         if ($m -eq "bs-nassau" -and -not $MarketsOnly) { continue }
@@ -98,6 +100,7 @@ try {
     }
     python "$here\build_markets_manifest.py" 2>&1 | Add-Content $log
     if ($failed.Count) { "Markets below floor / failed: $($failed -join ', ')" | Add-Content $log }
+    } # -not $PublishOnly
 
     # 3. Publish feeds/ as the single-commit orphan branch `feed-data`.
     #    Plumbing only: the working tree and main's index are never touched.
@@ -106,16 +109,22 @@ try {
         Remove-Item $tmpIndex -ErrorAction SilentlyContinue
         $env:GIT_INDEX_FILE = $tmpIndex
         try {
-            git add -f feeds
-            $tree = (git write-tree).Trim()
+            git add -f feeds 2>&1 | Add-Content $log
+            $tree = (git write-tree 2>$null).Trim()
         } finally {
             Remove-Item Env:GIT_INDEX_FILE -ErrorAction SilentlyContinue
             Remove-Item $tmpIndex -ErrorAction SilentlyContinue
         }
         $msg = "feeds: $(Get-Date -Format s) from $env:COMPUTERNAME"
-        $commit = (git commit-tree $tree -m $msg).Trim()
-        git push -q -f origin "${commit}:refs/heads/feed-data"
-        if ($LASTEXITCODE -ne 0) { throw "git push feed-data failed ($LASTEXITCODE)" }
+        $commit = (git commit-tree $tree -m $msg 2>$null).Trim()
+        if (-not $tree -or -not $commit) { throw "feed-data tree/commit not produced (tree=$tree commit=$commit)" }
+        # Every native call in this script redirects stderr. Under the headless
+        # task host (conhost --headless) an unredirected `git push -q` exits 128
+        # and python dies with console-mode error 0xE9 -- proven by A/B on
+        # 2026-09-24 after a week (09-17..24) of silent push failures.
+        $pushOut = (& git push -f origin "${commit}:refs/heads/feed-data" 2>&1 | Out-String).Trim()
+        if ($pushOut) { $pushOut | Add-Content $log }
+        if ($LASTEXITCODE -ne 0) { throw "git push feed-data failed ($LASTEXITCODE): $pushOut" }
         "Pushed feed-data $commit" | Add-Content $log
     }
 

@@ -73,6 +73,13 @@ Decisions and design in `GLOBAL_DESIGN.md`. Shipped on the Android codebase:
       `community` pipeline source. Live at `https://inbox.0fomo.app`
       (fie-worker-1, 2026-09-16; DNS-validated cert, port 80 stays closed).
       RR-002's 06:00 run pulls, extracts and auto-approves submissions.
+      2026-09-24 ops fixes: the headless task host had been failing the
+      `feed-data` push silently since 09-17 (unredirected stderr under
+      `conhost --headless` -> git exit 128; every native call now redirects,
+      `-PublishOnly` re-pushes feeds/ without re-scraping); extraction now
+      walks a Gemini model chain (flash -> flash-lite, a quota 429 latches
+      the model off for the run) with an OpenRouter/NVIDIA vision fallback
+      for flyers, so a dead daily quota no longer strands image submissions.
 - [ ] G4 Bots + social: Telegram @zerofomo_app_bot LIVE (2026-09-16).
       **Discord LIVE (2026-09-16):** app "0 FOMO" (id 1549801490304995423,
       account gunbarz, Message Content intent on), bot token + channel map on

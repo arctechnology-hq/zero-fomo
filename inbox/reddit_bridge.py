@@ -63,6 +63,33 @@ DEFAULT_KEYWORDS = ("event,party,concert,festival,fest,tickets,show,tonight,this
                     "tournament,happening,lineup,line-up,doors open,rsvp")
 KEYWORDS = [k.strip().lower() for k in os.environ.get("REDDIT_KEYWORDS", DEFAULT_KEYWORDS).split(",") if k.strip()]
 FLAIR_RX = re.compile(r"event|happening|things to do|what's on|whats on|announcement", re.I)
+# Strict prefilter (default since 2026-09-24). The loose any-keyword filter above
+# passed 223 of 226 real posts and only 11 carried an event: every miss cost an LLM
+# call and drained the Gemini daily quota. Scored on those 226 posts, this one
+# passes 32 and keeps 10 of the 11 events. REDDIT_PREFILTER=loose restores the old
+# behaviour; REDDIT_KEYWORDS still adds extra event words.
+STRICT = os.environ.get("REDDIT_PREFILTER", "strict").lower() != "loose"
+STRONG_RX = re.compile(
+    r"\b(events?|concerts?|festivals?|fest|tickets?|rsvp|doors (open|at)|line-?up|dj|dj set|"
+    r"live music|open mic|comedy (show|night)|stand-?up|meet-?up|pop-?up|farmers'? market|"
+    r"night market|flea market|street fair|fair|expo|parade|party|block party|watch party|"
+    r"brunch|happy hour|karaoke|trivia|gala|fundraiser|workshop|screening|premiere|tournament|"
+    r"5k|10k|marathon|race day|regatta|junkanoo|carnival|fete|soca|exhibition|opening night|"
+    r"launch party|album release|tour|matinee|showcase|conference|summit|hackathon|"
+    r"free admission|free entry|all ages|21\+|18\+|cover charge|early bird|presale|"
+    r"performing|performs?|headlin(er|ing)|hosted by|featuring|feat\.?|show|contest|competition|"
+    r"call-in|giveaway|grand opening|open house|game ?night|movie night|paint (and|&) sip)\b", re.I)
+TIME_RX = re.compile(
+    r"\b(tonight|tomorrow|this (weekend|week|friday|saturday|sunday|thursday)|"
+    r"mon(day)?|tue(s|sday)?|wed(nesday)?|thu(rs|rsday)?|fri(day)?|sat(urday)?|sun(day)?|"
+    r"jan(uary)?|feb(ruary)?|mar(ch)?|apr(il)?|may|june?|july?|aug(ust)?|sep(t|tember)?|"
+    r"oct(ober)?|nov(ember)?|dec(ember)?|"
+    r"\d{1,2}(:\d{2})?\s?(a\.?m|p\.?m)|\d{1,2}/\d{1,2}(/\d{2,4})?|\d{1,2}(st|nd|rd|th))\b", re.I)
+QUESTION_RX = re.compile(r"\?\s*$")
+ASK_RX = re.compile(r"\b(recommend(ations?)?|anyone know|where (can|do|should) i|any (good|suggestions?)|"
+                    r"looking for|does anyone|is there a|what are some|best place)\b", re.I)
+SKIP_RX = re.compile(r"daily discussion|weekly (thread|discussion)|megathread|roommate|for sale|hiring|"
+                     r"lost (dog|cat)|missing (dog|cat)", re.I)
 MIN_TEXT = 25
 MAX_BODY = 3000
 IMAGE_EXT = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp"}
@@ -205,13 +232,27 @@ def submit(market: str, kind: str, device: str, text: str = "", url: str = "",
         return json.load(r)
 
 
-def looks_like_event(post: dict) -> bool:
-    if not KEYWORDS:
-        return True
+def looks_like_event(post: dict, rich: bool = False) -> bool:
+    """`rich` = the post carries a flyer image or an external link, where the
+    details live outside the title; one event word is then enough."""
     if FLAIR_RX.search(post.get("link_flair_text") or ""):
         return True
-    hay = f"{post.get('title', '')}\n{post.get('selftext', '')}".lower()
-    return any(k in hay for k in KEYWORDS)
+    title = post.get("title", "") or ""
+    hay = f"{title}\n{post.get('selftext', '') or ''}"
+    if not STRICT:
+        return not KEYWORDS or any(k in hay.lower() for k in KEYWORDS)
+    if SKIP_RX.search(title):
+        return False
+    if QUESTION_RX.search(title.strip()) or ASK_RX.search(title):
+        return False          # asking about events is not listing one
+    strong = {m.group(0).lower() for m in STRONG_RX.finditer(hay)}
+    extra = [k for k in KEYWORDS if k not in DEFAULT_KEYWORDS.lower() and k in hay.lower()]
+    strong.update(extra)
+    if not strong:
+        return False
+    if rich or len(strong) >= 2:
+        return True
+    return bool(TIME_RX.search(hay))
 
 
 def image_of(post: dict) -> tuple[str, str] | None:
@@ -235,7 +276,10 @@ def post_to_submission(post: dict, market: str) -> dict | None:
     """Pure mapping (testable). Returns the submit pieces or None to skip."""
     if post.get("stickied") or post.get("removed_by_category") or post.get("author") == "AutoModerator":
         return None
-    if not looks_like_event(post):
+    img = image_of(post)
+    link = post.get("url_overridden_by_dest") or post.get("url") or ""
+    external = bool(link) and not post.get("is_self") and "reddit.com" not in link
+    if not looks_like_event(post, rich=bool(img) or external):
         return None
     sub = post.get("subreddit") or "?"
     title = html.unescape(post.get("title") or "").strip()
@@ -244,14 +288,12 @@ def post_to_submission(post: dict, market: str) -> dict | None:
         body = ""
     text = (title + ("\n\n" + body if body else "")).strip()[:MAX_BODY]
     permalink = "https://www.reddit.com" + (post.get("permalink") or "")
-    link = post.get("url_overridden_by_dest") or post.get("url") or ""
     device = f"rd:{sub.lower()}"
     hint = f"Reddit r/{sub}"
-    img = image_of(post)
     if img:
         return {"market": market, "kind": "image", "device": device, "text": text,
                 "url": permalink, "hint": hint, "image_url": img[0], "image_type": img[1]}
-    if link and not post.get("is_self") and "reddit.com" not in link:
+    if external:
         # Link post to an external page (ticket site, venue, Facebook event): the
         # extractor can fetch it; the reddit permalink goes in the text.
         return {"market": market, "kind": "url", "device": device,

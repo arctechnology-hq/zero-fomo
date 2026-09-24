@@ -1,7 +1,9 @@
 package com.arctechnology.zerofomo.model
 
+import java.util.Locale
 import kotlin.math.asin
 import kotlin.math.cos
+import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.math.sqrt
 
@@ -30,6 +32,14 @@ object Geo {
         val a = sin(dLat / 2) * sin(dLat / 2) +
             cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) * sin(dLng / 2) * sin(dLng / 2)
         return 2 * EARTH_RADIUS_KM * asin(sqrt(a))
+    }
+
+    /** Card label for a distance measured from an approximate origin (a city
+     *  centroid at best — location is coarse by design), so it reads as "~". */
+    fun distanceLabel(km: Double): String = when {
+        km < 1.0 -> "< 1 km"
+        km < 10.0 -> "~${String.format(Locale.US, "%.1f", km)} km"
+        else -> "~${km.roundToInt()} km"
     }
 
     /** Axis-aligned box that fully contains the circle; cheap Room pre-filter. */

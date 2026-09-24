@@ -53,6 +53,7 @@ data class FeedUiState(
     val countries: List<Country> = emptyList(),
     val isLocating: Boolean = false,
     val locationMessage: String? = null,
+    val distanceOrigin: Pair<Double, Double>? = null,  // where card distances are measured from
 )
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -120,8 +121,19 @@ class FeedViewModel @Inject constructor(
             syncError = c.error, lastSyncEpochMs = c.lastSync,
             userLocation = l.user, nearbyPlaces = l.nearby, placeSuggestions = l.suggestions,
             countries = l.countries, isLocating = l.locating, locationMessage = l.message,
+            distanceOrigin = distanceOriginFor(c.filters.location, l.user),
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), FeedUiState())
+
+    /** The point card distances are measured from: the active "near" point,
+     *  else the user's city. Bahamas views get none — island-tagged events carry
+     *  the island centroid, so every distance would read as zero. */
+    private fun distanceOriginFor(filter: LocationFilter, ul: UserLocation?): Pair<Double, Double>? =
+        when (filter) {
+            is LocationFilter.Near -> filter.lat to filter.lng
+            is LocationFilter.IslandTag -> null
+            else -> ul?.takeIf { it.country.code != "BS" }?.place?.let { it.lat to it.lng }
+        }
 
     init {
         refreshIfStale()   // sync on open only when cache is stale

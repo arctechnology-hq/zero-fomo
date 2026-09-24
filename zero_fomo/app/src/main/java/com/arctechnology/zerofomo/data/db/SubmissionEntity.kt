@@ -42,6 +42,12 @@ interface SubmissionDao {
     @Query("SELECT * FROM submissions ORDER BY createdAtEpochMs DESC LIMIT 50")
     fun recent(): Flow<List<SubmissionEntity>>
 
+    @Query("SELECT * FROM submissions WHERE id = :id")
+    suspend fun byId(id: String): SubmissionEntity?
+
+    @Query("DELETE FROM submissions WHERE id = :id")
+    suspend fun delete(id: String)
+
     @Query("""UPDATE submissions SET status = :status, attempts = :attempts,
               remoteId = :remoteId, error = :error WHERE id = :id""")
     suspend fun update(id: String, status: String, attempts: Int, remoteId: String?, error: String?)

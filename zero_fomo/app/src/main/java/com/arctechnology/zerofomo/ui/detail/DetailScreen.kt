@@ -173,7 +173,7 @@ fun DetailScreen(
                                 Uri.parse(ev.sourceUrl)))
                         },
                         modifier = Modifier.weight(1f),
-                    ) { Text("Get Tickets") }
+                    ) { Text(sourceActionLabel(ev.sourceUrl)) }
                 }
             }
 

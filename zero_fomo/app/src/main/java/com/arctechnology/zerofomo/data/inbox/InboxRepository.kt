@@ -71,6 +71,27 @@ class InboxRepository @Inject constructor(
         entity
     }
 
+    /** Put a FAILED submission back in the queue. A failed photo cannot be
+     *  re-sent: its file was deleted with the failure (nothing lingers), so the
+     *  Saved tab only offers Retry for text and link submissions. */
+    suspend fun retry(id: String) = withContext(Dispatchers.IO) {
+        val s = dao.byId(id) ?: return@withContext
+        val photoGone = s.kind == "image" && s.imagePath?.let { File(it).exists() } != true
+        if (photoGone) {
+            dao.update(s.id, SubmissionEntity.FAILED, s.attempts, null,
+                "The photo is no longer on this phone — share it again")
+        } else {
+            dao.update(s.id, SubmissionEntity.QUEUED, 0, null, null)
+            UploadWorker.enqueue(context)
+        }
+    }
+
+    /** Forget a submission on this device (the inbox copy, if any, is unaffected). */
+    suspend fun remove(id: String) = withContext(Dispatchers.IO) {
+        dao.byId(id)?.imagePath?.let { File(it).delete() }
+        dao.delete(id)
+    }
+
     /** Called by [UploadWorker]. Returns true when nothing is left queued. */
     suspend fun uploadPending(): Boolean = withContext(Dispatchers.IO) {
         var allDone = true

@@ -82,6 +82,7 @@ import com.arctechnology.zerofomo.model.Country
 import com.arctechnology.zerofomo.model.DateRangeFilter
 import com.arctechnology.zerofomo.model.Event
 import com.arctechnology.zerofomo.model.EventCategory
+import com.arctechnology.zerofomo.model.Geo
 import com.arctechnology.zerofomo.model.LocationFilter
 import com.arctechnology.zerofomo.model.Place
 import com.arctechnology.zerofomo.ui.theme.AquaDeep
@@ -165,6 +166,7 @@ fun FeedScreen(
                 } else {
                     EventList(
                         events = state.events,
+                        origin = state.distanceOrigin,
                         onEventClick = onEventClick,
                         onToggleFavorite = viewModel::toggleFavorite,
                     )
@@ -449,6 +451,7 @@ private fun FilterBar(
 @Composable
 private fun EventList(
     events: List<Event>,
+    origin: Pair<Double, Double>?,
     onEventClick: (String) -> Unit,
     onToggleFavorite: (Event) -> Unit,
 ) {
@@ -463,8 +466,16 @@ private fun EventList(
                 DayHeader(date, today, dayEvents.size)
             }
             items(dayEvents, key = { it.id }) { event ->
+                val distance = origin?.let { (olat, olng) ->
+                    val lat = event.lat
+                    val lng = event.lng
+                    if (lat != null && lng != null)
+                        Geo.distanceLabel(Geo.distanceKm(olat, olng, lat, lng))
+                    else null
+                }
                 EventCard(event, onClick = { onEventClick(event.id) },
-                    onToggleFavorite = { onToggleFavorite(event) })
+                    onToggleFavorite = { onToggleFavorite(event) },
+                    distanceLabel = distance)
             }
         }
     }
@@ -507,6 +518,7 @@ fun EventCard(
     event: Event,
     onClick: () -> Unit,
     onToggleFavorite: () -> Unit,
+    distanceLabel: String? = null,   // "~3.2 km" from the feed's origin; null = not shown
 ) {
     Card(
         onClick = onClick,
@@ -558,6 +570,13 @@ fun EventCard(
                             content = if (free)
                                 MaterialTheme.colorScheme.onTertiaryContainer
                             else MaterialTheme.colorScheme.onSecondaryContainer,
+                        )
+                    }
+                    distanceLabel?.let {
+                        InfoPill(
+                            it,
+                            container = MaterialTheme.colorScheme.surfaceVariant,
+                            content = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 }

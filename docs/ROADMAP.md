@@ -122,6 +122,14 @@ Decisions and design in `GLOBAL_DESIGN.md`. Shipped on the Android codebase:
       REDDIT_CLIENT_ID/SECRET ever exist. Adjust the map with
       `Set-BridgeSecret.ps1 -Bridge reddit -Map 'sub=market,...'`.
 
+- [x] v0.9.1 polish (2026-09-24): distance pill on feed cards, measured from the
+      active "near" point or the user's city (hidden on Bahamas island views,
+      where events carry the island centroid); Saved tab gains a "Forwarded to
+      0 FOMO" section showing each share's upload status (Queued / Sent - in
+      review / Couldn't send) with Retry for failed text/link shares and Remove;
+      the detail button reads Get Tickets / View post / More info by link host
+      instead of a blanket "Get Tickets". 69 unit tests green.
+
 ## Phase 2 — Backend v1 on GCP + OCI + B2 (weeks 2–7, overlaps Phase 1)
 
 Gate: `feeds.0fomo.app/bs-nassau/events.json` served from GCS via Cloudflare,

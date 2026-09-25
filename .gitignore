@@ -44,3 +44,6 @@ inbox/.server.log
 inbox/approved/
 inbox/telegram.offset*
 inbox/*.state.json
+
+# translate_strings.py scratch replies
+zero_fomo/tools/.translate_*.raw.txt

@@ -2076,11 +2076,14 @@ def keep_for_market(ev: Event, market: Market, params: dict,
             pass
     countries = [str(c).lower() for c in (params.get("countries") or [])]
     cities = [str(c).lower() for c in (params.get("cities") or [])]
+    exclude = [str(c).lower() for c in (params.get("exclude") or [])]
     blob = f"{country_text} {city_text} {ev.venue}".lower()
     if countries and not any(c in blob for c in countries):
         return False
     if cities and not any(c in blob for c in cities):
         return False
+    if exclude and any(c in blob for c in exclude):
+        return False        # "Trinidad and Tobago" must not drag Tobago into Port of Spain
     return True
 
 
@@ -3301,6 +3304,27 @@ SCRAPER_REGISTRY: dict[str, type[BaseScraper]] = {
 }
 
 
+def write_run_status(out_dir: str, market: "Optional[Market]", wanted: list[str],
+                     statuses: list[SourceStatus], raw: int, unique: int,
+                     exported: int, review: int) -> None:
+    """Machine-readable twin of the console summary: feeds/<market>/status.json.
+    source_health.py rolls these into history + dead-source alerts."""
+    payload = {
+        "market": market.id if market else FEED_MARKET,
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "sources_run": wanted,
+        "raw": raw, "unique": unique, "exported": exported, "review": review,
+        "sources": [{"name": s.name, "ok": s.ok, "events": s.events_found,
+                     "pages": s.pages_fetched, "note": s.note} for s in statuses],
+    }
+    try:
+        os.makedirs(out_dir, exist_ok=True)
+        with open(os.path.join(out_dir, "status.json"), "w", encoding="utf-8") as fh:
+            json.dump(payload, fh, ensure_ascii=False, indent=1)
+    except OSError as exc:  # never let bookkeeping fail a run
+        log.warning("status.json not written: %s", exc)
+
+
 def run_pipeline(args: argparse.Namespace) -> int:
     global FEED_COUNTRY, FEED_MARKET, FEED_TZ
     here = os.path.dirname(os.path.abspath(__file__))
@@ -3390,6 +3414,8 @@ def run_pipeline(args: argparse.Namespace) -> int:
 
     Exporter(out_dir, output_basename, workbook=market is None).export(
         master, review, per_source, summary)
+    write_run_status(out_dir, market, wanted, statuses, len(all_events),
+                     len(clusters), len(master), len(review))
 
     print("\n" + "=" * 62)
     print(f" PIPELINE COMPLETE  [{FEED_MARKET}]")

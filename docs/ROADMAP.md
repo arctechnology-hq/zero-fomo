@@ -122,6 +122,16 @@ Decisions and design in `GLOBAL_DESIGN.md`. Shipped on the Android codebase:
       REDDIT_CLIENT_ID/SECRET ever exist. Adjust the map with
       `Set-BridgeSecret.ps1 -Bridge reddit -Map 'sub=market,...'`.
 
+- [x] Source health watch (2026-09-26): `status.json` per market run,
+      `source_health.py` (history, dead / failed / revived / drop detection,
+      ntfy alert, weekly watchlist re-probe of parked candidates), wired into
+      the daily task. Published with the feeds under `feeds/health/`.
+- [ ] Localisation (in progress 2026-09-26): all user-visible strings moved to
+      resources (values/strings_*.xml), per-app language config (en, es, fr,
+      pt, ht, nl); translations generated on the FIE flash tier, reviewed
+      before release. Feed content stays in the source language; category and
+      filter labels are localised in the app.
+
 - [x] Caribbean rollout (2026-09-26): 22 new market files (OECS, ABC islands,
       Bermuda, TCI, USVI, PR, DR, SXM, Guyana, Belize, Haiti, Cuba, Tobago) and
       the existing JM/TT/BB/KY/Florida markets now read TriniJungleJuice's API,

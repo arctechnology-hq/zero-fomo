@@ -8,33 +8,80 @@
   "radius_km": 30,
   "currency": "TTD",
   "sources": {
+    "eventbrite": {
+      "slug": "trinidad-and-tobago--scarborough"
+    },
     "trinijunglejuice": {
       "countries": [
         "trinidad and tobago"
       ],
       "cities": [
-        "tobago",
+        "tobago,",
         "scarborough",
         "crown point",
         "pigeon point",
         "buccoo",
-        "store bay"
+        "store bay",
+        "canaan",
+        "bon accord",
+        "plymouth",
+        "roxborough",
+        "speyside",
+        "charlotteville",
+        "castara",
+        "black rock",
+        "lambeau",
+        "signal hill",
+        "mt. irvine",
+        "mount irvine",
+        "lowlands"
       ]
     },
     "islandetickets": {
-      "countries": [
-        "tobago"
+      "cities": [
+        "tobago,",
+        "scarborough",
+        "crown point",
+        "pigeon point",
+        "buccoo",
+        "store bay",
+        "canaan",
+        "bon accord",
+        "plymouth",
+        "roxborough",
+        "speyside",
+        "charlotteville",
+        "castara",
+        "black rock",
+        "lambeau",
+        "signal hill",
+        "mt. irvine",
+        "mount irvine",
+        "lowlands"
       ]
     },
     "beatstorapon": {
       "cc": "tt",
       "cities": [
-        "tobago",
+        "tobago,",
         "scarborough",
         "crown point",
         "pigeon point",
         "buccoo",
-        "store bay"
+        "store bay",
+        "canaan",
+        "bon accord",
+        "plymouth",
+        "roxborough",
+        "speyside",
+        "charlotteville",
+        "castara",
+        "black rock",
+        "lambeau",
+        "signal hill",
+        "mt. irvine",
+        "mount irvine",
+        "lowlands"
       ]
     },
     "community": {}

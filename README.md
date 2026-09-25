@@ -33,6 +33,20 @@ E-Tickets, TicketsPlus, Beats To Rap On, Tikkets) plus three generic readers
 with one line of market config. Survey, filters and rejects:
 `docs/SOURCES_CARIBBEAN.md`.
 
+### Source health (the active watch)
+
+Every market run writes `feeds/<market>/status.json` (per-source ok / events /
+pages / note). `source_health.py` rolls those into `feeds/health/history.jsonl`,
+flags a source as **dead** (median > 0 over the last 14 runs, now zero for 3
+runs), **failed** (2 consecutive exceptions) or **revived**, flags a market
+**drop** (exported < 50 % of its 7-run median), writes `feeds/health/report.json`
+and pushes the status lines to the phone via ntfy (`FIE_NTFY_TOPIC`). Sundays it
+also re-probes `sources_watchlist.json` (parked, seasonal and unverified
+candidates such as Bahamas Carnival, Tikkets country deployments, Eventbrite
+slugs, Beats To Rap On country pages) so a site that comes alive is named in
+the alert with the market key to adopt it under. `scrape_and_publish.ps1` runs
+`--record --report --notify` after the market loop; run `--probe` by hand any time.
+
 ```
 pip install requests beautifulsoup4 lxml pandas python-dateutil openpyxl rapidfuzz playwright
 playwright install chromium

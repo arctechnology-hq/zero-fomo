@@ -19,6 +19,27 @@
     "islandetickets": {
       "countries": [
         "trinidad"
+      ],
+      "exclude": [
+        "tobago,",
+        "scarborough",
+        "crown point",
+        "pigeon point",
+        "buccoo",
+        "store bay",
+        "canaan",
+        "bon accord",
+        "plymouth",
+        "roxborough",
+        "speyside",
+        "charlotteville",
+        "castara",
+        "black rock",
+        "lambeau",
+        "signal hill",
+        "mt. irvine",
+        "mount irvine",
+        "lowlands"
       ]
     },
     "beatstorapon": {

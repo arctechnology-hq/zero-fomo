@@ -1,4 +1,4 @@
-# =============================================================================
+﻿# =============================================================================
 # scrape_and_publish.ps1 — daily residential-IP scrape for the 0 FOMO app
 #
 #   1. Nassau pipeline (workbook + New_Providence_Events.json) unless -MarketsOnly
@@ -100,6 +100,19 @@ try {
     }
     python "$here\build_markets_manifest.py" 2>&1 | Add-Content $log
     if ($failed.Count) { "Markets below floor / failed: $($failed -join ', ')" | Add-Content $log }
+
+    # 2b. Source health (2026-09-26): roll every market's status.json into
+    #     feeds/health/history.jsonl, flag dead / failed / revived sources and
+    #     market collapses, and push a phone alert (status text only). Sundays
+    #     also re-probe sources_watchlist.json so a parked site that comes
+    #     alive gets noticed. Best effort: bookkeeping never blocks publishing.
+    try {
+        $healthArgs = @("--record", "--report", "--notify")
+        if ((Get-Date).DayOfWeek -eq "Sunday") { $healthArgs += "--probe" }
+        python "$here\source_health.py" @healthArgs 2>&1 | Add-Content $log
+    } catch {
+        "source health step skipped: $_" | Add-Content $log
+    }
     } # -not $PublishOnly
 
     # 3. Publish feeds/ as the single-commit orphan branch `feed-data`.

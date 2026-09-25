@@ -1,0 +1,32 @@
+{
+  "id": "vc-kingstown",
+  "name": "Kingstown, St. Vincent",
+  "country": "VC",
+  "tz": "America/St_Vincent",
+  "lat": 13.16,
+  "lng": -61.225,
+  "radius_km": 40,
+  "currency": "XCD",
+  "sources": {
+    "eventbrite": {
+      "slug": "saint-vincent-and-the-grenadines--kingstown"
+    },
+    "ticketpal": {
+      "countries": [
+        "st. vincent",
+        "saint vincent",
+        "st vincent",
+        "svg",
+        "bequia"
+      ]
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "saint vincent",
+        "st. vincent",
+        "st vincent"
+      ]
+    },
+    "community": {}
+  }
+}

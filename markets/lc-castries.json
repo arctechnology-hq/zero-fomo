@@ -1,0 +1,35 @@
+{
+  "id": "lc-castries",
+  "name": "Castries, Saint Lucia",
+  "country": "LC",
+  "tz": "America/St_Lucia",
+  "lat": 14.01,
+  "lng": -60.99,
+  "radius_km": 35,
+  "currency": "XCD",
+  "sources": {
+    "eventbrite": {
+      "slug": "saint-lucia--castries"
+    },
+    "ticketpal": {
+      "countries": [
+        "st. lucia",
+        "saint lucia",
+        "st lucia"
+      ]
+    },
+    "ticketsplus": {
+      "countries": [
+        "lucia"
+      ]
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "saint lucia",
+        "st. lucia",
+        "st lucia"
+      ]
+    },
+    "community": {}
+  }
+}

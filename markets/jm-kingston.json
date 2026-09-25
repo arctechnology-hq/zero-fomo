@@ -13,6 +13,45 @@
     "eventbrite": {
       "slug": "jamaica--kingston"
     },
+    "caribtix": {
+      "countries": [
+        "jamaica"
+      ],
+      "cities": [
+        "kingston",
+        "st. andrew",
+        "portmore",
+        "spanish town"
+      ]
+    },
+    "beatstorapon": {
+      "cc": "jm",
+      "cities": [
+        "kingston",
+        "st. andrew",
+        "portmore",
+        "spanish town"
+      ]
+    },
+    "ticketpal": {
+      "base": "https://secure.ticketpaljamaica.com",
+      "countries": [
+        "jamaica",
+        "kingston"
+      ]
+    },
+    "tikkets": {
+      "base": "https://jamaica.tikkets.com",
+      "city": "kingston"
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "jamaica"
+      ],
+      "cities": [
+        "kingston"
+      ]
+    },
     "community": {}
   }
 }

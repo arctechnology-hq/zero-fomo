@@ -1958,6 +1958,10 @@ class TikketsScraper(BaseScraper):
     EVENT_URL = "https://bahamas.tikkets.com/events/{slug}"
 
     def scrape(self) -> list[Event]:
+        # One deployment per country: bahamas / jamaica / trinidad / guyana
+        base = str(self.params.get("base") or self.BASE).rstrip("/")
+        self.BASE, self.API = base, f"{base}/api/events"
+        self.EVENT_URL = f"{base}/events/{{slug}}"
         payload = self.engine.get(self.API, referer=self.BASE, as_json=True)
         if not payload:
             return []
@@ -1990,6 +1994,698 @@ class TikketsScraper(BaseScraper):
             ev.source_url = self.EVENT_URL.format(slug=slug) if slug else self.BASE
             events.append(ev)
         return _dedupe_name_date(events)
+
+
+# =============================================================================
+# CARIBBEAN-WIDE SOURCES  (added 2026-09-26 — see docs/SOURCES_CARIBBEAN.md)
+#
+# Two kinds of adapter live here:
+#   * generic, config-driven readers (tribe, wp-posts, jsonld) that a market
+#     file points at a site with `base` / `urls` params — no code per island;
+#   * regional platforms that list many countries at once (TriniJungleJuice,
+#     Caribtix, Ticketpal, Island E-Tickets, TicketsPlus, Beats To Rap On).
+#     Each record is kept for a market only if it passes `keep_for_market`:
+#     coordinates inside the market radius when the source has them, else the
+#     market file's `countries` / `cities` substring filters.
+# =============================================================================
+
+_TZ_FALLBACK_HOURS = {
+    "America/Jamaica": -5, "America/Cayman": -5, "America/Panama": -5,
+    "America/Port_of_Spain": -4, "America/Barbados": -4, "America/Antigua": -4,
+    "America/St_Lucia": -4, "America/Grenada": -4, "America/St_Kitts": -4,
+    "America/Dominica": -4, "America/St_Vincent": -4, "America/Aruba": -4,
+    "America/Curacao": -4, "America/Kralendijk": -4, "America/Lower_Princes": -4,
+    "America/Guyana": -4, "America/Santo_Domingo": -4, "America/Puerto_Rico": -4,
+    "America/St_Thomas": -4, "America/Tortola": -4, "America/Montserrat": -4,
+    "America/Anguilla": -4, "Atlantic/Bermuda": -3, "America/Nassau": -4,
+    "America/Grand_Turk": -4, "America/New_York": -4, "America/Belize": -6,
+    "America/Port-au-Prince": -4, "America/Havana": -4,
+}
+
+
+def _to_local(dt: datetime, tz_name: str) -> datetime:
+    """Convert an aware/UTC datetime to the venue's local time. Falls back to a
+    fixed offset table when the OS has no zoneinfo database."""
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    try:
+        from zoneinfo import ZoneInfo  # noqa: WPS433 — stdlib, may lack tzdata
+        return dt.astimezone(ZoneInfo(tz_name))
+    except Exception:  # noqa: BLE001 — missing tzdata on Windows
+        hours = _TZ_FALLBACK_HOURS.get(tz_name, -4)
+        return dt.astimezone(timezone(timedelta(hours=hours)))
+
+
+def _iso_local(value: str, tz_name: str) -> tuple[str, str, Optional[datetime]]:
+    """ISO timestamp -> (date, time_label, local_dt) in the venue zone."""
+    if not value:
+        return "", "", None
+    try:
+        dt = dateparser.parse(str(value))
+    except (ValueError, OverflowError):
+        return "", "", None
+    if dt is None:
+        return "", "", None
+    if dt.tzinfo is not None:
+        dt = _to_local(dt, tz_name)
+    label = dt.strftime("%I:%M %p").lstrip("0") if (dt.hour or dt.minute) else ""
+    return dt.strftime("%Y-%m-%d"), label, dt
+
+
+def _haversine_km(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
+    import math
+    r = 6371.0
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    dphi = math.radians(lat2 - lat1)
+    dlmb = math.radians(lng2 - lng1)
+    a = math.sin(dphi / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dlmb / 2) ** 2
+    return 2 * r * math.asin(math.sqrt(a))
+
+
+def keep_for_market(ev: Event, market: Market, params: dict,
+                    country_text: str = "", city_text: str = "") -> bool:
+    """Multi-country sources: keep a record for this market when its
+    coordinates fall inside the market radius (x1.5 slack), or — without
+    coordinates — when the market file's `countries` / `cities` substrings
+    match the record's country / city / venue text. No filters = keep."""
+    if ev.lat is not None and ev.lng is not None and market is not None:
+        try:
+            return _haversine_km(float(ev.lat), float(ev.lng),
+                                 market.lat, market.lng) <= market.radius_km * 1.5
+        except (TypeError, ValueError):
+            pass
+    countries = [str(c).lower() for c in (params.get("countries") or [])]
+    cities = [str(c).lower() for c in (params.get("cities") or [])]
+    blob = f"{country_text} {city_text} {ev.venue}".lower()
+    if countries and not any(c in blob for c in countries):
+        return False
+    if cities and not any(c in blob for c in cities):
+        return False
+    return True
+
+
+def _flight_blob(html_text: str) -> str:
+    """Join a Next.js App-Router flight payload (self.__next_f.push chunks)
+    back into one decoded string so embedded JSON can be regexed."""
+    chunks = re.findall(r'self\.__next_f\.push\(\[1,"(.*?)"\]\)', html_text, re.S)
+    out = []
+    for c in chunks:
+        try:
+            out.append(json.loads('"' + c + '"'))
+        except ValueError:
+            continue
+    return "".join(out)
+
+
+# -----------------------------------------------------------------------------
+# G1. TRIBE  (WordPress "The Events Calendar" REST — puregrenada.com,
+#     visitmontserrat.com, bonaireisland.com, bahamascarnival.com, …)
+# -----------------------------------------------------------------------------
+
+class TribeEventsScraper(BaseScraper):
+    name = "tribe"
+
+    def scrape(self) -> list[Event]:
+        base = str(self.params.get("base", "")).rstrip("/")
+        if not base:
+            self.status.note = "params.base required (site root)"
+            return []
+        start = datetime.now().strftime("%Y-%m-%d")
+        events: list[Event] = []
+        for page in range(1, self.max_pages + 1):
+            url = (f"{base}/wp-json/tribe/events/v1/events?per_page=50&page={page}"
+                   f"&start_date={start}&status=publish")
+            payload = self.engine.get(url, referer=base, as_json=True, quiet=page > 1)
+            if not isinstance(payload, dict):
+                break
+            self.status.pages_fetched += 1
+            for r in payload.get("events") or []:
+                if isinstance(r, dict):
+                    events.append(self._event(r))
+            if page >= int(payload.get("total_pages") or 1):
+                break
+        kept = []
+        for ev in _dedupe_name_date(events):
+            if keep_for_market(ev, self.market, self.params, ev.venue):
+                kept.append(ev)
+        return kept
+
+    def _event(self, r: dict) -> Event:
+        ev = Event(source_name=self.name, name=strip_html(r.get("title") or "")[:200])
+        start = str(r.get("start_date") or "")
+        end = str(r.get("end_date") or "")
+        ev.date, ev.raw_date = parse_date_iso(start)
+        if not r.get("all_day"):
+            try:
+                sdt = dateparser.parse(start)
+                edt = dateparser.parse(end) if end else None
+                if sdt and (sdt.hour or sdt.minute):
+                    ev.time = sdt.strftime("%I:%M %p").lstrip("0")
+                    if edt and edt.date() == sdt.date() and (edt.hour or edt.minute):
+                        ev.time += " - " + edt.strftime("%I:%M %p").lstrip("0")
+            except (ValueError, OverflowError):
+                pass
+        venue = r.get("venue")
+        if isinstance(venue, dict):
+            bits = [clean_text(venue.get(k)) for k in ("venue", "address", "city", "country")]
+            seen: dict[str, str] = {}
+            for b in bits:
+                if b and b.lower() not in seen:
+                    seen[b.lower()] = b
+            ev.venue = ", ".join(seen.values())
+            try:
+                if venue.get("geo_lat") and venue.get("geo_lng"):
+                    ev.lat, ev.lng = float(venue["geo_lat"]), float(venue["geo_lng"])
+            except (TypeError, ValueError):
+                pass
+        cost = clean_text(r.get("cost"))
+        ev.price = parse_price(cost) or ("Free" if cost.lower() == "free" else "")
+        ev.source_url = clean_text(r.get("url") or r.get("website") or "")
+        ev.description = strip_html(r.get("excerpt") or r.get("description") or "")[:600]
+        cats = " ".join(clean_text(c.get("name")) for c in (r.get("categories") or [])
+                        if isinstance(c, dict))
+        ev.category = infer_category(ev.name, cats, ev.description)
+        return ev
+
+
+# -----------------------------------------------------------------------------
+# G2. WP-POSTS  (WordPress REST custom post types that carry a start date in
+#     meta/ACF — visitantiguabarbuda.com `events_festivals` (_piecal_*),
+#     discoversvg.com `events`. Falls back to the first date in the text.)
+# -----------------------------------------------------------------------------
+
+class WpPostsScraper(BaseScraper):
+    name = "wp-posts"
+    DATE_KEYS = ("_piecal_start_date", "_EventStartDate", "event_start_date",
+                 "start_date", "event_date", "date", "_event_start")
+    VENUE_KEYS = ("venue", "location", "event_venue", "event_location",
+                  "_EventVenue", "_piecal_location")
+
+    def scrape(self) -> list[Event]:
+        base = str(self.params.get("base", "")).rstrip("/")
+        ptype = str(self.params.get("type", "events")).strip("/")
+        if not base:
+            self.status.note = "params.base required (site root)"
+            return []
+        date_keys = list(self.params.get("date_keys") or self.DATE_KEYS)
+        venue_keys = list(self.params.get("venue_keys") or self.VENUE_KEYS)
+        events: list[Event] = []
+        for page in range(1, self.max_pages + 1):
+            url = f"{base}/wp-json/wp/v2/{ptype}?per_page=100&page={page}&orderby=date&order=desc"
+            resp = self.engine.get(url, referer=base, quiet=page > 1)
+            if resp is None:
+                break
+            text = resp.text
+            start = text.find("[{")
+            if start < 0:
+                break
+            try:
+                records = json.loads(text[start:])
+            except ValueError:
+                break
+            self.status.pages_fetched += 1
+            if not isinstance(records, list) or not records:
+                break
+            for r in records:
+                if isinstance(r, dict):
+                    events.append(self._event(r, date_keys, venue_keys))
+            if len(records) < 100:
+                break
+        return [e for e in _dedupe_name_date(events)
+                if keep_for_market(e, self.market, self.params, ev_country(e, self.params))]
+
+    def _event(self, r: dict, date_keys: list[str], venue_keys: list[str]) -> Event:
+        title = r.get("title")
+        ev = Event(source_name=self.name,
+                   name=strip_html(title.get("rendered") if isinstance(title, dict) else title or "")[:200])
+        meta = {}
+        for holder in ("meta", "acf"):
+            h = r.get(holder)
+            if isinstance(h, dict):
+                meta.update({k: v for k, v in h.items() if v not in (None, "", [], {})})
+        for k in date_keys:
+            if meta.get(k):
+                raw = str(meta[k])
+                ev.date, ev.raw_date = parse_date_iso(raw)
+                if ev.date:
+                    t = parse_time(raw)
+                    if not t and "T" in raw:
+                        t = _fmt_24h(raw.split("T", 1)[1][:5])
+                    ev.time = t
+                    break
+        excerpt = r.get("excerpt", {})
+        content = r.get("content", {})
+        body = strip_html((excerpt.get("rendered") if isinstance(excerpt, dict) else "") or "") \
+            or strip_html((content.get("rendered") if isinstance(content, dict) else "") or "")
+        if not ev.date:
+            ev.date, ev.raw_date = parse_date_iso(ev.name + " " + body[:1500])
+        ev.time = ev.time or parse_time(body[:1500])
+        for k in venue_keys:
+            if meta.get(k) and isinstance(meta[k], (str, int, float)):
+                ev.venue = clean_text(str(meta[k]))
+                break
+        ev.venue = ev.venue or clean_text(self.params.get("venue_default") or "")
+        ev.price = parse_price(body[:1500])
+        ev.source_url = clean_text(r.get("link") or "")
+        ev.description = body[:600]
+        ev.category = infer_category(ev.name, ev.description)
+        return ev
+
+
+def ev_country(ev: Event, params: dict) -> str:
+    return str(params.get("country") or "")
+
+
+# -----------------------------------------------------------------------------
+# G3. JSON-LD  (any page that embeds schema.org Event nodes, including
+#     ItemList wrappers — visitcaymanislands.com/en-us/events, …)
+# -----------------------------------------------------------------------------
+
+class JsonLdPagesScraper(BaseScraper):
+    name = "jsonld"
+
+    def scrape(self) -> list[Event]:
+        urls = [str(u) for u in (self.params.get("urls") or []) if u]
+        if not urls:
+            self.status.note = "params.urls required"
+            return []
+        events: list[Event] = []
+        for url in urls[: self.max_pages]:
+            soup = self.engine.soup(url)
+            if soup is None:
+                continue
+            self.status.pages_fetched += 1
+            venue_default = clean_text(self.params.get("venue_default") or "")
+            for node in self._nodes(soup):
+                ev = event_from_json_ld(node, self.name, url)
+                if ev.name:
+                    ev.venue = ev.venue or venue_default
+                    events.append(ev)
+        return [e for e in _dedupe_name_date(events)
+                if keep_for_market(e, self.market, self.params, e.venue)]
+
+    @staticmethod
+    def _nodes(soup: BeautifulSoup) -> list[dict]:
+        found = extract_json_ld_events(soup)
+        if found:
+            return found
+        out: list[dict] = []
+
+        def walk(obj) -> None:
+            if isinstance(obj, dict):
+                if str(obj.get("@type", "")).lower().endswith("event"):
+                    out.append(obj)
+                for v in obj.values():
+                    walk(v)
+            elif isinstance(obj, list):
+                for v in obj:
+                    walk(v)
+
+        for tag in soup.find_all("script", attrs={"type": "application/ld+json"}):
+            try:
+                walk(json.loads(tag.string or ""))
+            except (ValueError, TypeError):
+                continue
+        return out
+
+
+# -----------------------------------------------------------------------------
+# R1. TRINI JUNGLE JUICE  (region-wide fete/carnival calendar; the Next.js
+#     site reads a public Laravel API with venue coordinates and timezone.)
+# -----------------------------------------------------------------------------
+
+class TriniJungleJuiceScraper(BaseScraper):
+    name = "trinijunglejuice"
+    API_BASE = "https://staging.trinijunglejuice.com/api"   # what the live site calls
+    SITE = "https://trinijunglejuice.com"
+
+    def scrape(self) -> list[Event]:
+        api = str(self.params.get("api_base") or self.API_BASE).rstrip("/")
+        events: list[Event] = []
+        page = 1
+        while page <= self.max_pages:
+            url = (f"{api}/events?page={page}&items=100&type=all"
+                   f"&orderDirection=asc&timestamped=true")
+            resp = self.engine.get(url, referer=f"{self.SITE}/events", quiet=page > 1)
+            if resp is None:
+                break
+            try:
+                payload = resp.json()
+            except ValueError:
+                break
+            self.status.pages_fetched += 1
+            groups = payload.get("events") or payload.get("data") or []
+            for g in groups:
+                recs = g.get("events") if isinstance(g, dict) and "events" in g else [g]
+                for r in recs or []:
+                    if isinstance(r, dict) and r.get("title"):
+                        events.append(self._event(r))
+            if page >= int(payload.get("last_page") or 1):
+                break
+            page += 1
+        return [e for e in _dedupe_name_date(events)
+                if keep_for_market(e, self.market, self.params,
+                                   getattr(e, "_country", ""), getattr(e, "_city", ""))]
+
+    def _event(self, r: dict) -> Event:
+        loc = r.get("location") or {}
+        tz_name = clean_text(loc.get("timezone")) or self.market.tz
+        ev = Event(source_name=self.name, name=strip_html(r.get("title") or "")[:200])
+        ev.date, start_label, sdt = _iso_local(str(r.get("start_datetime") or ""), tz_name)
+        ev.raw_date = str(r.get("start_datetime") or "")
+        _, end_label, edt = _iso_local(str(r.get("end_datetime") or ""), tz_name)
+        if r.get("is_whole_day_event"):
+            ev.time = ""
+        else:
+            ev.time = start_label
+            if end_label and sdt and edt and (edt - sdt) <= timedelta(hours=18):
+                ev.time = f"{start_label} - {end_label}" if start_label else ""
+        bits = [clean_text(loc.get("address")), clean_text(loc.get("city")),
+                clean_text(loc.get("country"))]
+        seen: dict[str, str] = {}
+        for b in bits:
+            if b and b.lower() not in seen and not any(b.lower() in s for s in seen):
+                seen[b.lower()] = b
+        ev.venue = ", ".join(seen.values())
+        try:
+            if loc.get("latitude") and loc.get("longitude"):
+                ev.lat, ev.lng = float(loc["latitude"]), float(loc["longitude"])
+        except (TypeError, ValueError):
+            pass
+        cost = str(r.get("cost_per_person") or "").strip()
+        try:
+            ev.price = f"${float(cost):,.2f}" if cost and float(cost) > 0 else ""
+        except ValueError:
+            ev.price = parse_price(cost)
+        slug = clean_text(r.get("slug"))
+        ev.source_url = f"{self.SITE}/events/{slug}" if slug else self.SITE
+        ev.description = strip_html(r.get("description") or "")[:600]
+        cats = " ".join(clean_text(c.get("title")) for c in (r.get("event_categories") or [])
+                        if isinstance(c, dict))
+        tags = " ".join(clean_text(t.get("name")) for t in (r.get("tags") or []) if isinstance(t, dict))
+        ev.category = infer_category(ev.name, cats, tags, ev.description)
+        ev._country = clean_text(loc.get("country"))   # type: ignore[attr-defined]
+        ev._city = clean_text(loc.get("city"))         # type: ignore[attr-defined]
+        return ev
+
+
+# -----------------------------------------------------------------------------
+# R2. CARIBTIX  (Jamaica-centred ticketing, also Bahamas / TCI / South
+#     Florida. The home page is a Next.js flight payload carrying every
+#     listed event with venue coordinates, UTC times and prices.)
+# -----------------------------------------------------------------------------
+
+class CaribtixScraper(BaseScraper):
+    name = "caribtix"
+    BASE = "https://www.caribtix.com"
+    _HEAD_RX = re.compile(r'"id":(\d+),"title":"((?:[^"\\]|\\.)*)"')
+
+    def scrape(self) -> list[Event]:
+        resp = self.engine.get(self.BASE + "/", referer=self.BASE)
+        if resp is None:
+            return []
+        self.status.pages_fetched = 1
+        blob = _flight_blob(resp.text)
+        if "startDateTime" not in blob:
+            self.status.note = "no flight payload with events"
+            return []
+        events: list[Event] = []
+        heads = list(self._HEAD_RX.finditer(blob))
+        for idx, m in enumerate(heads):
+            end = heads[idx + 1].start() if idx + 1 < len(heads) else len(blob)
+            seg = blob[m.start():end]
+            if '"startDateTime"' not in seg:
+                continue
+
+            def grab(key: str) -> str:
+                mm = re.search(r'"%s":"((?:[^"\\]|\\.)*)"' % re.escape(key), seg)
+                return json.loads('"' + mm.group(1) + '"') if mm else ""
+
+            def num(key: str) -> Optional[float]:
+                mm = re.search(r'"%s":(-?\d+(?:\.\d+)?)' % re.escape(key), seg)
+                return float(mm.group(1)) if mm else None
+
+            title = json.loads('"' + m.group(2) + '"')
+            tz_name = grab("eventTimezone") or self.market.tz
+            ev = Event(source_name=self.name, name=clean_text(title)[:200])
+            ev.date, start_label, sdt = _iso_local(grab("startDateTime"), tz_name)
+            ev.raw_date = grab("startDateTime")
+            _, end_label, edt = _iso_local(grab("endDateTime"), tz_name)
+            ev.time = start_label
+            if end_label and sdt and edt and (edt - sdt) <= timedelta(hours=18):
+                ev.time = f"{start_label} - {end_label}"
+            venue = grab("venueName") or grab("name")
+            city, country = grab("city"), grab("country")
+            addr = grab("formattedAddress")
+            seen: dict[str, str] = {}
+            for b in (venue, city, country):
+                if b and b.lower() not in seen:
+                    seen[b.lower()] = b
+            ev.venue = ", ".join(seen.values()) or addr
+            ev.lat, ev.lng = num("lat"), num("lng")
+            price = num("minPrice")
+            cur = grab("currencyCode")
+            if price and price > 0:
+                ev.price = f"${price:,.2f}" if cur in ("USD", "", None) else f"${price:,.2f} {cur}"
+            ev.source_url = grab("buyUrl") or f"{self.BASE}/event/{grab('slug')}"
+            ev.category = infer_category(ev.name)
+            ev._country, ev._city = country, city   # type: ignore[attr-defined]
+            events.append(ev)
+        return [e for e in _dedupe_name_date(events)
+                if keep_for_market(e, self.market, self.params,
+                                   getattr(e, "_country", ""), getattr(e, "_city", ""))]
+
+
+# -----------------------------------------------------------------------------
+# R3. TICKETPAL  (Eastern Caribbean box office: secure.ticketpal.com lists
+#     Barbados / SVG / Dominica / Grenada … ; secure.ticketpaljamaica.com is
+#     the Jamaica spin-off. Server-rendered `.singleEvent` rows.)
+# -----------------------------------------------------------------------------
+
+class TicketpalScraper(BaseScraper):
+    name = "ticketpal"
+    BASE = "https://secure.ticketpal.com"
+
+    def scrape(self) -> list[Event]:
+        base = str(self.params.get("base") or self.BASE).rstrip("/")
+        soup = self.engine.soup(base + "/", referer=base)
+        if soup is None:
+            return []
+        self.status.pages_fetched = 1
+        events: list[Event] = []
+        for row in soup.select(".singleEvent"):
+            a = row.select_one(".eventTitle a[href]")
+            if not a:
+                continue
+            title = clean_text(a.get_text(" "))
+            date_el = row.select_one(".eventDate")
+            date_text = clean_text(date_el.get_text(" ")) if date_el else ""
+            price_el = row.select_one(".priceRangeBlock")
+            where_el = row.select_one(".eventShortDescription")
+            where = clean_text(where_el.get_text(" ")) if where_el else ""
+            iso, raw = parse_date_iso(date_text)
+            if not iso and row.get("data-start-date"):
+                try:
+                    iso = datetime.fromtimestamp(int(row["data-start-date"]), tz=timezone.utc).strftime("%Y-%m-%d")
+                    raw = row["data-start-date"]
+                except (ValueError, OverflowError):
+                    pass
+            ev = Event(name=title[:200], date=iso, raw_date=raw or date_text,
+                       time=parse_time(date_text),
+                       price=parse_price(clean_text(price_el.get_text(" ")) if price_el else ""),
+                       venue=where, source_url=urljoin(base, a["href"]),
+                       source_name=self.name)
+            ev.category = infer_category(ev.name)
+            ev._country = where   # type: ignore[attr-defined]
+            events.append(ev)
+        events = [e for e in _dedupe_name_date(events)
+                  if keep_for_market(e, self.market, self.params, getattr(e, "_country", ""))]
+        self.enrich_from_detail_pages(events)
+        return events
+
+
+# -----------------------------------------------------------------------------
+# R4. ISLAND E-TICKETS  (Trinidad-based promoter platform used across TT /
+#     Barbados / Curaçao / Miami. The home list gives titles and links; each
+#     event page carries a schema.org Event with dates and address.)
+# -----------------------------------------------------------------------------
+
+class IslandETicketsScraper(BaseScraper):
+    name = "islandetickets"
+    BASE = "https://islandetickets.com"
+    DETAIL_CAP = 60      # the home list is ~300 links in date order
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.detail_cap = max(self.detail_cap, self.DETAIL_CAP)
+
+    def scrape(self) -> list[Event]:
+        soup = self.engine.soup(self.BASE + "/", referer=self.BASE)
+        if soup is None:
+            return []
+        self.status.pages_fetched = 1
+        stubs: list[Event] = []
+        for a in soup.select("a.event-list-item[href]"):
+            h = a.select_one("h5")
+            title = clean_text(h.get_text(" ")) if h else clean_text(a.get_text(" "))
+            if len(title) < 3:
+                continue
+            sec = a.select_one(".secondary")
+            sec_text = clean_text(sec.get_text(" ")) if sec else ""
+            venue = ""
+            m = re.search(r"@\s*([^@]{2,80}?)\s*(?:\d{1,2}(?::\d{2})?\s*[ap]m|$)", sec_text, re.I)
+            if m:
+                venue = clean_text(m.group(1)).strip(" -|,")
+            ev = Event(name=title[:200], venue=venue, time=parse_time(sec_text),
+                       source_url=urljoin(self.BASE, a["href"]), source_name=self.name)
+            stubs.append(ev)
+        stubs = dedupe_by_url(stubs)
+        events: list[Event] = []
+        visited = 0
+        for ev in stubs:
+            if visited >= self.detail_cap:
+                break
+            page = self.engine.soup(ev.source_url, referer=self.BASE)
+            visited += 1
+            if page is None:
+                continue
+            # The site's ld+json block is broken by leaked PHP template code
+            # inside "offers", so json.loads fails; pull the fields by regex.
+            raw = " ".join((t.string or t.get_text() or "")
+                           for t in page.find_all("script", attrs={"type": "application/ld+json"}))
+            if '"startDate"' not in raw:
+                continue
+
+            def field(key: str, text: str = raw) -> str:
+                m = re.search(r'"%s"\s*:\s*"((?:[^"\\]|\\.)*)"' % re.escape(key), text)
+                try:
+                    return clean_text(json.loads('"' + m.group(1) + '"')) if m else ""
+                except ValueError:
+                    return clean_text(m.group(1)) if m else ""
+
+            loc_m = re.search(r'"location"\s*:\s*\{(.*?)\}', raw, re.S)
+            loc_text = loc_m.group(1) if loc_m else ""
+            place = field("name", loc_text)
+            address = field("address", loc_text)
+            ev.date, ev.raw_date = parse_date_iso(field("startDate"))
+            start_dt = None
+            try:
+                start_dt = dateparser.parse(field("startDate"))
+                end_dt = dateparser.parse(field("endDate")) if field("endDate") else None
+                if start_dt and (start_dt.hour or start_dt.minute):
+                    ev.time = start_dt.strftime("%I:%M %p").lstrip("0")
+                    if end_dt and (end_dt - start_dt) <= timedelta(hours=18) and (end_dt.hour or end_dt.minute):
+                        ev.time += " - " + end_dt.strftime("%I:%M %p").lstrip("0")
+            except (ValueError, OverflowError, TypeError):
+                pass
+            seen_bits: dict[str, str] = {}
+            for b in (ev.venue, place, address):
+                for part in b.split(","):        # "Barbados, Barbados" collapses
+                    part = clean_text(part)
+                    if part and part.lower() not in seen_bits:
+                        seen_bits[part.lower()] = part
+            ev.venue = ", ".join(seen_bits.values())
+            price = field("price")
+            ev.price = parse_price("$" + price) if price and price not in ("0", "0.00") else ""
+            ev.description = strip_html(field("description"))[:600]
+            ev.category = infer_category(ev.name, ev.description)
+            country = f"{place} {address}"
+            if keep_for_market(ev, self.market, self.params, country, ev.venue):
+                events.append(ev)
+        return events
+
+
+# -----------------------------------------------------------------------------
+# R5. TICKETSPLUS  (Cayman Islands box office, also Antigua / Barbados /
+#     Grenada / Saint Lucia. Server-rendered hero slides on the home page.)
+# -----------------------------------------------------------------------------
+
+class TicketsPlusScraper(BaseScraper):
+    name = "ticketsplus"
+    BASE = "https://www.ticketsplus.ky"
+
+    def scrape(self) -> list[Event]:
+        soup = self.engine.soup(self.BASE + "/en", referer=self.BASE)
+        if soup is None:
+            return []
+        self.status.pages_fetched = 1
+        events: list[Event] = []
+        seen_urls: set[str] = set()
+        for a in soup.select("a[href^='/en/event/']"):
+            url = urljoin(self.BASE, a["href"])
+            if url in seen_urls:
+                continue
+            card = a
+            for _ in range(5):
+                if card.parent is None:
+                    break
+                card = card.parent
+                if card.find(re.compile(r"^h[1-5]$")) and len(clean_text(card.get_text(" "))) > 30:
+                    break
+            text = clean_text(card.get_text(" "))
+            head = card.find(re.compile(r"^h[1-4]$"))
+            title = clean_text(head.get_text(" ")) if head else ""
+            if len(title) < 3:
+                continue
+            venue = ""
+            for h5 in card.find_all("h5"):
+                t = clean_text(h5.get_text(" "))
+                if h5.find("i", class_=re.compile("map")) or ("," in t and not parse_date_iso(t)[0]):
+                    venue = t
+                    break
+            iso, raw = parse_date_iso(text)
+            ev = Event(name=title[:200], date=iso, raw_date=raw, time=parse_time(text),
+                       venue=venue, price=parse_price(text), source_url=url,
+                       source_name=self.name)
+            ev.category = infer_category(ev.name, text)
+            seen_urls.add(url)
+            events.append(ev)
+        events = [e for e in events if keep_for_market(e, self.market, self.params, e.venue)]
+        self.enrich_from_detail_pages(events)
+        return events
+
+
+# -----------------------------------------------------------------------------
+# R6. BEATS TO RAP ON  (per-country concert/party listings with ISO dates and
+#     Plus-Code addresses: /events/jm/, /events/tt/ have inventory.)
+# -----------------------------------------------------------------------------
+
+class BeatsToRapOnScraper(BaseScraper):
+    name = "beatstorapon"
+    BASE = "https://beatstorapon.com"
+
+    def scrape(self) -> list[Event]:
+        cc = str(self.params.get("cc") or self.market.country).lower()
+        url = f"{self.BASE}/events/{cc}/"
+        soup = self.engine.soup(url, referer=self.BASE)
+        if soup is None:
+            return []
+        self.status.pages_fetched = 1
+        events: list[Event] = []
+        for a in soup.select("a.event-card[href]"):
+            h = a.select_one("h3")
+            title = clean_text(h.get_text(" ")) if h else ""
+            if len(title) < 3:
+                continue
+            text = clean_text(a.get_text(" "))
+            m = re.search(r"Date:\s*(20\d{2}-\d{2}-\d{2})", text)
+            loc = re.search(r"Location:\s*(.+?)(?:\s{2,}|$)", text)
+            venue = clean_text(loc.group(1)) if loc else ""
+            venue = re.sub(r"^[A-Z0-9]{4,8}\+[A-Z0-9]{2,3},?\s*", "", venue)   # drop Plus Codes
+            desc = ""
+            paras = [clean_text(p.get_text(" ")) for p in a.select("p")]
+            for p in paras:
+                if not p.startswith(("Date:", "Location:")):
+                    desc = p
+                    break
+            ev = Event(name=title[:200], date=m.group(1) if m else "",
+                       raw_date=m.group(0) if m else "", time=parse_time(desc),
+                       venue=venue, source_url=urljoin(self.BASE, a["href"]),
+                       source_name=self.name, description=desc[:600])
+            ev.category = infer_category(ev.name, desc)
+            events.append(ev)
+        return [e for e in _dedupe_name_date(events)
+                if keep_for_market(e, self.market, self.params, "", e.venue)]
 
 
 # -----------------------------------------------------------------------------
@@ -2589,6 +3285,15 @@ SCRAPER_REGISTRY: dict[str, type[BaseScraper]] = {
     "atlantis": AtlantisScraper,
     "bahamar": BahaMarScraper,
     "tikkets": TikketsScraper,
+    "tribe": TribeEventsScraper,
+    "wp-posts": WpPostsScraper,
+    "jsonld": JsonLdPagesScraper,
+    "trinijunglejuice": TriniJungleJuiceScraper,
+    "caribtix": CaribtixScraper,
+    "ticketpal": TicketpalScraper,
+    "islandetickets": IslandETicketsScraper,
+    "ticketsplus": TicketsPlusScraper,
+    "beatstorapon": BeatsToRapOnScraper,
     "ticketmaster": TicketmasterScraper,
     "seatgeek": SeatGeekScraper,
     "community": CommunityEventsScraper,

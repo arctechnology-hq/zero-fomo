@@ -1,0 +1,21 @@
+{
+  "id": "ht-port-au-prince",
+  "name": "Port-au-Prince",
+  "country": "HT",
+  "tz": "America/Port-au-Prince",
+  "lat": 18.594,
+  "lng": -72.307,
+  "radius_km": 40,
+  "currency": "HTG",
+  "sources": {
+    "eventbrite": {
+      "slug": "haiti--port-au-prince"
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "haiti"
+      ]
+    },
+    "community": {}
+  }
+}

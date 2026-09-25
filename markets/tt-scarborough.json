@@ -1,0 +1,42 @@
+{
+  "id": "tt-scarborough",
+  "name": "Tobago",
+  "country": "TT",
+  "tz": "America/Port_of_Spain",
+  "lat": 11.18,
+  "lng": -60.735,
+  "radius_km": 30,
+  "currency": "TTD",
+  "sources": {
+    "trinijunglejuice": {
+      "countries": [
+        "trinidad and tobago"
+      ],
+      "cities": [
+        "tobago",
+        "scarborough",
+        "crown point",
+        "pigeon point",
+        "buccoo",
+        "store bay"
+      ]
+    },
+    "islandetickets": {
+      "countries": [
+        "tobago"
+      ]
+    },
+    "beatstorapon": {
+      "cc": "tt",
+      "cities": [
+        "tobago",
+        "scarborough",
+        "crown point",
+        "pigeon point",
+        "buccoo",
+        "store bay"
+      ]
+    },
+    "community": {}
+  }
+}

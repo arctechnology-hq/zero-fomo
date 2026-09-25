@@ -11,6 +11,26 @@
     "eventbrite": {
       "slug": "barbados--bridgetown"
     },
+    "ticketpal": {
+      "countries": [
+        "barbados"
+      ]
+    },
+    "ticketsplus": {
+      "countries": [
+        "barbados"
+      ]
+    },
+    "islandetickets": {
+      "countries": [
+        "barbados"
+      ]
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "barbados"
+      ]
+    },
     "community": {}
   }
 }

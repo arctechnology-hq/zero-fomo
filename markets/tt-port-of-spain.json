@@ -11,6 +11,60 @@
     "eventbrite": {
       "slug": "trinidad-and-tobago--port-of-spain"
     },
+    "trinijunglejuice": {
+      "countries": [
+        "trinidad and tobago"
+      ]
+    },
+    "islandetickets": {
+      "countries": [
+        "trinidad"
+      ]
+    },
+    "beatstorapon": {
+      "cc": "tt",
+      "cities": [
+        "port of spain",
+        "chaguanas",
+        "san fernando",
+        "arima",
+        "diego martin",
+        "st. james",
+        "woodbrook",
+        "maraval",
+        "couva",
+        "point fortin",
+        "cantaro",
+        "santa cruz",
+        "chaguaramas",
+        "tunapuna",
+        "curepe",
+        "st. augustine",
+        "valsayn",
+        "macoya",
+        "trincity",
+        "piarco",
+        "carenage",
+        "westmoorings",
+        "cascade",
+        "st. ann",
+        "belmont",
+        "laventille",
+        "barataria",
+        "san juan",
+        "el socorro",
+        "morvant",
+        "moka",
+        "gasparee",
+        "gaspar grande",
+        "queen's park",
+        "chancery lane",
+        "mille fleurs"
+      ]
+    },
+    "tikkets": {
+      "base": "https://trinidad.tikkets.com"
+    },
     "community": {}
   }
 }

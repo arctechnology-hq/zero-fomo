@@ -1,0 +1,25 @@
+{
+  "id": "do-santo-domingo",
+  "name": "Santo Domingo",
+  "country": "DO",
+  "tz": "America/Santo_Domingo",
+  "lat": 18.486,
+  "lng": -69.931,
+  "radius_km": 40,
+  "currency": "DOP",
+  "sources": {
+    "ticketmaster": {},
+    "eventbrite": {
+      "slug": "dominican-republic--santo-domingo"
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "dominican republic"
+      ],
+      "cities": [
+        "santo domingo"
+      ]
+    },
+    "community": {}
+  }
+}

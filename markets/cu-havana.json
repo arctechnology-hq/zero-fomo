@@ -1,0 +1,21 @@
+{
+  "id": "cu-havana",
+  "name": "Havana",
+  "country": "CU",
+  "tz": "America/Havana",
+  "lat": 23.113,
+  "lng": -82.366,
+  "radius_km": 40,
+  "currency": "CUP",
+  "sources": {
+    "eventbrite": {
+      "slug": "cuba--havana"
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "cuba"
+      ]
+    },
+    "community": {}
+  }
+}

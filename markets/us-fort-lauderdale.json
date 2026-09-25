@@ -13,6 +13,46 @@
     "eventbrite": {
       "slug": "fl--fort-lauderdale"
     },
+    "trinijunglejuice": {
+      "countries": [
+        "united states"
+      ],
+      "cities": [
+        "miami",
+        "hollywood",
+        "fort lauderdale",
+        "lauderdale",
+        "tamarac",
+        "davie",
+        "sunrise",
+        "miramar",
+        "pembroke",
+        "hialeah",
+        "coral",
+        "doral",
+        "aventura"
+      ]
+    },
+    "caribtix": {
+      "countries": [
+        "united states"
+      ],
+      "cities": [
+        "miami",
+        "hollywood",
+        "fort lauderdale",
+        "lauderdale",
+        "tamarac",
+        "davie",
+        "sunrise",
+        "miramar",
+        "pembroke",
+        "hialeah",
+        "coral",
+        "doral",
+        "aventura"
+      ]
+    },
     "community": {}
   }
 }

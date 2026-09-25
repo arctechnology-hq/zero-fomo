@@ -1,0 +1,21 @@
+{
+  "id": "aw-oranjestad",
+  "name": "Oranjestad, Aruba",
+  "country": "AW",
+  "tz": "America/Aruba",
+  "lat": 12.524,
+  "lng": -70.027,
+  "radius_km": 25,
+  "currency": "AWG",
+  "sources": {
+    "eventbrite": {
+      "slug": "aruba--oranjestad"
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "aruba"
+      ]
+    },
+    "community": {}
+  }
+}

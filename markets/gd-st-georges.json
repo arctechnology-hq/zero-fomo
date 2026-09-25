@@ -1,0 +1,35 @@
+{
+  "id": "gd-st-georges",
+  "name": "St. George's, Grenada",
+  "country": "GD",
+  "tz": "America/Grenada",
+  "lat": 12.056,
+  "lng": -61.749,
+  "radius_km": 35,
+  "currency": "XCD",
+  "sources": {
+    "eventbrite": {
+      "slug": "grenada--st-georges"
+    },
+    "tribe": {
+      "base": "https://www.puregrenada.com"
+    },
+    "ticketpal": {
+      "countries": [
+        "grenada",
+        "carriacou"
+      ]
+    },
+    "ticketsplus": {
+      "countries": [
+        "grenada"
+      ]
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "grenada"
+      ]
+    },
+    "community": {}
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "tc-providenciales",
+  "name": "Providenciales, Turks & Caicos",
+  "country": "TC",
+  "tz": "America/Grand_Turk",
+  "lat": 21.774,
+  "lng": -72.27,
+  "radius_km": 40,
+  "currency": "USD",
+  "sources": {
+    "eventbrite": {
+      "slug": "united-kingdom--providenciales-and-west-caicos"
+    },
+    "caribtix": {
+      "countries": [
+        "turks and caicos"
+      ]
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "turks and caicos"
+      ]
+    },
+    "community": {}
+  }
+}

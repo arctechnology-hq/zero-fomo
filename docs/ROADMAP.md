@@ -122,6 +122,14 @@ Decisions and design in `GLOBAL_DESIGN.md`. Shipped on the Android codebase:
       REDDIT_CLIENT_ID/SECRET ever exist. Adjust the map with
       `Set-BridgeSecret.ps1 -Bridge reddit -Map 'sub=market,...'`.
 
+- [x] Caribbean rollout (2026-09-26): 22 new market files (OECS, ABC islands,
+      Bermuda, TCI, USVI, PR, DR, SXM, Guyana, Belize, Haiti, Cuba, Tobago) and
+      the existing JM/TT/BB/KY/Florida markets now read TriniJungleJuice's API,
+      Caribtix, Ticketpal, Island E-Tickets, TicketsPlus, Beats To Rap On and
+      per-country Tikkets, plus generic `tribe` / `wp-posts` / `jsonld` readers
+      for tourism-board sites. Records are matched to markets by venue
+      coordinates or `countries` / `cities` filters. `docs/SOURCES_CARIBBEAN.md`.
+
 - [x] Bahamas source survey (2026-09-25): six official/venue calendars added
       to the pipeline (bahamas.com Ministry of Tourism JSON, Tourism Today,
       Nassau Paradise Island, Atlantis, Baha Mar, Tikkets) — Nassau + Freeport

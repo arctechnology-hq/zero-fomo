@@ -23,6 +23,16 @@ Board, Atlantis, Baha Mar and Tikkets — see `docs/SOURCES_BS.md` for the
 survey and the rejected candidates. Cross-source fuzzy deduplication melts
 cross-listed events into single records.
 
+Since 2026-09-26 the same pipeline covers the wider Caribbean: 33 market
+files (Jamaica, Trinidad & Tobago, Barbados, Cayman, the OECS islands, Aruba /
+Curaçao / Bonaire, Bermuda, Turks & Caicos, USVI, Puerto Rico, Dominican
+Republic, Sint Maarten, Guyana, Belize, Haiti, Cuba, South Florida) fed by
+region-wide platforms (TriniJungleJuice API, Caribtix, Ticketpal, Island
+E-Tickets, TicketsPlus, Beats To Rap On, Tikkets) plus three generic readers
+(`tribe`, `wp-posts`, `jsonld`) that turn a tourism-board site into a source
+with one line of market config. Survey, filters and rejects:
+`docs/SOURCES_CARIBBEAN.md`.
+
 ```
 pip install requests beautifulsoup4 lxml pandas python-dateutil openpyxl rapidfuzz playwright
 playwright install chromium

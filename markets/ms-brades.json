@@ -1,0 +1,16 @@
+{
+  "id": "ms-brades",
+  "name": "Montserrat",
+  "country": "MS",
+  "tz": "America/Montserrat",
+  "lat": 16.79,
+  "lng": -62.21,
+  "radius_km": 20,
+  "currency": "XCD",
+  "sources": {
+    "tribe": {
+      "base": "https://www.visitmontserrat.com"
+    },
+    "community": {}
+  }
+}

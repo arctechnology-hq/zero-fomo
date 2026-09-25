@@ -1,0 +1,16 @@
+{
+  "id": "bq-kralendijk",
+  "name": "Kralendijk, Bonaire",
+  "country": "BQ",
+  "tz": "America/Kralendijk",
+  "lat": 12.15,
+  "lng": -68.277,
+  "radius_km": 25,
+  "currency": "USD",
+  "sources": {
+    "tribe": {
+      "base": "https://www.bonaireisland.com"
+    },
+    "community": {}
+  }
+}

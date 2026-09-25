@@ -1,0 +1,28 @@
+{
+  "id": "cw-willemstad",
+  "name": "Willemstad, Curaçao",
+  "country": "CW",
+  "tz": "America/Curacao",
+  "lat": 12.109,
+  "lng": -68.935,
+  "radius_km": 30,
+  "currency": "ANG",
+  "sources": {
+    "eventbrite": {
+      "slug": "curacao--willemstad"
+    },
+    "islandetickets": {
+      "countries": [
+        "curacao",
+        "curaçao"
+      ]
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "curacao",
+        "curaçao"
+      ]
+    },
+    "community": {}
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "id": "sx-philipsburg",
+  "name": "Philipsburg, Sint Maarten",
+  "country": "SX",
+  "tz": "America/Lower_Princes",
+  "lat": 18.026,
+  "lng": -63.045,
+  "radius_km": 25,
+  "currency": "ANG",
+  "sources": {
+    "eventbrite": {
+      "slug": "sint-maarten--philipsburg"
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "sint maarten",
+        "st. maarten",
+        "st maarten",
+        "saint martin",
+        "st. martin"
+      ]
+    },
+    "community": {}
+  }
+}

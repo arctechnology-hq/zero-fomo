@@ -1,0 +1,27 @@
+{
+  "id": "do-punta-cana",
+  "name": "Punta Cana",
+  "country": "DO",
+  "tz": "America/Santo_Domingo",
+  "lat": 18.582,
+  "lng": -68.404,
+  "radius_km": 40,
+  "currency": "DOP",
+  "sources": {
+    "ticketmaster": {},
+    "eventbrite": {
+      "slug": "dominican-republic--punta-cana"
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "dominican republic"
+      ],
+      "cities": [
+        "punta cana",
+        "bavaro",
+        "bávaro"
+      ]
+    },
+    "community": {}
+  }
+}

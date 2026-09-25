@@ -1,0 +1,24 @@
+{
+  "id": "gy-georgetown",
+  "name": "Georgetown, Guyana",
+  "country": "GY",
+  "tz": "America/Guyana",
+  "lat": 6.804,
+  "lng": -58.155,
+  "radius_km": 40,
+  "currency": "GYD",
+  "sources": {
+    "eventbrite": {
+      "slug": "guyana--georgetown"
+    },
+    "tikkets": {
+      "base": "https://guyana.tikkets.com"
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "guyana"
+      ]
+    },
+    "community": {}
+  }
+}

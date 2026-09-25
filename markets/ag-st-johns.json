@@ -1,0 +1,38 @@
+{
+  "id": "ag-st-johns",
+  "name": "St. John's, Antigua",
+  "country": "AG",
+  "tz": "America/Antigua",
+  "lat": 17.118,
+  "lng": -61.845,
+  "radius_km": 35,
+  "currency": "XCD",
+  "sources": {
+    "eventbrite": {
+      "slug": "antigua-and-barbuda--st-johns"
+    },
+    "wp-posts": {
+      "base": "https://www.visitantiguabarbuda.com",
+      "type": "events_festivals",
+      "country": "Antigua and Barbuda",
+      "venue_default": "Antigua"
+    },
+    "ticketpal": {
+      "countries": [
+        "antigua"
+      ]
+    },
+    "ticketsplus": {
+      "countries": [
+        "antigua"
+      ]
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "antigua and barbuda",
+        "antigua"
+      ]
+    },
+    "community": {}
+  }
+}

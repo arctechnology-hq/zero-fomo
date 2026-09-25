@@ -1,0 +1,21 @@
+{
+  "id": "bz-belize-city",
+  "name": "Belize City",
+  "country": "BZ",
+  "tz": "America/Belize",
+  "lat": 17.498,
+  "lng": -88.188,
+  "radius_km": 40,
+  "currency": "BZD",
+  "sources": {
+    "eventbrite": {
+      "slug": "belize--belize-city"
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "belize"
+      ]
+    },
+    "community": {}
+  }
+}

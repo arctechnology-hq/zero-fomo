@@ -1,0 +1,32 @@
+{
+  "id": "kn-basseterre",
+  "name": "Basseterre, St. Kitts",
+  "country": "KN",
+  "tz": "America/St_Kitts",
+  "lat": 17.302,
+  "lng": -62.717,
+  "radius_km": 35,
+  "currency": "XCD",
+  "sources": {
+    "eventbrite": {
+      "slug": "saint-kitts-and-nevis--basseterre"
+    },
+    "ticketpal": {
+      "countries": [
+        "st. kitts",
+        "saint kitts",
+        "st kitts",
+        "nevis"
+      ]
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "saint kitts",
+        "st. kitts",
+        "st kitts",
+        "nevis"
+      ]
+    },
+    "community": {}
+  }
+}

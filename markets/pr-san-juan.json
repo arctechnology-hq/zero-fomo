@@ -1,0 +1,23 @@
+{
+  "id": "pr-san-juan",
+  "name": "San Juan, Puerto Rico",
+  "country": "PR",
+  "tz": "America/Puerto_Rico",
+  "lat": 18.466,
+  "lng": -66.106,
+  "radius_km": 40,
+  "currency": "USD",
+  "sources": {
+    "ticketmaster": {},
+    "seatgeek": {},
+    "eventbrite": {
+      "slug": "pr--san-juan"
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "puerto rico"
+      ]
+    },
+    "community": {}
+  }
+}

@@ -11,6 +11,22 @@
     "eventbrite": {
       "slug": "cayman-islands--george-town"
     },
+    "jsonld": {
+      "urls": [
+        "https://www.visitcaymanislands.com/en-us/events"
+      ],
+      "venue_default": "Cayman Islands"
+    },
+    "ticketsplus": {
+      "countries": [
+        "cayman"
+      ]
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "cayman islands"
+      ]
+    },
     "community": {}
   }
 }

@@ -1,0 +1,21 @@
+{
+  "id": "bm-hamilton",
+  "name": "Hamilton, Bermuda",
+  "country": "BM",
+  "tz": "Atlantic/Bermuda",
+  "lat": 32.294,
+  "lng": -64.782,
+  "radius_km": 25,
+  "currency": "BMD",
+  "sources": {
+    "eventbrite": {
+      "slug": "united-kingdom--hamilton--85669359"
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "bermuda"
+      ]
+    },
+    "community": {}
+  }
+}

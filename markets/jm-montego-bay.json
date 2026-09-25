@@ -8,8 +8,54 @@
   "radius_km": 40,
   "currency": "JMD",
   "sources": {
+    "ticketmaster": {},
+    "seatgeek": {},
     "eventbrite": {
       "slug": "jamaica--montego-bay"
+    },
+    "caribtix": {
+      "countries": [
+        "jamaica"
+      ],
+      "cities": [
+        "montego bay",
+        "negril",
+        "ocho rios",
+        "falmouth",
+        "westmoreland",
+        "st. james",
+        "hanover",
+        "trelawny",
+        "belmont"
+      ]
+    },
+    "beatstorapon": {
+      "cc": "jm",
+      "cities": [
+        "montego bay",
+        "negril",
+        "ocho rios",
+        "falmouth",
+        "westmoreland",
+        "st. james",
+        "hanover",
+        "trelawny",
+        "belmont"
+      ]
+    },
+    "tikkets": {
+      "base": "https://jamaica.tikkets.com",
+      "city": "montego bay"
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "jamaica"
+      ],
+      "cities": [
+        "montego bay",
+        "negril",
+        "ocho rios"
+      ]
     },
     "community": {}
   }

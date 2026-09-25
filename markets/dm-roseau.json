@@ -1,0 +1,26 @@
+{
+  "id": "dm-roseau",
+  "name": "Roseau, Dominica",
+  "country": "DM",
+  "tz": "America/Dominica",
+  "lat": 15.301,
+  "lng": -61.388,
+  "radius_km": 35,
+  "currency": "XCD",
+  "sources": {
+    "eventbrite": {
+      "slug": "dominica--roseau"
+    },
+    "ticketpal": {
+      "countries": [
+        "dominica"
+      ]
+    },
+    "trinijunglejuice": {
+      "countries": [
+        "dominica"
+      ]
+    },
+    "community": {}
+  }
+}

@@ -1,0 +1,28 @@
+{
+ "market": "ms-brades",
+ "generated_at": "2026-09-25T15:59:34Z",
+ "sources_run": [
+  "tribe",
+  "community"
+ ],
+ "raw": 16,
+ "unique": 16,
+ "exported": 16,
+ "review": 0,
+ "sources": [
+  {
+   "name": "tribe",
+   "ok": true,
+   "events": 16,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

@@ -11,6 +11,24 @@
     "eventbrite": {
       "slug": "bahamas--freeport"
     },
+    "bahamas.com": {
+      "areas": [
+        "freeport",
+        "grand bahama",
+        "lucaya",
+        "west end",
+        "east end",
+        "eight mile rock",
+        "high rock",
+        "mcclean",
+        "freetown",
+        "pelican point",
+        "sweeting"
+      ]
+    },
+    "tikkets": {
+      "city": "freeport"
+    },
     "community": {}
   }
 }

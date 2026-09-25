@@ -138,6 +138,7 @@ account the community adds to its own group/channel.
 | Eventbrite | Scrape | live (Nassau) | Public search API was retired in 2020; the `__SERVER_DATA__` parser stays. Per-city URL pattern generalises. |
 | Bandsintown | Scrape (Playwright) | live | Cloudflare-guarded; runs on the OCI fleet. Artist API is not geo-searchable. |
 | Songkick / Reggaeville / Ticket Flare / ETickets Live / AllEvents.in / BahaEvents / Bid Bahamas / BahamasLocal | Scrape | live (Nassau) | Keep as the Bahamas market's source group. |
+| bahamas.com (Ministry of Tourism), Tourism Today, Nassau Paradise Island, Atlantis, Baha Mar, Tikkets | Scrape / JSON | live (Nassau, 2026-09-25) | Official + venue calendars; bahamas.com and Tikkets also feed Freeport. Survey and rejects: `SOURCES_BS.md`. |
 | Resident Advisor, Dice, Skiddle (UK API), Luma public pages | Scrape / API | to build | Nightlife depth in EU/US/UK markets. Skiddle has a free API. |
 | Meetup | API (paid) | deferred | GraphQL API requires a Meetup Pro subscription; scrape public group pages instead. |
 | Instagram | API (hashtag search) | to build | Business account + app review; 30 hashtags / 7 days per account (`#nassauevents`, `#kingstonparty`, …). Posts are images: OCR + LLM extraction. |

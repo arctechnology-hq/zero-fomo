@@ -13,11 +13,15 @@ zero_fomo/                         Android app (Kotlin, Jetpack Compose)
 
 ## Data pipeline
 
-11 sources with per-source error isolation: Ticket Flare (embedded Vue JSON),
-ETickets Live, Eventbrite (`__SERVER_DATA__`), AllEvents.in, Bandsintown
-(Playwright — Cloudflare-guarded), Songkick, Reggaeville, BahaEvents,
-Bid Bahamas, BahamasLocal, and curated `manual_events.json`. Cross-source
-fuzzy deduplication melts cross-listed events into single records.
+17 Bahamas sources with per-source error isolation: Ticket Flare (embedded
+Vue JSON), ETickets Live, Eventbrite (`__SERVER_DATA__`), AllEvents.in,
+Bandsintown (Playwright — Cloudflare-guarded), Songkick, Reggaeville,
+BahaEvents, Bid Bahamas, BahamasLocal, curated `manual_events.json`, and
+since 2026-09-25 the official/venue calendars: bahamas.com (Ministry of
+Tourism JSON endpoint), Tourism Today, Nassau Paradise Island Promotion
+Board, Atlantis, Baha Mar and Tikkets — see `docs/SOURCES_BS.md` for the
+survey and the rejected candidates. Cross-source fuzzy deduplication melts
+cross-listed events into single records.
 
 ```
 pip install requests beautifulsoup4 lxml pandas python-dateutil openpyxl rapidfuzz playwright

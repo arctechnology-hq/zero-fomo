@@ -122,6 +122,12 @@ Decisions and design in `GLOBAL_DESIGN.md`. Shipped on the Android codebase:
       REDDIT_CLIENT_ID/SECRET ever exist. Adjust the map with
       `Set-BridgeSecret.ps1 -Bridge reddit -Map 'sub=market,...'`.
 
+- [x] Bahamas source survey (2026-09-25): six official/venue calendars added
+      to the pipeline (bahamas.com Ministry of Tourism JSON, Tourism Today,
+      Nassau Paradise Island, Atlantis, Baha Mar, Tikkets) — Nassau + Freeport
+      market files updated; 20 more candidates probed and logged with reasons
+      in `docs/SOURCES_BS.md`. Facebook/Instagram remain forwarding-only.
+
 - [x] v0.9.1 polish (2026-09-24): distance pill on feed cards, measured from the
       active "near" point or the user's city (hidden on Bahamas island views,
       where events carry the island centroid); Saved tab gains a "Forwarded to

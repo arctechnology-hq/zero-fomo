@@ -96,7 +96,7 @@ import string
 import sys
 import time
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from difflib import SequenceMatcher
 from functools import lru_cache
 from typing import Callable, Iterable, Optional
@@ -585,6 +585,11 @@ def infer_category(*texts: str) -> str:
 def location_verdict(*texts: str) -> str:
     """'np' = New Providence, 'other' = another island, 'unknown' otherwise."""
     blob = " ".join(t.lower() for t in texts if t)
+    venue = (texts[0] or "").lower() if texts else ""
+    # The venue field is the strongest signal: "Smith's Point Fish Fry, Freeport"
+    # must not become New Providence because "fish fry" is an NP keyword.
+    if venue and any(kw in venue for kw in OTHER_ISLAND_KEYWORDS)             and not any(kw in venue for kw in NEW_PROVIDENCE_KEYWORDS):
+        return "other"
     if any(kw in blob for kw in NEW_PROVIDENCE_KEYWORDS):
         return "np"
     if any(kw in blob for kw in OTHER_ISLAND_KEYWORDS):
@@ -1508,6 +1513,486 @@ class ReggaevilleScraper(BaseScraper):
 
 
 # -----------------------------------------------------------------------------
+# BAHAMAS OFFICIAL / VENUE CALENDARS  (added 2026-09-25 — see docs/SOURCES_BS.md)
+# Shared helpers for listings that print dates without a year ("Sep 26",
+# "Sunday, October 11", "October 21 – 25") and for recurring weekday events.
+# -----------------------------------------------------------------------------
+
+DATE_NOYEAR_RX = re.compile(
+    r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+"
+    r"\d{1,2}(?:st|nd|rd|th)?\b(?:,?\s*(20\d{2}))?", re.IGNORECASE)
+
+_WEEKDAYS = {"monday": 0, "tuesday": 1, "wednesday": 2, "thursday": 3,
+             "friday": 4, "saturday": 5, "sunday": 6}
+
+
+def _next_weekday_date(names: str) -> str:
+    """'thursday,friday,saturday' -> ISO date of the next matching weekday
+    (today counts). Empty when nothing parses."""
+    wanted = {_WEEKDAYS[n.strip().lower()] for n in (names or "").split(",")
+              if n.strip().lower() in _WEEKDAYS}
+    if not wanted:
+        return ""
+    today = datetime.now().date()
+    for delta in range(7):
+        d = today + timedelta(days=delta)
+        if d.weekday() in wanted:
+            return d.isoformat()
+    return ""
+
+
+def _parse_noyear(token: str, year_hint: Optional[int]) -> Optional[datetime]:
+    token = re.sub(r"(\d)(st|nd|rd|th)\b", r"\1", token)
+    try:
+        return dateparser.parse(
+            token, fuzzy=True,
+            default=datetime(year_hint or datetime.now().year, 1, 1))
+    except (ValueError, OverflowError):
+        return None
+
+
+def span_dates(text: str) -> tuple[str, str]:
+    """Resolve a listing date or date range that may lack a year.
+
+    Rules: a single date more than 45 days in the past rolls to next year;
+    a range whose end has passed rolls a year; a range already underway
+    resolves to today (the next occurrence a reader can attend).
+    Returns (iso_date, raw_match)."""
+    if not text:
+        return "", ""
+    text = text.replace("–", "-").replace("—", "-")
+    matches = list(DATE_NOYEAR_RX.finditer(text))
+    if not matches:
+        return parse_date_iso(text)
+    today = datetime.now()
+    first, last = matches[0], matches[-1]
+    year_hint = int(last.group(1)) if last.group(1) else (
+        int(first.group(1)) if first.group(1) else None)
+    start = _parse_noyear(first.group(0), year_hint)
+    if start is None:
+        return "", ""
+    raw = text[first.start():last.end()].strip()
+    explicit_year = bool(first.group(1) or last.group(1))
+    if len(matches) > 1:
+        end = _parse_noyear(last.group(0), year_hint) or start
+        if end < start:                      # "Dec 30 - Jan 2"
+            end = end.replace(year=end.year + 1)
+        if not explicit_year and (today - end).days > 0:
+            start = start.replace(year=start.year + 1)
+            end = end.replace(year=end.year + 1)
+        if start < today <= end:
+            return today.strftime("%Y-%m-%d"), raw
+        return start.strftime("%Y-%m-%d"), raw
+    if not explicit_year and (today - start).days > 45:
+        start = start.replace(year=start.year + 1)
+    return start.strftime("%Y-%m-%d"), raw
+
+
+def _weekday_fallback(text: str) -> str:
+    """Next occurrence when a listing only names weekdays ('Friday & Saturday')."""
+    names = re.findall(r"\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)s?\b",
+                       (text or "").lower())
+    return _next_weekday_date(",".join(names)) if names else ""
+
+
+def _dedupe_name_date(events: list[Event]) -> list[Event]:
+    seen: set[tuple[str, str, str]] = set()
+    out: list[Event] = []
+    for ev in events:
+        key = (normalize_title(ev.name), ev.date, ev.source_url)
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(ev)
+    return out
+
+
+# -----------------------------------------------------------------------------
+# 12. BAHAMAS.COM  (Ministry of Tourism national events calendar, Tambourine
+#     CMS). The listing page is empty HTML; one POST returns every approved
+#     event as a JSON object keyed by timestamp. Records carry the island/area
+#     ("name"), venue, price, recurrence and a seo_name for the detail URL.
+# -----------------------------------------------------------------------------
+
+class BahamasComScraper(BaseScraper):
+    name = "bahamas.com"
+    BASE = "https://www.bahamas.com"
+    ENDPOINT = "https://www.bahamas.com/ajax/functions.php?operation=search_events"
+
+    def scrape(self) -> list[Event]:
+        headers = self.engine._headers(referer=f"{self.BASE}/events")
+        headers["X-Requested-With"] = "XMLHttpRequest"
+        self.engine._throttle(self.ENDPOINT)
+        resp = self.engine.session.post(
+            self.ENDPOINT, data={"data[0][page]": "1"}, headers=headers,
+            timeout=getattr(self.engine, "timeout", 25))
+        resp.raise_for_status()
+        payload = resp.json()
+        self.status.pages_fetched = 1
+        records = [v for v in (payload.values() if isinstance(payload, dict) else payload)
+                   if isinstance(v, dict) and v.get("event_name")]
+        areas = [a.lower() for a in (self.params.get("areas") or [])]
+        events: list[Event] = []
+        for r in records:
+            area = strip_html(r.get("name") or "")
+            place = strip_html(r.get("venue") or r.get("location") or "")
+            if place.upper() == "TBD":
+                place = ""
+            if not area and not place:
+                continue        # national holidays and other venue-less filler
+            venue = ", ".join(dict.fromkeys(b for b in (place, area) if b))
+            if areas and not any(a in f"{venue} {area}".lower() for a in areas):
+                continue
+            ev = Event(source_name=self.name, name=strip_html(r.get("event_name") or "")[:200],
+                       venue=venue)
+            start_raw = clean_text(r.get("event_start"))
+            end_raw = clean_text(r.get("event_end"))
+            rtype = clean_text(r.get("recurrent_type")).lower()
+            ev.date, ev.raw_date = parse_date_iso(start_raw)
+            if not ev.date and end_raw and end_raw.lower() != "none":
+                ev.date, ev.raw_date = parse_date_iso(end_raw)
+            if rtype == "weekly":
+                nxt = _next_weekday_date(clean_text(r.get("recurrent_date")))
+                if nxt and (not ev.date or ev.date < nxt):
+                    ev.date = nxt
+                ev.raw_date = ev.raw_date or f"weekly {clean_text(r.get('recurrent_date'))}".strip()
+            elif rtype == "daily" and not ev.date:
+                ev.date = datetime.now().strftime("%Y-%m-%d")
+                ev.raw_date = "daily"
+            elif rtype == "yearly" and not ev.raw_date:
+                ev.raw_date = f"annually {start_raw}".strip()
+            ev.time = parse_time(" ".join(clean_text(r.get(k)) for k in
+                                          ("recurrent_from_time", "recurrent_until_time", "dates")))
+            price_raw = clean_text(r.get("price"))
+            ev.price = parse_price(price_raw) or ("Free" if price_raw.lower() == "free" else "")
+            seo = clean_text(r.get("seo_name"))
+            website = clean_text(r.get("website"))
+            if seo:
+                ev.source_url = f"{self.BASE}/events/{seo}"
+            elif website and website not in ("http://", "https://"):
+                ev.source_url = website
+            else:
+                ev.source_url = f"{self.BASE}/events"
+            ev.description = strip_html(r.get("short_description") or r.get("description") or "")[:600]
+            ev.category = infer_category(ev.name, ev.description, area)
+            events.append(ev)
+        return _dedupe_name_date(events)
+
+
+# -----------------------------------------------------------------------------
+# 13. TOURISM TODAY  (Ministry of Tourism industry site, Drupal views listing.
+#     Family-Island heavy: homecomings, regattas, boating flings. Exposed
+#     filter `island` — 34 = Nassau & Paradise Island, 6 = Bimini,
+#     28 = Eleuthera & Harbour Island, All = everything.)
+# -----------------------------------------------------------------------------
+
+_RANGE_START_RX = re.compile(
+    r"\b([A-Z][a-z]{2,8})\s+(\d{1,2})(?:\s*-\s*(?:[A-Z][a-z]{2,8}\s+)?\d{1,2})?,\s*(20\d{2})")
+
+
+def _range_start_iso(raw: str) -> tuple[str, str]:
+    m = _RANGE_START_RX.search(raw or "")
+    if m:
+        try:
+            dt = dateparser.parse(f"{m.group(1)} {m.group(2)}, {m.group(3)}")
+            return dt.strftime("%Y-%m-%d"), m.group(0)
+        except (ValueError, OverflowError):
+            pass
+    return parse_date_iso(raw)
+
+
+class TourismTodayScraper(BaseScraper):
+    name = "tourismtoday"
+    BASE = "https://www.tourismtoday.com"
+
+    def scrape(self) -> list[Event]:
+        island = str(self.params.get("island", "All"))
+        events: list[Event] = []
+        for page in range(0, self.max_pages):
+            url = f"{self.BASE}/events?island={island}&page={page}"
+            soup = self.engine.soup(url, referer=self.BASE)
+            if soup is None:
+                break
+            self.status.pages_fetched += 1
+            found: list[Event] = []
+            for row in soup.select(".views-row"):
+                a = row.select_one(".teaser-title a[href], h3 a[href*='/events/']")
+                if not a:   # fall back to any text-bearing link (the first is often the image)
+                    a = next((x for x in row.select("a[href*='/events/']")
+                              if clean_text(x.get_text(" "))), None)
+                if not a:
+                    continue
+                title = clean_text(a.get_text(" "))
+                if len(title) < 3:
+                    continue
+                date_el = row.select_one(".teaser-date")
+                raw = clean_text(date_el.get_text(" ")) if date_el else clean_text(row.get_text(" "))
+                iso, _ = _range_start_iso(raw)
+                body = row.select_one(".teaser-content")
+                ev = Event(name=title[:200], date=iso, raw_date=raw,
+                           source_url=urljoin(self.BASE, a["href"]),
+                           source_name=self.name,
+                           description=clean_text(body.get_text(" "))[:600] if body else "")
+                found.append(ev)
+            known = {e.source_url for e in events}
+            new = [e for e in found if e.source_url not in known]
+            if not new:
+                break
+            events.extend(new)
+        events = dedupe_by_url(events)
+        self._enrich(events)
+        for ev in events:
+            ev.category = ev.category or infer_category(ev.name, ev.description)
+        return events
+
+    def _enrich(self, events: list[Event]) -> None:
+        if not self.fetch_details:
+            return
+        visited = 0
+        for ev in events:
+            if visited >= self.detail_cap:
+                break
+            soup = self.engine.soup(ev.source_url, referer=self.BASE)
+            visited += 1
+            if soup is None:
+                continue
+
+            def field(cls: str) -> str:
+                node = soup.select_one(f".field--name-{cls} .field__item, .field--name-{cls}")
+                if not node:
+                    return ""
+                text = clean_text(node.get_text(" "))
+                return re.sub(r"^(Venue|Address|Date|Organization / Contact|Website)\s*",
+                              "", text, flags=re.IGNORECASE).strip()
+
+            venue = field("field-event-venue")
+            address = field("field-event-address")
+            island = field("field-event-island")
+            seen_bits: dict[str, str] = {}
+            for bit in (venue, address, island):
+                if bit and bit.lower() not in seen_bits:
+                    seen_bits[bit.lower()] = bit
+            ev.venue = ", ".join(seen_bits.values())
+            date_text = field("field-date")
+            if date_text:
+                iso, raw = _range_start_iso(date_text)
+                ev.date = ev.date or iso
+                ev.time = ev.time or parse_time(date_text)
+            cat = field("field-event-category")
+            ev.category = infer_category(cat, ev.name, ev.description)
+            body = soup.select_one(".field--name-body")
+            body_text = clean_text(body.get_text(" ")) if body else ""
+            if not ev.description:
+                ev.description = body_text[:600]
+            # Price only from the event body: the site footer says "Toll-Free"
+            ev.price = ev.price or parse_price(body_text)
+
+
+# -----------------------------------------------------------------------------
+# 14. NASSAU PARADISE ISLAND  (Promotion Board calendar, Drupal, server-
+#     rendered <article class="event card"> — resort activities, culinary,
+#     sporting and cultural dates on New Providence.)
+# -----------------------------------------------------------------------------
+
+class NassauParadiseIslandScraper(BaseScraper):
+    name = "nassauparadiseisland"
+    BASE = "https://www.nassauparadiseisland.com"
+    URL = "https://www.nassauparadiseisland.com/experiences/calendar-of-events"
+
+    def scrape(self) -> list[Event]:
+        soup = self.engine.soup(self.URL, referer=self.BASE)
+        if soup is None:
+            return []
+        self.status.pages_fetched = 1
+        events: list[Event] = []
+        for art in soup.select("article.event"):
+            heading = art.select_one("h4")
+            if not heading:
+                continue
+            title = clean_text(heading.get_text(" "))
+            if len(title) < 3:
+                continue
+            date_div = art.select_one(".date")
+            spans = [clean_text(s.get_text(" ")) for s in date_div.select("span")] if date_div else []
+            raw = ""
+            if len(spans) >= 4:
+                raw = f"{spans[0]} {spans[1]} - {spans[2]} {spans[3]}"
+            elif len(spans) >= 2:
+                raw = f"{spans[0]} {spans[1]}"
+            iso, _ = span_dates(raw)
+            time_el = art.select_one(".time")
+            if not iso and time_el:
+                iso = _weekday_fallback(time_el.get_text(" "))
+            loc = art.select_one(".location")
+            body = art.select_one(".body")
+            tag = art.select_one(".tagline")
+            link = art.select_one(".links a[href]")
+            venue = clean_text(loc.get_text(" ")) if loc else ""
+            if venue and "nassau" not in venue.lower() and "paradise island" not in venue.lower():
+                venue = f"{venue}, Nassau"
+            ev = Event(
+                name=title[:200], date=iso, raw_date=raw,
+                time=parse_time(time_el.get_text(" ")) if time_el else "",
+                venue=venue or "Nassau & Paradise Island",
+                source_url=(link["href"] if link else urljoin(self.BASE, art.get("about") or self.URL)),
+                source_name=self.name,
+                description=clean_text(body.get_text(" "))[:600] if body else "",
+            )
+            ev.category = infer_category(ev.name, clean_text(tag.get_text(" ")) if tag else "",
+                                         ev.description)
+            events.append(ev)
+        return _dedupe_name_date(events)
+
+
+# -----------------------------------------------------------------------------
+# 15. ATLANTIS PARADISE ISLAND  (Nuxt, server-rendered event cards: headline,
+#     weekday date without year, time span, venue row.)
+# -----------------------------------------------------------------------------
+
+_WEEKDAY_DATE_RX = re.compile(
+    r"\b(?:Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day,?\s+"
+    r"(?:January|February|March|April|May|June|July|August|September|October|"
+    r"November|December)\s+\d{1,2}(?:,\s*20\d{2})?", re.IGNORECASE)
+
+
+class AtlantisScraper(BaseScraper):
+    name = "atlantis"
+    BASE = "https://www.atlantisbahamas.com"
+    URL = "https://www.atlantisbahamas.com/events"
+
+    def scrape(self) -> list[Event]:
+        resp = self.engine.get(self.URL, referer=self.BASE)
+        if resp is None:
+            return []
+        self.status.pages_fetched = 1
+        soup = make_soup(resp.text)
+        events: list[Event] = []
+        for head in soup.select("div[class*='headline-3']"):
+            title = clean_text(head.get_text(" "))
+            if len(title) < 3:
+                continue
+            card = head.parent
+            for _ in range(3):
+                if card is None or len(clean_text(card.get_text(" "))) > len(title) + 12:
+                    break
+                card = card.parent
+            if card is None:
+                continue
+            rows = [clean_text(r.get_text(" ")) for r in card.select("div.flex.items-center")]
+            text = " ".join(rows) or clean_text(card.get_text(" "))
+            m = _WEEKDAY_DATE_RX.search(text)
+            iso, raw = span_dates(m.group(0)) if m else ("", "")
+            time_txt = parse_time(text)
+            venue_rows = [r for r in rows
+                          if r and not _WEEKDAY_DATE_RX.search(r) and not parse_time(r)]
+            venue = venue_rows[0] if venue_rows else ""
+            link = head.find_parent("a", href=True) or card.find("a", href=True)
+            outer = card
+            for _ in range(4):
+                if link is not None or outer is None:
+                    break
+                outer = outer.parent
+                link = outer.find("a", href=True) if outer is not None else None
+            url = urljoin(self.BASE, link["href"]) if link else self.URL
+            ev = Event(name=title[:200], date=iso, raw_date=raw, time=time_txt,
+                       venue=(f"{venue}, Atlantis Paradise Island" if venue and
+                              "atlantis" not in venue.lower() else venue or "Atlantis Paradise Island"),
+                       source_url=url, source_name=self.name)
+            ev.price = parse_price(text)
+            ev.category = infer_category(ev.name, text)
+            events.append(ev)
+        return _dedupe_name_date(events)
+
+
+# -----------------------------------------------------------------------------
+# 16. BAHA MAR  (WordPress special-events page: callout cards with a headline,
+#     description, "October 21 – 25"-style date span and a Learn More link.)
+# -----------------------------------------------------------------------------
+
+class BahaMarScraper(BaseScraper):
+    name = "bahamar"
+    BASE = "https://bahamar.com"
+    URL = "https://bahamar.com/special-events/"
+
+    def scrape(self) -> list[Event]:
+        soup = self.engine.soup(self.URL, referer=self.BASE)
+        if soup is None:
+            return []
+        self.status.pages_fetched = 1
+        events: list[Event] = []
+        for card in soup.select(".callout-text-container"):
+            head = card.select_one(".cal-healdine, .cal-headline, h3, h4")
+            if not head:
+                continue
+            title = clean_text(head.get_text(" "))
+            if len(title) < 3:
+                continue
+            date_el = card.select_one(".date")
+            raw = clean_text(date_el.get_text(" ")) if date_el else ""
+            iso, _ = span_dates(raw)
+            if not iso:
+                iso = _weekday_fallback(raw)
+            desc = card.select_one(".description")
+            link = card.select_one("a[href]")
+            text = clean_text(card.get_text(" "))
+            ev = Event(name=title[:200], date=iso, raw_date=raw,
+                       time=parse_time(raw) or parse_time(text),
+                       venue="Baha Mar, Cable Beach, Nassau",
+                       source_url=urljoin(self.BASE, link["href"]) if link else self.URL,
+                       source_name=self.name,
+                       description=clean_text(desc.get_text(" "))[:600] if desc else "")
+            ev.category = infer_category(ev.name, ev.description)
+            events.append(ev)
+        return _dedupe_name_date(events)
+
+
+# -----------------------------------------------------------------------------
+# 17. TIKKETS  (Bahamas ticketing start-up; clean public JSON at /api/events
+#     with ISO start/end, venue, city, price, category, slug.)
+# -----------------------------------------------------------------------------
+
+class TikketsScraper(BaseScraper):
+    name = "tikkets"
+    BASE = "https://bahamas.tikkets.com"
+    API = "https://bahamas.tikkets.com/api/events"
+    EVENT_URL = "https://bahamas.tikkets.com/events/{slug}"
+
+    def scrape(self) -> list[Event]:
+        payload = self.engine.get(self.API, referer=self.BASE, as_json=True)
+        if not payload:
+            return []
+        self.status.pages_fetched = 1
+        records = payload.get("data") if isinstance(payload, dict) else payload
+        city = str(self.params.get("city") or "").lower()   # e.g. "freeport"
+        events: list[Event] = []
+        for d in records or []:
+            if not isinstance(d, dict):
+                continue
+            if city and city not in f"{d.get('city', '')} {d.get('location', '')}".lower():
+                continue
+            ev = event_from_mined_dict(d, self.name, self.BASE)
+            ev.time = clean_text(d.get("time")) or ev.time
+            if d.get("end_date") and ev.time and " - " not in ev.time:
+                try:
+                    end = dateparser.parse(str(d["end_date"]))
+                    if end and (end.hour or end.minute):
+                        ev.time = f"{ev.time} - {end.strftime('%I:%M %p').lstrip('0')}"
+                except (ValueError, OverflowError):
+                    pass
+            if d.get("price") in (None, 0, "0", "0.00"):
+                ev.price = ""
+            elif d.get("price"):
+                ev.price = parse_price(f"${d['price']}")
+            ev.venue = ", ".join(dict.fromkeys(
+                b for b in (clean_text(d.get("venue_name")), clean_text(d.get("city")),
+                            clean_text(d.get("country"))) if b)) or ev.venue
+            slug = clean_text(d.get("slug"))
+            ev.source_url = self.EVENT_URL.format(slug=slug) if slug else self.BASE
+            events.append(ev)
+        return _dedupe_name_date(events)
+
+
+# -----------------------------------------------------------------------------
 # 11. MANUAL EVENTS  (curated hand-entries: word-of-mouth / social-media-only
 #     promotions that no indexable site lists yet. Edit manual_events.json.)
 # -----------------------------------------------------------------------------
@@ -2098,6 +2583,12 @@ SCRAPER_REGISTRY: dict[str, type[BaseScraper]] = {
     "bandsintown": BandsintownScraper,
     "songkick": SongkickScraper,
     "reggaeville": ReggaevilleScraper,
+    "bahamas.com": BahamasComScraper,
+    "tourismtoday": TourismTodayScraper,
+    "nassauparadiseisland": NassauParadiseIslandScraper,
+    "atlantis": AtlantisScraper,
+    "bahamar": BahaMarScraper,
+    "tikkets": TikketsScraper,
     "ticketmaster": TicketmasterScraper,
     "seatgeek": SeatGeekScraper,
     "community": CommunityEventsScraper,

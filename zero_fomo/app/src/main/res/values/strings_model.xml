@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Strings owned by the model/ and data/sync/, data/inbox/ layer (Event,
+     DateRangeFilter, Location, ReminderWorker, InboxRepository). Android
+     merges every values/*.xml, so this sits alongside strings.xml and the
+     other agents' own files rather than editing them directly. -->
+<resources>
+
+    <!-- Event.kt: EventCategory display labels (card chips). -->
+    <string name="category_culture_heritage">Culture / Heritage</string>
+    <string name="category_regatta_maritime">Regatta / Maritime</string>
+    <string name="category_farmers_craft_market">Farmers / Craft Market</string>
+    <string name="category_fair_popup">Fair / Popup</string>
+    <string name="category_festival">Festival</string>
+    <string name="category_concert_live_music">Concert / Live Music</string>
+    <string name="category_club_promotion">Club Promotion</string>
+    <string name="category_nightlife_party">Nightlife / Party</string>
+    <string name="category_beach_party">Beach Party</string>
+    <string name="category_comedy">Comedy</string>
+    <string name="category_pageant">Pageant</string>
+    <string name="category_food_drink">Food &amp; Drink</string>
+    <string name="category_sports_fitness">Sports &amp; Fitness</string>
+    <string name="category_arts_theatre">Arts &amp; Theatre</string>
+    <string name="category_conference_expo">Conference / Expo</string>
+    <string name="category_business_networking">Business / Networking</string>
+    <string name="category_faith_community">Faith &amp; Community</string>
+    <string name="category_general">General</string>
+    <string name="category_unknown">Other</string>
+
+    <!-- Event.kt: price display. -->
+    <string name="price_free">Free</string>
+    <string name="price_from_format">From $%1$s</string>
+
+    <!-- DateRangeFilter.kt: quick date presets + the custom-range format. -->
+    <string name="filter_all_upcoming">All upcoming</string>
+    <string name="filter_today">Today</string>
+    <string name="filter_this_weekend">This weekend</string>
+    <string name="filter_next_7_days">Next 7 days</string>
+    <string name="filter_next_30_days">Next 30 days</string>
+    <string name="filter_custom_range_format">%1$s → %2$s</string>
+
+    <!-- Location.kt: LocationFilter.Everywhere. -->
+    <string name="location_everywhere">Everywhere</string>
+
+    <!-- ReminderWorker.kt: notification channel + content. -->
+    <string name="reminder_channel_name">Event reminders</string>
+    <string name="reminder_channel_description">Reminders for events you saved</string>
+    <string name="reminder_notification_title_format">Tomorrow: %1$s</string>
+    <string name="reminder_time_suffix_format"> at %1$s</string>
+    <string name="reminder_venue_fallback">Nassau</string>
+    <string name="reminder_notification_body_format">%1$s%2$s 🎉</string>
+
+    <!-- InboxRepository.kt: user-facing submission error text. -->
+    <string name="error_photo_gone">The photo is no longer on this phone — share it again</string>
+    <string name="error_http_format">HTTP %1$d</string>
+
+</resources>

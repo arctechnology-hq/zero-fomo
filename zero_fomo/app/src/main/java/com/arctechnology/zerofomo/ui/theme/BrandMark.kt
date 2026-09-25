@@ -9,9 +9,11 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.arctechnology.zerofomo.R
 
 /**
  * "The Cancelled Zero" drawn live so the arms can take the selected
@@ -27,7 +29,8 @@ fun BrandMark(
     armB: Color = LocalCountryAccents.current.armB,
     bar: Color = Sand,
 ) {
-    Canvas(modifier.semantics { contentDescription = "0 FOMO" }) {
+    val wordmark = stringResource(R.string.app_name)
+    Canvas(modifier.semantics { contentDescription = wordmark }) {
         val s = size.minDimension
         val k = s / 24f
         val stroke = Stroke(width = 2.6f * k, cap = StrokeCap.Round)

@@ -32,10 +32,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.arctechnology.zerofomo.R
 import com.arctechnology.zerofomo.ui.theme.AquaDeep
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
@@ -98,7 +101,7 @@ fun SavedScreen(
                         listOf(AquaDeep, MaterialTheme.colorScheme.primary))),
         ) {
             Text(
-                "Saved 💛",
+                stringResource(R.string.saved_title),
                 Modifier
                     .statusBarsPadding()
                     .padding(start = 16.dp, top = 6.dp, bottom = 12.dp),
@@ -119,9 +122,9 @@ fun SavedScreen(
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text("💛", style = MaterialTheme.typography.displayMedium)
-                        Text("Nothing saved yet",
+                        Text(stringResource(R.string.saved_empty_title),
                             style = MaterialTheme.typography.titleMedium)
-                        Text("Tap the heart on any event to keep it here — even offline",
+                        Text(stringResource(R.string.saved_empty_subtitle),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.outline)
                     }
@@ -134,8 +137,8 @@ fun SavedScreen(
                     if (submissions.isNotEmpty()) {
                         item(key = "forwarded-header") {
                             SectionHeader(
-                                "Forwarded to 0 FOMO",
-                                "Posts you shared are reviewed before they reach the feed",
+                                stringResource(R.string.saved_forwarded_header),
+                                stringResource(R.string.saved_forwarded_subtitle),
                             )
                         }
                         items(submissions, key = { "sub-${it.id}" }) { s ->
@@ -147,8 +150,8 @@ fun SavedScreen(
                         }
                         item(key = "saved-header") {
                             SectionHeader(
-                                "Saved events",
-                                if (saved.isEmpty()) "Tap the heart on any event to keep it here" else null,
+                                stringResource(R.string.saved_section_header),
+                                if (saved.isEmpty()) stringResource(R.string.saved_section_subtitle) else null,
                             )
                         }
                     }
@@ -185,14 +188,16 @@ private fun ForwardedRow(s: SubmissionEntity, onRetry: () -> Unit, onRemove: () 
     val title = when {
         s.text.isNotBlank() -> s.text.lineSequence().first { it.isNotBlank() }.take(90)
         s.url.isNotBlank() -> s.url
-        else -> "Photo"
+        else -> stringResource(R.string.saved_photo_fallback)
     }
-    val from = s.sourceHint.ifBlank { "another app" }
+    val from = s.sourceHint.ifBlank { stringResource(R.string.saved_from_another_app) }
     val failed = s.status == SubmissionEntity.FAILED
     val statusText = when (s.status) {
-        SubmissionEntity.SENT -> "Sent · in review"
-        SubmissionEntity.FAILED -> "Couldn't send" + (s.error?.let { " · $it" } ?: "")
-        else -> if (s.attempts > 0) "Retrying when online…" else "Queued"
+        SubmissionEntity.SENT -> stringResource(R.string.saved_status_sent)
+        SubmissionEntity.FAILED -> s.error?.let { stringResource(R.string.saved_status_failed_with_error, it) }
+            ?: stringResource(R.string.saved_status_failed)
+        else -> if (s.attempts > 0) stringResource(R.string.saved_status_retrying)
+        else stringResource(R.string.saved_status_queued)
     }
     val statusColor = when (s.status) {
         SubmissionEntity.SENT -> MaterialTheme.colorScheme.tertiary
@@ -216,7 +221,7 @@ private fun ForwardedRow(s: SubmissionEntity, onRetry: () -> Unit, onRemove: () 
             Column(Modifier.weight(1f)) {
                 Text(title, style = MaterialTheme.typography.titleSmall,
                     maxLines = 2, overflow = TextOverflow.Ellipsis)
-                Text("from $from · ${ago(s.createdAtEpochMs)}",
+                Text(stringResource(R.string.saved_from_ago, from, ago(s.createdAtEpochMs)),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline)
                 Text(statusText, style = MaterialTheme.typography.labelMedium,
@@ -224,23 +229,26 @@ private fun ForwardedRow(s: SubmissionEntity, onRetry: () -> Unit, onRemove: () 
             }
             if (failed) {
                 if (s.kind != "image") {
-                    TextButton(onClick = onRetry) { Text("Retry") }
+                    TextButton(onClick = onRetry) { Text(stringResource(R.string.saved_retry)) }
                 }
                 IconButton(onClick = onRemove) {
-                    Icon(Icons.Default.Close, contentDescription = "Remove")
+                    Icon(Icons.Default.Close, contentDescription = stringResource(R.string.saved_cd_remove))
                 }
             }
         }
     }
 }
 
+@Composable
 private fun ago(epochMs: Long, now: Long = System.currentTimeMillis()): String {
     val mins = ((now - epochMs) / 60_000L).coerceAtLeast(0)
     return when {
-        mins < 1 -> "just now"
-        mins < 60 -> "${mins}m ago"
-        mins < 60 * 24 -> "${mins / 60}h ago"
-        else -> "${mins / (60 * 24)}d ago"
+        mins < 1 -> stringResource(R.string.time_ago_just_now)
+        mins < 60 -> pluralStringResource(R.plurals.time_ago_minutes, mins.toInt(), mins.toInt())
+        mins < 60 * 24 -> pluralStringResource(
+            R.plurals.time_ago_hours, (mins / 60).toInt(), (mins / 60).toInt())
+        else -> pluralStringResource(
+            R.plurals.time_ago_days, (mins / (60 * 24)).toInt(), (mins / (60 * 24)).toInt())
     }
 }
 
@@ -264,18 +272,17 @@ private fun PurgedNotice(names: List<String>, onDismiss: () -> Unit) {
         ) {
             Column(Modifier.weight(1f)) {
                 Text(
-                    if (names.size == 1) "A saved event is no longer listed"
-                    else "${names.size} saved events are no longer listed",
+                    pluralStringResource(R.plurals.saved_purged_title, names.size, names.size),
                     style = MaterialTheme.typography.titleSmall,
                 )
                 Text(
-                    if (more > 0) "$shown and $more more were removed from Saved."
-                    else "$shown ${if (names.size == 1) "was" else "were"} removed from Saved.",
+                    if (more > 0) stringResource(R.string.saved_purged_removed_more, shown, more)
+                    else pluralStringResource(R.plurals.saved_purged_removed, names.size, shown),
                     style = MaterialTheme.typography.bodySmall,
                 )
             }
             IconButton(onClick = onDismiss) {
-                Icon(Icons.Default.Close, contentDescription = "Dismiss notice")
+                Icon(Icons.Default.Close, contentDescription = stringResource(R.string.saved_cd_dismiss_notice))
             }
         }
     }

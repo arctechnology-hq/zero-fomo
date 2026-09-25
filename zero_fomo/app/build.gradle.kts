@@ -68,6 +68,11 @@ android {
         compose = true
         buildConfig = true
     }
+    // Ship only the translated locales (declared in res/xml/locales_config.xml)
+    // instead of every locale a dependency happens to carry strings for.
+    androidResources {
+        localeFilters += listOf("en", "es", "fr", "pt", "ht", "nl")
+    }
 }
 
 dependencies {

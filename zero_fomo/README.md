@@ -30,6 +30,14 @@ kotlinx.serialization · WorkManager (6-hour feed sync) · min SDK 26.
    `buildConfigField("String", "FEED_BASE_URL", "\"https://<your-host>/<path>/\"")`
    (the directory that contains `events.json`, trailing slash required).
 
+## Languages
+UI strings live in `app/src/main/res/values/strings*.xml` (English) with
+generated `values-es`, `values-fr`, `values-pt`, `values-ht`, `values-nl`.
+Regenerate or check translations with `python tools/translate_strings.py
+[langs] [--check|--from-raw]` (FIE flash tier, zero Claude tokens). Android 13+
+users pick the app language in system settings via `xml/locales_config.xml`;
+older devices follow the system locale.
+
 ## Building
 Open the `zero_fomo/` folder in Android Studio (Koala or newer). First build
 downloads the Gradle wrapper if prompted; or install Gradle 8.7+ and run:

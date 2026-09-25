@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">0 FOMO</string>
+
+<string name="detail_back_content_description">Voltar</string>
+    
+<string name="detail_share_content_description">Compartilhar</string>
+    
+<string name="detail_save_content_description">Salvar</string>
+    
+<string name="detail_unsave_content_description">Remover</string>
+    
+<string name="detail_directions_button">Rota</string>
+    
+<string name="detail_location_tba">Local a definir</string>
+    
+<string name="detail_price_free_badge">Entrada gratuita</string>
+    
+<string name="detail_add_to_calendar_button">Adicionar à agenda</string>
+    
+<string name="detail_about_heading">Sobre</string>
+    
+<string name="detail_add_to_calendar_sheet_title">Adicionar à agenda</string>
+    
+<string name="detail_calendar_target_google">Google / agenda do aparelho</string>
+    
+<string name="detail_calendar_target_google_subtitle">Abre o editor de eventos do seu app de agenda</string>
+    
+<string name="detail_calendar_target_outlook">Outlook</string>
+    
+<string name="detail_calendar_target_outlook_subtitle">Abre a página de novo evento do Outlook</string>
+    
+<string name="detail_calendar_target_ical">Arquivo iCal (.ics)</string>
+    
+<string name="detail_calendar_target_ical_subtitle">Compartilhar um arquivo de agenda universal</string>
+    
+<string name="detail_share_calendar_file_chooser_title">Compartilhar arquivo de agenda</string>
+    
+<string name="detail_share_event_chooser_title">Compartilhar evento</string>
+    
+<string name="detail_no_app_toast">Nenhum app neste celular pode abrir isso</string>
+
+    
+    
+<string name="action_get_tickets">Comprar ingressos</string>
+    
+<string name="action_view_post">Ver publicação</string>
+    
+<string name="action_more_info">Mais informações</string>
+
+    
+    
+<string name="share_title">Enviar para o 0 FOMO</string>
+    
+<string name="share_kind_flyer">Flyer</string>
+    
+<string name="share_kind_link">Link</string>
+    
+<string name="share_kind_post">Publicação</string>
+    
+<string name="share_from_hint">de %1$s</string>
+    
+<string name="share_for_area_prefix">· para</string>
+    
+<string name="share_default_area">sua região</string>
+    
+<string name="share_note_placeholder">Algo a acrescentar? Local, preço, data…</string>
+    
+<string name="share_reviewer_disclaimer">Um revisor confere antes de aparecer. Não precisa de conta; nada mais é lido dos seus apps.</string>
+    
+<string name="share_cancel_button">Cancelar</string>
+    
+<string name="share_send_button">Enviar</string>
+    
+<string name="share_sending_button">Enviando…</string>
+    
+<string name="share_sent_toast">Enviado ao 0 FOMO para revisão</string>
+
+    
+    
+<string name="calendar_price_prefix">Preço: %1$s</string>
+    
+<string name="calendar_tickets_info_prefix">Ingressos/info: %1$s</string>
+    
+<string name="calendar_added_from">Adicionado do 0 FOMO</string>
+
+    
+    
+<string name="nav_events_tab">Eventos</string>
+    
+<string name="nav_saved_tab">Salvos</string>
+
+<string name="feed_cd_search">Buscar</string>
+    
+<string name="feed_not_synced_yet">Ainda não sincronizado. Puxe para atualizar</string>
+    
+<string name="feed_updated_just_now">Atualizado agora mesmo</string>
+    
+<plurals name="time_freshness_minutes">
+        <item quantity="one">Atualizado há %1$d min</item>
+        <item quantity="other">Atualizado há %1$d min</item>
+    </plurals>
+    
+<plurals name="time_freshness_hours">
+        <item quantity="one">Atualizado há %1$dh</item>
+        <item quantity="other">Atualizado há %1$dh</item>
+    </plurals>
+    
+<plurals name="time_freshness_days">
+        <item quantity="one">Atualizado há %1$dd</item>
+        <item quantity="other">Atualizado há %1$dd</item>
+    </plurals>
+    
+<string name="feed_choose_a_place">Escolha um lugar</string>
+    
+<string name="feed_cd_change_location">Mudar localização</string>
+    
+<string name="feed_date_custom">Personalizado…</string>
+    
+<string name="feed_all_islands">Todas as ilhas</string>
+    
+<string name="feed_near_place">Perto de %1$s</string>
+    
+<string name="feed_all_country_name">Todo o %1$s</string>
+    
+<string name="feed_keyword_chip">“%1$s”</string>
+    
+<string name="feed_cd_clear_search">Limpar busca</string>
+    
+<string name="feed_today">Hoje</string>
+    
+<string name="feed_tomorrow">Amanhã</string>
+    
+<plurals name="feed_event_count">
+        <item quantity="one">%1$d evento</item>
+        <item quantity="other">%1$d eventos</item>
+    </plurals>
+    
+<string name="feed_tba">A definir</string>
+    
+<string name="feed_cd_unsave">Remover</string>
+    
+<string name="feed_cd_save">Salvar</string>
+    
+<string name="feed_empty_no_events_market">Nenhum evento corresponde a esses filtros</string>
+    
+<string name="feed_empty_no_events_location">Nada listado para %1$s ainda</string>
+    
+<string name="feed_empty_hint_market">Tente ampliar o período ou a ilha</string>
+    
+<string name="feed_empty_hint_location">O 0 FOMO cresce cidade por cidade. Amplie a área ou volte em breve.</string>
+    
+<string name="feed_clear_filters">Limpar filtros</string>
+    
+<string name="feed_change_location">Mudar localização</string>
+    
+<string name="feed_cancel">Cancelar</string>
+    
+<string name="feed_apply">Aplicar</string>
+    
+<string name="feed_keyword_title">O que você procura?</string>
+    
+<string name="feed_keyword_placeholder">Palavra-chave: reggae, brunch, comédia…</string>
+    
+<string name="feed_location_title">Onde você está?</string>
+    
+<string name="feed_locating">Encontrando sua cidade…</string>
+    
+<string name="feed_use_my_location">Usar minha localização (aproximada)</string>
+    
+<string name="feed_location_search_placeholder">Cidade, ilha, CEP ou região</string>
+    
+<string name="feed_cd_clear">Limpar</string>
+    
+<string name="feed_search_online">Buscar \"%1$s\" online</string>
+    
+<string name="feed_popular_in">Popular em %1$s</string>
+    
+<string name="feed_country_section_label">País</string>
+    
+<string name="feed_cd_selected">Selecionado</string>
+    
+<string name="feed_all_countries_count">Todos os %1$d países</string>
+
+    
+    
+<string name="feed_status_offline">Offline. Mostrando eventos em cache.</string>
+    
+<string name="feed_status_location_off">Localização desativada. Escolha uma cidade.</string>
+    
+<string name="feed_status_near_place">Você está perto de %1$s</string>
+    
+<string name="feed_status_no_fix">Não foi possível localizar. Escolha uma cidade.</string>
+
+    
+    
+<string name="saved_title">Salvos 💛</string>
+    
+<string name="saved_empty_title">Nada salvo ainda</string>
+    
+<string name="saved_empty_subtitle">Toque no coração de qualquer evento para guardá-lo aqui — até offline</string>
+    
+<string name="saved_forwarded_header">Encaminhado ao 0 FOMO</string>
+    
+<string name="saved_forwarded_subtitle">As publicações que você compartilhou passam por revisão antes de chegar ao feed</string>
+    
+<string name="saved_section_header">Eventos salvos</string>
+    
+<string name="saved_section_subtitle">Toque no coração de qualquer evento para guardá-lo aqui</string>
+    
+<string name="saved_status_sent">Enviado · em revisão</string>
+    
+<string name="saved_status_failed">Não foi possível enviar</string>
+    
+<string name="saved_status_failed_with_error">Não foi possível enviar · %1$s</string>
+    
+<string name="saved_status_retrying">Tentando de novo quando online…</string>
+    
+<string name="saved_status_queued">Na fila</string>
+    
+<string name="saved_retry">Tentar de novo</string>
+    
+<string name="saved_cd_remove">Remover</string>
+    
+<string name="saved_from_ago">de %1$s · %2$s</string>
+    
+<string name="saved_from_another_app">outro app</string>
+    
+<string name="saved_photo_fallback">Foto</string>
+    
+<string name="time_ago_just_now">agora mesmo</string>
+    
+<plurals name="time_ago_minutes">
+        <item quantity="one">há %1$d min</item>
+        <item quantity="other">há %1$d min</item>
+    </plurals>
+    
+<plurals name="time_ago_hours">
+        <item quantity="one">há %1$dh</item>
+        <item quantity="other">há %1$dh</item>
+    </plurals>
+    
+<plurals name="time_ago_days">
+        <item quantity="one">há %1$dd</item>
+        <item quantity="other">há %1$dd</item>
+    </plurals>
+    
+<plurals name="saved_purged_title">
+        <item quantity="one">Um evento salvo não está mais listado</item>
+        <item quantity="other">%1$d eventos salvos não estão mais listados</item>
+    </plurals>
+    
+<string name="saved_purged_removed_more">%1$s e mais %2$d foram removidos dos Salvos.</string>
+    
+<plurals name="saved_purged_removed">
+        <item quantity="one">%1$s foi removido dos Salvos.</item>
+        <item quantity="other">%1$s foram removidos dos Salvos.</item>
+    </plurals>
+    
+<string name="saved_cd_dismiss_notice">Dispensar aviso</string>
+
+<string name="category_culture_heritage">Cultura / Patrimônio</string>
+    
+<string name="category_regatta_maritime">Regata / Marítimo</string>
+    
+<string name="category_farmers_craft_market">Feira de produtores / artesanato</string>
+    
+<string name="category_fair_popup">Feira / Pop-up</string>
+    
+<string name="category_festival">Festival</string>
+    
+<string name="category_concert_live_music">Show / Música ao vivo</string>
+    
+<string name="category_club_promotion">Festa de balada</string>
+    
+<string name="category_nightlife_party">Vida noturna / Festa</string>
+    
+<string name="category_beach_party">Festa na praia</string>
+    
+<string name="category_comedy">Comédia</string>
+    
+<string name="category_pageant">Concurso de beleza</string>
+    
+<string name="category_food_drink">Comida &amp; Bebida</string>
+    
+<string name="category_sports_fitness">Esportes &amp; Fitness</string>
+    
+<string name="category_arts_theatre">Artes &amp; Teatro</string>
+    
+<string name="category_conference_expo">Conferência / Exposição</string>
+    
+<string name="category_business_networking">Negócios / Networking</string>
+    
+<string name="category_faith_community">Fé &amp; Comunidade</string>
+    
+<string name="category_general">Geral</string>
+    
+<string name="category_unknown">Outro</string>
+
+    
+    
+<string name="price_free">Grátis</string>
+    
+<string name="price_from_format">A partir de $%1$s</string>
+
+    
+    
+<string name="filter_all_upcoming">Todos os próximos</string>
+    
+<string name="filter_today">Hoje</string>
+    
+<string name="filter_this_weekend">Este fim de semana</string>
+    
+<string name="filter_next_7_days">Próximos 7 dias</string>
+    
+<string name="filter_next_30_days">Próximos 30 dias</string>
+    
+<string name="filter_custom_range_format">%1$s → %2$s</string>
+
+    
+    
+<string name="location_everywhere">Em todos os lugares</string>
+
+    
+    
+<string name="reminder_channel_name">Lembretes de eventos</string>
+    
+<string name="reminder_channel_description">Lembretes dos eventos que você salvou</string>
+    
+<string name="reminder_notification_title_format">Amanhã: %1$s</string>
+    
+<string name="reminder_time_suffix_format"> às %1$s</string>
+    
+<string name="reminder_venue_fallback">Nassau</string>
+    
+<string name="reminder_notification_body_format">%1$s%2$s 🎉</string>
+
+    
+    
+<string name="error_photo_gone">A foto não está mais neste celular — compartilhe de novo</string>
+    
+<string name="error_http_format">HTTP %1$d</string>
+
+
+</resources>

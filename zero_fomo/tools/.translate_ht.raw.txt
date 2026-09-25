@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">0 FOMO</string>
+
+<string name="detail_back_content_description">Retounen</string>
+    
+<string name="detail_share_content_description">Pataje</string>
+    
+<string name="detail_save_content_description">Sove</string>
+    
+<string name="detail_unsave_content_description">Retire</string>
+    
+<string name="detail_directions_button">Wout</string>
+    
+<string name="detail_location_tba">Kote pou konfime</string>
+    
+<string name="detail_price_free_badge">Antre gratis</string>
+    
+<string name="detail_add_to_calendar_button">Ajoute nan Kalandriye</string>
+    
+<string name="detail_about_heading">Konsènan</string>
+    
+<string name="detail_add_to_calendar_sheet_title">Ajoute nan kalandriye</string>
+    
+<string name="detail_calendar_target_google">Google / kalandriye telefòn</string>
+    
+<string name="detail_calendar_target_google_subtitle">Louvri editè evènman aplikasyon kalandriye w la</string>
+    
+<string name="detail_calendar_target_outlook">Outlook</string>
+    
+<string name="detail_calendar_target_outlook_subtitle">Louvri paj nouvo evènman Outlook la</string>
+    
+<string name="detail_calendar_target_ical">Fichye iCal (.ics)</string>
+    
+<string name="detail_calendar_target_ical_subtitle">Pataje yon fichye kalandriye inivèsèl</string>
+    
+<string name="detail_share_calendar_file_chooser_title">Pataje fichye kalandriye</string>
+    
+<string name="detail_share_event_chooser_title">Pataje evènman</string>
+    
+<string name="detail_no_app_toast">Pa gen okenn aplikasyon sou telefòn sa a ki ka louvri sa</string>
+
+    
+    
+<string name="action_get_tickets">Jwenn Tikè</string>
+    
+<string name="action_view_post">Wè pòs</string>
+    
+<string name="action_more_info">Plis enfòmasyon</string>
+
+    
+    
+<string name="share_title">Voye bay 0 FOMO</string>
+    
+<string name="share_kind_flyer">Flyer</string>
+    
+<string name="share_kind_link">Lyen</string>
+    
+<string name="share_kind_post">Pòs</string>
+    
+<string name="share_from_hint">soti nan %1$s</string>
+    
+<string name="share_for_area_prefix">· pou</string>
+    
+<string name="share_default_area">zòn ou</string>
+    
+<string name="share_note_placeholder">Anyen pou ajoute? Kote, pri, dat…</string>
+    
+<string name="share_reviewer_disclaimer">Yon revizè verifye li anvan li parèt. Pa bezwen kont; pa gen anyen lòt li nan aplikasyon w yo.</string>
+    
+<string name="share_cancel_button">Anile</string>
+    
+<string name="share_send_button">Voye</string>
+    
+<string name="share_sending_button">Ap voye…</string>
+    
+<string name="share_sent_toast">Voye bay 0 FOMO pou revizyon</string>
+
+    
+    
+<string name="calendar_price_prefix">Pri: %1$s</string>
+    
+<string name="calendar_tickets_info_prefix">Tikè/enfo: %1$s</string>
+    
+<string name="calendar_added_from">Ajoute soti nan 0 FOMO</string>
+
+    
+    
+<string name="nav_events_tab">Evènman</string>
+    
+<string name="nav_saved_tab">Sove</string>
+
+<string name="feed_cd_search">Chèche</string>
+    
+<string name="feed_not_synced_yet">Poko senkronize. Rale pou rafrechi</string>
+    
+<string name="feed_updated_just_now">Mizajou kounye a</string>
+    
+<plurals name="time_freshness_minutes">
+        <item quantity="one">Mizajou %1$d min de sa</item>
+        <item quantity="other">Mizajou %1$d min de sa</item>
+    </plurals>
+    
+<plurals name="time_freshness_hours">
+        <item quantity="one">Mizajou %1$dh de sa</item>
+        <item quantity="other">Mizajou %1$dh de sa</item>
+    </plurals>
+    
+<plurals name="time_freshness_days">
+        <item quantity="one">Mizajou %1$dj de sa</item>
+        <item quantity="other">Mizajou %1$dj de sa</item>
+    </plurals>
+    
+<string name="feed_choose_a_place">Chwazi yon kote</string>
+    
+<string name="feed_cd_change_location">Chanje kote</string>
+    
+<string name="feed_date_custom">Pèsonalize…</string>
+    
+<string name="feed_all_islands">Tout zile</string>
+    
+<string name="feed_near_place">Pre %1$s</string>
+    
+<string name="feed_all_country_name">Tout %1$s</string>
+    
+<string name="feed_keyword_chip">“%1$s”</string>
+    
+<string name="feed_cd_clear_search">Efase rechèch</string>
+    
+<string name="feed_today">Jodi a</string>
+    
+<string name="feed_tomorrow">Demen</string>
+    
+<plurals name="feed_event_count">
+        <item quantity="one">%1$d evènman</item>
+        <item quantity="other">%1$d evènman</item>
+    </plurals>
+    
+<string name="feed_tba">Pou konfime</string>
+    
+<string name="feed_cd_unsave">Retire</string>
+    
+<string name="feed_cd_save">Sove</string>
+    
+<string name="feed_empty_no_events_market">Pa gen evènman ki matche ak filtè sa yo</string>
+    
+<string name="feed_empty_no_events_location">Poko gen anyen ki nan lis pou %1$s</string>
+    
+<string name="feed_empty_hint_market">Eseye elaji peryòd dat la oswa zile a</string>
+    
+<string name="feed_empty_hint_location">0 FOMO ap grandi vil pa vil. Elaji zòn nan, oswa tounen pi devan.</string>
+    
+<string name="feed_clear_filters">Efase filtè</string>
+    
+<string name="feed_change_location">Chanje kote</string>
+    
+<string name="feed_cancel">Anile</string>
+    
+<string name="feed_apply">Aplike</string>
+    
+<string name="feed_keyword_title">Kisa w ap chèche?</string>
+    
+<string name="feed_keyword_placeholder">Mo kle: reggae, brunch, komedi…</string>
+    
+<string name="feed_location_title">Kote ou ye?</string>
+    
+<string name="feed_locating">Ap jwenn vil ou…</string>
+    
+<string name="feed_use_my_location">Sèvi ak kote mwen (apwoksimatif)</string>
+    
+<string name="feed_location_search_placeholder">Vil, zile, kòd postal oswa rejyon</string>
+    
+<string name="feed_cd_clear">Efase</string>
+    
+<string name="feed_search_online">Chèche \"%1$s\" sou entènèt</string>
+    
+<string name="feed_popular_in">Popilè nan %1$s</string>
+    
+<string name="feed_country_section_label">Peyi</string>
+    
+<string name="feed_cd_selected">Chwazi</string>
+    
+<string name="feed_all_countries_count">Tout %1$d peyi</string>
+
+    
+    
+<string name="feed_status_offline">Òfliy. Ap montre evènman ki an kachèt.</string>
+    
+<string name="feed_status_location_off">Kote fèmen. Chwazi yon vil pito.</string>
+    
+<string name="feed_status_near_place">Ou pre %1$s</string>
+    
+<string name="feed_status_no_fix">Pa t kapab jwenn kote w. Chwazi yon vil pito.</string>
+
+    
+    
+<string name="saved_title">Sove 💛</string>
+    
+<string name="saved_empty_title">Poko gen anyen sove</string>
+    
+<string name="saved_empty_subtitle">Tape kè a sou nenpòt evènman pou kenbe l la — menm òfliy</string>
+    
+<string name="saved_forwarded_header">Voye bay 0 FOMO</string>
+    
+<string name="saved_forwarded_subtitle">Pòs ou pataje yo revize anvan yo rive nan fil la</string>
+    
+<string name="saved_section_header">Evènman sove</string>
+    
+<string name="saved_section_subtitle">Tape kè a sou nenpòt evènman pou kenbe l la</string>
+    
+<string name="saved_status_sent">Voye · an revizyon</string>
+    
+<string name="saved_status_failed">Pa t kapab voye</string>
+    
+<string name="saved_status_failed_with_error">Pa t kapab voye · %1$s</string>
+    
+<string name="saved_status_retrying">Ap eseye ankò lè sou entènèt…</string>
+    
+<string name="saved_status_queued">Nan keu</string>
+    
+<string name="saved_retry">Eseye ankò</string>
+    
+<string name="saved_cd_remove">Retire</string>
+    
+<string name="saved_from_ago">soti nan %1$s · %2$s</string>
+    
+<string name="saved_from_another_app">yon lòt aplikasyon</string>
+    
+<string name="saved_photo_fallback">Foto</string>
+    
+<string name="time_ago_just_now">kounye a</string>
+    
+<plurals name="time_ago_minutes">
+        <item quantity="one">%1$dmin de sa</item>
+        <item quantity="other">%1$dmin de sa</item>
+    </plurals>
+    
+<plurals name="time_ago_hours">
+        <item quantity="one">%1$dh de sa</item>
+        <item quantity="other">%1$dh de sa</item>
+    </plurals>
+    
+<plurals name="time_ago_days">
+        <item quantity="one">%1$dj de sa</item>
+        <item quantity="other">%1$dj de sa</item>
+    </plurals>
+    
+<plurals name="saved_purged_title">
+        <item quantity="one">Yon evènman sove pa nan lis ankò</item>
+        <item quantity="other">%1$d evènman sove pa nan lis ankò</item>
+    </plurals>
+    
+<string name="saved_purged_removed_more">%1$s ak %2$d lòt te retire nan Sove.</string>
+    
+<plurals name="saved_purged_removed">
+        <item quantity="one">%1$s te retire nan Sove.</item>
+        <item quantity="other">%1$s te retire nan Sove.</item>
+    </plurals>
+    
+<string name="saved_cd_dismiss_notice">Fèmen avi</string>
+
+<string name="category_culture_heritage">Kilti / Eritaj</string>
+    
+<string name="category_regatta_maritime">Regatta / Maritim</string>
+    
+<string name="category_farmers_craft_market">Mache Kiltivatè / Atizana</string>
+    
+<string name="category_fair_popup">Fwa / Popup</string>
+    
+<string name="category_festival">Festival</string>
+    
+<string name="category_concert_live_music">Konsè / Mizik an Dirèk</string>
+    
+<string name="category_club_promotion">Pwomosyon Klèb</string>
+    
+<string name="category_nightlife_party">Vie Nwit / Fèt</string>
+    
+<string name="category_beach_party">Fèt Plaj</string>
+    
+<string name="category_comedy">Komedi</string>
+    
+<string name="category_pageant">Konkou Bèlte</string>
+    
+<string name="category_food_drink">Manje &amp; Bwason</string>
+    
+<string name="category_sports_fitness">Espò &amp; Fòm</string>
+    
+<string name="category_arts_theatre">Atizay &amp; Teyat</string>
+    
+<string name="category_conference_expo">Konferans / Ekspozisyon</string>
+    
+<string name="category_business_networking">Biznis / Rezo</string>
+    
+<string name="category_faith_community">Lafwa &amp; Kominote</string>
+    
+<string name="category_general">Jeneral</string>
+    
+<string name="category_unknown">Lòt</string>
+
+    
+    
+<string name="price_free">Gratis</string>
+    
+<string name="price_from_format">Soti nan $%1$s</string>
+
+    
+    
+<string name="filter_all_upcoming">Tout sa k ap vini</string>
+    
+<string name="filter_today">Jodi a</string>
+    
+<string name="filter_this_weekend">Wikenn sa a</string>
+    
+<string name="filter_next_7_days">7 jou kap vini</string>
+    
+<string name="filter_next_30_days">30 jou kap vini</string>
+    
+<string name="filter_custom_range_format">%1$s → %2$s</string>
+
+    
+    
+<string name="location_everywhere">Toupatou</string>
+
+    
+    
+<string name="reminder_channel_name">Rapèl evènman</string>
+    
+<string name="reminder_channel_description">Rapèl pou evènman ou sove yo</string>
+    
+<string name="reminder_notification_title_format">Demen: %1$s</string>
+    
+<string name="reminder_time_suffix_format"> a %1$s</string>
+    
+<string name="reminder_venue_fallback">Nassau</string>
+    
+<string name="reminder_notification_body_format">%1$s%2$s 🎉</string>
+
+    
+    
+<string name="error_photo_gone">Foto a pa sou telefòn sa a ankò — pataje l ankò</string>
+    
+<string name="error_http_format">HTTP %1$d</string>
+
+
+</resources>

@@ -8,6 +8,7 @@ import android.net.Uri
 import android.util.Base64
 import androidx.core.content.edit
 import com.arctechnology.zerofomo.BuildConfig
+import com.arctechnology.zerofomo.R
 import com.arctechnology.zerofomo.data.db.SubmissionDao
 import com.arctechnology.zerofomo.data.db.SubmissionEntity
 import com.arctechnology.zerofomo.data.sync.UploadWorker
@@ -79,7 +80,7 @@ class InboxRepository @Inject constructor(
         val photoGone = s.kind == "image" && s.imagePath?.let { File(it).exists() } != true
         if (photoGone) {
             dao.update(s.id, SubmissionEntity.FAILED, s.attempts, null,
-                "The photo is no longer on this phone — share it again")
+                context.getString(R.string.error_photo_gone))
         } else {
             dao.update(s.id, SubmissionEntity.QUEUED, 0, null, null)
             UploadWorker.enqueue(context)
@@ -120,10 +121,12 @@ class InboxRepository @Inject constructor(
                 // Only a rejection of the payload itself is final. 404/5xx mean
                 // the inbox is not (yet) reachable behind the host: keep trying.
                 if (e.code() in PERMANENT_HTTP || s.attempts + 1 >= MAX_ATTEMPTS) {
-                    dao.update(s.id, SubmissionEntity.FAILED, s.attempts + 1, null, "HTTP ${e.code()}")
+                    dao.update(s.id, SubmissionEntity.FAILED, s.attempts + 1, null,
+                        context.getString(R.string.error_http_format, e.code()))
                     image?.delete()
                 } else {
-                    dao.update(s.id, SubmissionEntity.QUEUED, s.attempts + 1, null, "HTTP ${e.code()}")
+                    dao.update(s.id, SubmissionEntity.QUEUED, s.attempts + 1, null,
+                        context.getString(R.string.error_http_format, e.code()))
                     allDone = false
                 }
             } catch (e: Exception) {

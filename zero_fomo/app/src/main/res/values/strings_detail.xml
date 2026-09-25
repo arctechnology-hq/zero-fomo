@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ui/detail/DetailScreen.kt -->
+    <string name="detail_back_content_description">Back</string>
+    <string name="detail_share_content_description">Share</string>
+    <string name="detail_save_content_description">Save</string>
+    <string name="detail_unsave_content_description">Unsave</string>
+    <string name="detail_directions_button">Directions</string>
+    <string name="detail_location_tba">Location TBA</string>
+    <string name="detail_price_free_badge">Free entry</string>
+    <string name="detail_add_to_calendar_button">Add to Calendar</string>
+    <string name="detail_about_heading">About</string>
+    <string name="detail_add_to_calendar_sheet_title">Add to calendar</string>
+    <string name="detail_calendar_target_google">Google / device calendar</string>
+    <string name="detail_calendar_target_google_subtitle">Opens your calendar app\'s event editor</string>
+    <string name="detail_calendar_target_outlook">Outlook</string>
+    <string name="detail_calendar_target_outlook_subtitle">Opens Outlook\'s new-event page</string>
+    <string name="detail_calendar_target_ical">iCal file (.ics)</string>
+    <string name="detail_calendar_target_ical_subtitle">Share a universal calendar file</string>
+    <string name="detail_share_calendar_file_chooser_title">Share calendar file</string>
+    <string name="detail_share_event_chooser_title">Share event</string>
+    <string name="detail_no_app_toast">No app on this phone can open that</string>
+
+    <!-- ui/detail/SourceAction.kt -->
+    <string name="action_get_tickets">Get Tickets</string>
+    <string name="action_view_post">View post</string>
+    <string name="action_more_info">More info</string>
+
+    <!-- ui/share/ShareActivity.kt -->
+    <string name="share_title">Send to 0 FOMO</string>
+    <string name="share_kind_flyer">Flyer</string>
+    <string name="share_kind_link">Link</string>
+    <string name="share_kind_post">Post</string>
+    <string name="share_from_hint">from %1$s</string>
+    <string name="share_for_area_prefix">· for</string>
+    <string name="share_default_area">your area</string>
+    <string name="share_note_placeholder">Anything to add? Venue, price, date…</string>
+    <string name="share_reviewer_disclaimer">A reviewer checks it before it appears. No account needed; nothing else is read from your apps.</string>
+    <string name="share_cancel_button">Cancel</string>
+    <string name="share_send_button">Send</string>
+    <string name="share_sending_button">Sending…</string>
+    <string name="share_sent_toast">Sent to 0 FOMO for review</string>
+
+    <!-- ui/calendar/CalendarExporter.kt -->
+    <string name="calendar_price_prefix">Price: %1$s</string>
+    <string name="calendar_tickets_info_prefix">Tickets/info: %1$s</string>
+    <string name="calendar_added_from">Added from 0 FOMO</string>
+
+    <!-- MainActivity.kt -->
+    <string name="nav_events_tab">Events</string>
+    <string name="nav_saved_tab">Saved</string>
+</resources>

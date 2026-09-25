@@ -30,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.padding
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -119,7 +120,7 @@ fun ZeroFomoNavHost() {
                                 if (currentRoute == Routes.FEED) Icons.Default.Celebration
                                 else Icons.Outlined.Celebration, null)
                         },
-                        label = { Text("Events") },
+                        label = { Text(stringResource(R.string.nav_events_tab)) },
                     )
                     NavigationBarItem(
                         selected = currentRoute == Routes.SAVED,
@@ -129,7 +130,7 @@ fun ZeroFomoNavHost() {
                                 if (currentRoute == Routes.SAVED) Icons.Default.Favorite
                                 else Icons.Default.FavoriteBorder, null)
                         },
-                        label = { Text("Saved") },
+                        label = { Text(stringResource(R.string.nav_saved_tab)) },
                     )
                 }
             }

@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<string name="detail_back_content_description">Terug</string>
+    
+<string name="detail_share_content_description">Delen</string>
+    
+<string name="detail_save_content_description">Opslaan</string>
+    
+<string name="detail_unsave_content_description">Niet meer opslaan</string>
+    
+<string name="detail_directions_button">Route</string>
+    
+<string name="detail_location_tba">Locatie volgt</string>
+    
+<string name="detail_price_free_badge">Gratis entree</string>
+    
+<string name="detail_add_to_calendar_button">Toevoegen aan agenda</string>
+    
+<string name="detail_about_heading">Over</string>
+    
+<string name="detail_add_to_calendar_sheet_title">Toevoegen aan agenda</string>
+    
+<string name="detail_calendar_target_google">Google / agenda-app</string>
+    
+<string name="detail_calendar_target_google_subtitle">Opent de afspraak-editor van je agenda-app</string>
+    
+<string name="detail_calendar_target_outlook">Outlook</string>
+    
+<string name="detail_calendar_target_outlook_subtitle">Opent de nieuwe-afspraak-pagina van Outlook</string>
+    
+<string name="detail_calendar_target_ical">iCal-bestand (.ics)</string>
+    
+<string name="detail_calendar_target_ical_subtitle">Deel een universeel agendabestand</string>
+    
+<string name="detail_share_calendar_file_chooser_title">Agendabestand delen</string>
+    
+<string name="detail_share_event_chooser_title">Evenement delen</string>
+    
+<string name="detail_no_app_toast">Geen enkele app op deze telefoon kan dat openen</string>
+
+    
+    
+<string name="action_get_tickets">Tickets kopen</string>
+    
+<string name="action_view_post">Bekijk post</string>
+    
+<string name="action_more_info">Meer info</string>
+
+    
+    
+<string name="share_title">Stuur naar 0 FOMO</string>
+    
+<string name="share_kind_flyer">Flyer</string>
+    
+<string name="share_kind_link">Link</string>
+    
+<string name="share_kind_post">Post</string>
+    
+<string name="share_from_hint">van %1$s</string>
+    
+<string name="share_for_area_prefix">· voor</string>
+    
+<string name="share_default_area">jouw regio</string>
+    
+<string name="share_note_placeholder">Iets toevoegen? Locatie, prijs, datum…</string>
+    
+<string name="share_reviewer_disclaimer">Een reviewer controleert het voordat het verschijnt. Geen account nodig; er wordt niets anders uit je apps gelezen.</string>
+    
+<string name="share_cancel_button">Annuleren</string>
+    
+<string name="share_send_button">Versturen</string>
+    
+<string name="share_sending_button">Versturen…</string>
+    
+<string name="share_sent_toast">Naar 0 FOMO gestuurd voor review</string>
+
+    
+    
+<string name="calendar_price_prefix">Prijs: %1$s</string>
+    
+<string name="calendar_tickets_info_prefix">Tickets/info: %1$s</string>
+    
+<string name="calendar_added_from">Toegevoegd via 0 FOMO</string>
+
+    
+    
+<string name="nav_events_tab">Evenementen</string>
+    
+<string name="nav_saved_tab">Opgeslagen</string>
+
+<string name="feed_cd_search">Zoeken</string>
+    
+<string name="feed_not_synced_yet">Nog niet gesynchroniseerd. Trek om te vernieuwen</string>
+    
+<string name="feed_updated_just_now">Zojuist bijgewerkt</string>
+    
+<plurals name="time_freshness_minutes">
+        <item quantity="one">%1$d min geleden bijgewerkt</item>
+        <item quantity="other">%1$d min geleden bijgewerkt</item>
+    </plurals>
+    
+<plurals name="time_freshness_hours">
+        <item quantity="one">%1$du geleden bijgewerkt</item>
+        <item quantity="other">%1$du geleden bijgewerkt</item>
+    </plurals>
+    
+<plurals name="time_freshness_days">
+        <item quantity="one">%1$dd geleden bijgewerkt</item>
+        <item quantity="other">%1$dd geleden bijgewerkt</item>
+    </plurals>
+    
+<string name="feed_choose_a_place">Kies een plek</string>
+    
+<string name="feed_cd_change_location">Locatie wijzigen</string>
+    
+<string name="feed_date_custom">Aangepast…</string>
+    
+<string name="feed_all_islands">Alle eilanden</string>
+    
+<string name="feed_near_place">Bij %1$s</string>
+    
+<string name="feed_all_country_name">Heel %1$s</string>
+    
+<string name="feed_keyword_chip">“%1$s”</string>
+    
+<string name="feed_cd_clear_search">Zoekopdracht wissen</string>
+    
+<string name="feed_today">Vandaag</string>
+    
+<string name="feed_tomorrow">Morgen</string>
+    
+<plurals name="feed_event_count">
+        <item quantity="one">%1$d evenement</item>
+        <item quantity="other">%1$d evenementen</item>
+    </plurals>
+    
+<string name="feed_tba">Volgt</string>
+    
+<string name="feed_cd_unsave">Niet meer opslaan</string>
+    
+<string name="feed_cd_save">Opslaan</string>
+    
+<string name="feed_empty_no_events_market">Geen evenementen met deze filters</string>
+    
+<string name="feed_empty_no_events_location">Nog niets vermeld voor %1$s</string>
+    
+<string name="feed_empty_hint_market">Probeer een breder datumbereik of eiland</string>
+    
+<string name="feed_empty_hint_location">0 FOMO groeit stad voor stad. Verbreed het gebied, of kom snel terug.</string>
+    
+<string name="feed_clear_filters">Filters wissen</string>
+    
+<string name="feed_change_location">Locatie wijzigen</string>
+    
+<string name="feed_cancel">Annuleren</string>
+    
+<string name="feed_apply">Toepassen</string>
+    
+<string name="feed_keyword_title">Waar zoek je naar?</string>
+    
+<string name="feed_keyword_placeholder">Trefwoord: reggae, brunch, comedy…</string>
+    
+<string name="feed_location_title">Waar ben je?</string>
+    
+<string name="feed_locating">Je stad zoeken…</string>
+    
+<string name="feed_use_my_location">Gebruik mijn locatie (bij benadering)</string>
+    
+<string name="feed_location_search_placeholder">Stad, eiland, postcode of regio</string>
+    
+<string name="feed_cd_clear">Wissen</string>
+    
+<string name="feed_search_online">Zoek \"%1$s\" online</string>
+    
+<string name="feed_popular_in">Populair in %1$s</string>
+    
+<string name="feed_country_section_label">Land</string>
+    
+<string name="feed_cd_selected">Geselecteerd</string>
+    
+<string name="feed_all_countries_count">Alle %1$d landen</string>
+
+    
+    
+<string name="feed_status_offline">Offline. Opgeslagen evenementen worden getoond.</string>
+    
+<string name="feed_status_location_off">Locatie staat uit. Kies een stad.</string>
+    
+<string name="feed_status_near_place">Je bent bij %1$s</string>
+    
+<string name="feed_status_no_fix">Kon je locatie niet bepalen. Kies een stad.</string>
+
+    
+    
+<string name="saved_title">Opgeslagen 💛</string>
+    
+<string name="saved_empty_title">Nog niets opgeslagen</string>
+    
+<string name="saved_empty_subtitle">Tik op het hartje bij een evenement om het hier te bewaren — ook offline</string>
+    
+<string name="saved_forwarded_header">Doorgestuurd naar 0 FOMO</string>
+    
+<string name="saved_forwarded_subtitle">Posts die je deelt worden gecontroleerd voordat ze in de feed komen</string>
+    
+<string name="saved_section_header">Opgeslagen evenementen</string>
+    
+<string name="saved_section_subtitle">Tik op het hartje bij een evenement om het hier te bewaren</string>
+    
+<string name="saved_status_sent">Verstuurd · in review</string>
+    
+<string name="saved_status_failed">Versturen mislukt</string>
+    
+<string name="saved_status_failed_with_error">Versturen mislukt · %1$s</string>
+    
+<string name="saved_status_retrying">Opnieuw proberen zodra je online bent…</string>
+    
+<string name="saved_status_queued">In wachtrij</string>
+    
+<string name="saved_retry">Opnieuw</string>
+    
+<string name="saved_cd_remove">Verwijderen</string>
+    
+<string name="saved_from_ago">van %1$s · %2$s</string>
+    
+<string name="saved_from_another_app">een andere app</string>
+    
+<string name="saved_photo_fallback">Foto</string>
+    
+<string name="time_ago_just_now">zojuist</string>
+    
+<plurals name="time_ago_minutes">
+        <item quantity="one">%1$d min geleden</item>
+        <item quantity="other">%1$d min geleden</item>
+    </plurals>
+    
+<plurals name="time_ago_hours">
+        <item quantity="one">%1$du geleden</item>
+        <item quantity="other">%1$du geleden</item>
+    </plurals>
+    
+<plurals name="time_ago_days">
+        <item quantity="one">%1$dd geleden</item>
+        <item quantity="other">%1$dd geleden</item>
+    </plurals>
+    
+<plurals name="saved_purged_title">
+        <item quantity="one">%1$d opgeslagen evenement staat niet meer vermeld</item>
+        <item quantity="other">%1$d opgeslagen evenementen staan niet meer vermeld</item>
+    </plurals>
+    
+<string name="saved_purged_removed_more">%1$s en nog %2$d zijn verwijderd uit Opgeslagen.</string>
+    
+<plurals name="saved_purged_removed">
+        <item quantity="one">%1$s is verwijderd uit Opgeslagen.</item>
+        <item quantity="other">%1$s zijn verwijderd uit Opgeslagen.</item>
+    </plurals>
+    
+<string name="saved_cd_dismiss_notice">Melding sluiten</string>
+
+<string name="category_culture_heritage">Cultuur / Erfgoed</string>
+    
+<string name="category_regatta_maritime">Regatta / Maritiem</string>
+    
+<string name="category_farmers_craft_market">Boeren- / Ambachtsmarkt</string>
+    
+<string name="category_fair_popup">Beurs / Pop-up</string>
+    
+<string name="category_festival">Festival</string>
+    
+<string name="category_concert_live_music">Concert / Live muziek</string>
+    
+<string name="category_club_promotion">Clubpromotie</string>
+    
+<string name="category_nightlife_party">Nachtleven / Feest</string>
+    
+<string name="category_beach_party">Strandfeest</string>
+    
+<string name="category_comedy">Comedy</string>
+    
+<string name="category_pageant">Schoonheidswedstrijd</string>
+    
+<string name="category_food_drink">Eten &amp; drinken</string>
+    
+<string name="category_sports_fitness">Sport &amp; fitness</string>
+    
+<string name="category_arts_theatre">Kunst &amp; theater</string>
+    
+<string name="category_conference_expo">Congres / Expo</string>
+    
+<string name="category_business_networking">Zaken / Netwerken</string>
+    
+<string name="category_faith_community">Geloof &amp; gemeenschap</string>
+    
+<string name="category_general">Algemeen</string>
+    
+<string name="category_unknown">Overig</string>
+
+    
+    
+<string name="price_free">Gratis</string>
+    
+<string name="price_from_format">Vanaf $%1$s</string>
+
+    
+    
+<string name="filter_all_upcoming">Alles wat komt</string>
+    
+<string name="filter_today">Vandaag</string>
+    
+<string name="filter_this_weekend">Dit weekend</string>
+    
+<string name="filter_next_7_days">Komende 7 dagen</string>
+    
+<string name="filter_next_30_days">Komende 30 dagen</string>
+    
+<string name="filter_custom_range_format">%1$s → %2$s</string>
+
+    
+    
+<string name="location_everywhere">Overal</string>
+
+    
+    
+<string name="reminder_channel_name">Herinneringen aan evenementen</string>
+    
+<string name="reminder_channel_description">Herinneringen voor evenementen die je hebt opgeslagen</string>
+    
+<string name="reminder_notification_title_format">Morgen: %1$s</string>
+    
+<string name="reminder_time_suffix_format"> om %1$s</string>
+    
+<string name="reminder_venue_fallback">Nassau</string>
+    
+<string name="reminder_notification_body_format">%1$s%2$s 🎉</string>
+
+    
+    
+<string name="error_photo_gone">De foto staat niet meer op deze telefoon — deel hem opnieuw</string>
+    
+<string name="error_http_format">HTTP %1$d</string>
+
+
+</resources>

@@ -1,7 +1,9 @@
 package com.arctechnology.zerofomo.ui.feed
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.arctechnology.zerofomo.R
 import com.arctechnology.zerofomo.data.EventRepository
 import com.arctechnology.zerofomo.data.location.DeviceLocationProvider
 import com.arctechnology.zerofomo.data.location.Gazetteer
@@ -33,6 +35,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/** A status message the ViewModel needs to surface — carried as a resource id
+ *  (plus an optional format arg) rather than built English text, so
+ *  FeedScreen is the only layer that resolves it via stringResource. */
+sealed interface StatusMessage {
+    data class Res(@StringRes val resId: Int) : StatusMessage
+    data class ResArg(@StringRes val resId: Int, val arg: String) : StatusMessage
+}
+
 /** One immutable filter state = MVI-style single source of UI truth. */
 data class FilterState(
     val location: LocationFilter = LocationFilter.Everywhere,
@@ -45,14 +55,14 @@ data class FeedUiState(
     val events: List<Event> = emptyList(),
     val filters: FilterState = FilterState(),
     val isRefreshing: Boolean = false,
-    val syncError: String? = null,
+    val syncError: StatusMessage? = null,
     val lastSyncEpochMs: Long = 0L,
     val userLocation: UserLocation? = null,
     val nearbyPlaces: List<Place> = emptyList(),       // chips for the current country
     val placeSuggestions: List<Place> = emptyList(),   // location search results
     val countries: List<Country> = emptyList(),
     val isLocating: Boolean = false,
-    val locationMessage: String? = null,
+    val locationMessage: StatusMessage? = null,
     val distanceOrigin: Pair<Double, Double>? = null,  // where card distances are measured from
 )
 
@@ -68,12 +78,12 @@ class FeedViewModel @Inject constructor(
 
     private val filters = MutableStateFlow(FilterState())
     private val isRefreshing = MutableStateFlow(false)
-    private val syncError = MutableStateFlow<String?>(null)
+    private val syncError = MutableStateFlow<StatusMessage?>(null)
     private val nearbyPlaces = MutableStateFlow<List<Place>>(emptyList())
     private val placeSuggestions = MutableStateFlow<List<Place>>(emptyList())
     private val countries = MutableStateFlow<List<Country>>(emptyList())
     private val isLocating = MutableStateFlow(false)
-    private val locationMessage = MutableStateFlow<String?>(null)
+    private val locationMessage = MutableStateFlow<StatusMessage?>(null)
 
     /** True once the user picked a location chip by hand; the automatic
      *  "follow the user's location" default then stops overriding it. */
@@ -82,7 +92,7 @@ class FeedViewModel @Inject constructor(
 
     private data class Core(
         val events: List<Event>, val filters: FilterState, val refreshing: Boolean,
-        val error: String?, val lastSync: Long,
+        val error: StatusMessage?, val lastSync: Long,
     )
 
     private val core = combine(
@@ -104,7 +114,7 @@ class FeedViewModel @Inject constructor(
 
     private data class Loc(
         val user: UserLocation?, val nearby: List<Place>, val suggestions: List<Place>,
-        val countries: List<Country>, val locating: Boolean, val message: String?,
+        val countries: List<Country>, val locating: Boolean, val message: StatusMessage?,
     )
 
     private val loc = combine(
@@ -112,7 +122,7 @@ class FeedViewModel @Inject constructor(
     ) { arr ->
         @Suppress("UNCHECKED_CAST")
         Loc(arr[0] as UserLocation?, arr[1] as List<Place>, arr[2] as List<Place>,
-            arr[3] as List<Country>, arr[4] as Boolean, arr[5] as String?)
+            arr[3] as List<Country>, arr[4] as Boolean, arr[5] as StatusMessage?)
     }
 
     val uiState: StateFlow<FeedUiState> = combine(core, loc) { c, l ->
@@ -238,7 +248,7 @@ class FeedViewModel @Inject constructor(
      *  already granted). */
     fun onLocationPermissionResult(granted: Boolean) {
         if (granted) locate(quiet = false)
-        else locationMessage.value = "Location is off. Pick a city instead."
+        else locationMessage.value = StatusMessage.Res(R.string.feed_status_location_off)
     }
 
     private fun locate(quiet: Boolean) {
@@ -250,9 +260,10 @@ class FeedViewModel @Inject constructor(
                 if (place != null) {
                     locationPinned = false
                     locationStore.setPlace(place, LocationSource.DEVICE)
-                    if (!quiet) locationMessage.value = "You're near ${place.name}"
+                    if (!quiet) locationMessage.value =
+                        StatusMessage.ResArg(R.string.feed_status_near_place, place.name)
                 } else if (!quiet) {
-                    locationMessage.value = "Couldn't get a fix. Pick a city instead."
+                    locationMessage.value = StatusMessage.Res(R.string.feed_status_no_fix)
                 }
             } finally {
                 isLocating.value = false
@@ -284,7 +295,7 @@ class FeedViewModel @Inject constructor(
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e   // scope teardown, not a network failure
             } catch (e: Exception) {
-                syncError.value = "Offline. Showing cached events."
+                syncError.value = StatusMessage.Res(R.string.feed_status_offline)
             } finally {
                 isRefreshing.value = false
             }

@@ -17,6 +17,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import com.arctechnology.zerofomo.R
 import com.arctechnology.zerofomo.data.db.EventDao
 import com.arctechnology.zerofomo.data.db.toDomain
 import dagger.assisted.Assisted
@@ -52,9 +53,9 @@ class ReminderWorker @AssistedInject constructor(
 
         val nm = applicationContext.getSystemService(NotificationManager::class.java)
         nm.createNotificationChannel(
-            NotificationChannel(CHANNEL_ID, "Event reminders",
+            NotificationChannel(CHANNEL_ID, applicationContext.getString(R.string.reminder_channel_name),
                 NotificationManager.IMPORTANCE_DEFAULT).apply {
-                description = "Reminders for events you saved"
+                description = applicationContext.getString(R.string.reminder_channel_description)
             })
 
         val timeFmt = DateTimeFormatter.ofPattern("h:mm a")
@@ -67,11 +68,14 @@ class ReminderWorker @AssistedInject constructor(
             val tap = PendingIntent.getActivity(
                 applicationContext, event.id.hashCode(), view,
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-            val timeBit = event.timeStart?.let { " at ${it.format(timeFmt)}" } ?: ""
+            val timeBit = event.timeStart?.let {
+                applicationContext.getString(R.string.reminder_time_suffix_format, it.format(timeFmt))
+            } ?: ""
+            val venue = event.venue.ifBlank { applicationContext.getString(R.string.reminder_venue_fallback) }
             val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
-                .setSmallIcon(com.arctechnology.zerofomo.R.drawable.ic_stat_zerofomo)
-                .setContentTitle("Tomorrow: ${event.name}")
-                .setContentText("${event.venue.ifBlank { "Nassau" }}$timeBit 🎉")
+                .setSmallIcon(R.drawable.ic_stat_zerofomo)
+                .setContentTitle(applicationContext.getString(R.string.reminder_notification_title_format, event.name))
+                .setContentText(applicationContext.getString(R.string.reminder_notification_body_format, venue, timeBit))
                 .setContentIntent(tap)
                 .setAutoCancel(true)
                 .build()

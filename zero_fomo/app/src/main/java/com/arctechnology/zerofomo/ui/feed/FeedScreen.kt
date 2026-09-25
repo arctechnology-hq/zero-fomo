@@ -68,6 +68,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -76,6 +78,7 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.arctechnology.zerofomo.R
 import com.arctechnology.zerofomo.data.location.UserLocation
 import com.arctechnology.zerofomo.model.BahamianIsland
 import com.arctechnology.zerofomo.model.Country
@@ -108,14 +111,16 @@ fun FeedScreen(
     var showKeywordSearch by remember { mutableStateOf(false) }
     var showLocationSheet by remember { mutableStateOf(false) }
 
-    LaunchedEffect(state.syncError) {
-        state.syncError?.let {
+    val syncErrorText = state.syncError?.let { resolveStatusMessage(it) }
+    LaunchedEffect(syncErrorText) {
+        syncErrorText?.let {
             snackbar.showSnackbar(it)
             viewModel.dismissError()
         }
     }
-    LaunchedEffect(state.locationMessage) {
-        state.locationMessage?.let {
+    val locationMessageText = state.locationMessage?.let { resolveStatusMessage(it) }
+    LaunchedEffect(locationMessageText) {
+        locationMessageText?.let {
             snackbar.showSnackbar(it)
             viewModel.dismissLocationMessage()
         }
@@ -214,6 +219,14 @@ fun FeedScreen(
     }
 }
 
+/** Resolves a ViewModel-issued [StatusMessage] to display text — the only
+ *  layer allowed to know English strings live behind resource ids. */
+@Composable
+private fun resolveStatusMessage(message: StatusMessage): String = when (message) {
+    is StatusMessage.Res -> stringResource(message.resId)
+    is StatusMessage.ResArg -> stringResource(message.resId, message.arg)
+}
+
 /** Branded masthead: the country-tinted mark as the "0" of "0 FOMO", the
  *  location pill, freshness, and keyword search. The gradient runs under the
  *  status bar for a full edge-to-edge header. */
@@ -251,7 +264,7 @@ private fun FeedHeader(
                 )
                 Spacer(Modifier.weight(1f))
                 IconButton(onClick = onSearchClick) {
-                    Icon(Icons.Default.Search, contentDescription = "Search", tint = Sand)
+                    Icon(Icons.Default.Search, contentDescription = stringResource(R.string.feed_cd_search), tint = Sand)
                 }
             }
             Spacer(Modifier.height(6.dp))
@@ -285,11 +298,11 @@ private fun LocationPill(userLocation: UserLocation?, onClick: () -> Unit) {
             Text(userLocation?.country?.flagEmoji ?: "", fontSize = 15.sp)
             Spacer(Modifier.width(6.dp))
             Text(
-                userLocation?.label ?: "Choose a place",
+                userLocation?.label ?: stringResource(R.string.feed_choose_a_place),
                 style = MaterialTheme.typography.titleSmall,
                 maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
-            Icon(Icons.Default.ExpandMore, contentDescription = "Change location",
+            Icon(Icons.Default.ExpandMore, contentDescription = stringResource(R.string.feed_cd_change_location),
                 modifier = Modifier.size(18.dp))
         }
     }
@@ -306,13 +319,15 @@ private fun freshnessLabel(lastSyncEpochMs: Long): String {
             kotlinx.coroutines.delay(60_000)
         }
     }
-    if (lastSyncEpochMs == 0L) return "Not synced yet. Pull to refresh"
+    if (lastSyncEpochMs == 0L) return stringResource(R.string.feed_not_synced_yet)
     val mins = (now - lastSyncEpochMs) / 60_000
     return when {
-        mins < 1 -> "Updated just now"
-        mins < 60 -> "Updated $mins min ago"
-        mins < 60 * 24 -> "Updated ${mins / 60}h ago"
-        else -> "Updated ${mins / (60 * 24)}d ago"
+        mins < 1 -> stringResource(R.string.feed_updated_just_now)
+        mins < 60 -> pluralStringResource(R.plurals.time_freshness_minutes, mins.toInt(), mins.toInt())
+        mins < 60 * 24 -> pluralStringResource(
+            R.plurals.time_freshness_hours, (mins / 60).toInt(), (mins / 60).toInt())
+        else -> pluralStringResource(
+            R.plurals.time_freshness_days, (mins / (60 * 24)).toInt(), (mins / (60 * 24)).toInt())
     }
 }
 
@@ -337,7 +352,9 @@ private fun FilterBar(
                 FilterChip(
                     selected = filters.dateRange::class == preset::class,
                     onClick = { onDateChipClick(preset) },
-                    label = { Text(preset.label) },
+                    // presets are always the static, non-Custom entries, so labelRes
+                    // is never null here — the elvis is a defensive fallback only.
+                    label = { Text(preset.labelRes?.let { stringResource(it) } ?: preset.label) },
                 )
             }
             item {
@@ -346,7 +363,7 @@ private fun FilterBar(
                     onClick = onCustomRangeClick,
                     label = {
                         Text((filters.dateRange as? DateRangeFilter.Custom)?.label
-                            ?: "Custom…")
+                            ?: stringResource(R.string.feed_date_custom))
                     },
                 )
             }
@@ -362,7 +379,7 @@ private fun FilterBar(
                     FilterChip(
                         selected = filters.location is LocationFilter.Everywhere,
                         onClick = { onIslandSelected(null) },
-                        label = { Text("All islands") },
+                        label = { Text(stringResource(R.string.feed_all_islands)) },
                     )
                 }
                 items(BahamianIsland.entries.toList()) { island ->
@@ -385,7 +402,7 @@ private fun FilterBar(
                         FilterChip(
                             selected = (filters.location as? LocationFilter.Near)?.label == p.name,
                             onClick = { onLocationFilter(near) },
-                            label = { Text("Near ${p.name}") },
+                            label = { Text(stringResource(R.string.feed_near_place, p.name)) },
                         )
                     }
                 }
@@ -393,7 +410,7 @@ private fun FilterBar(
                     FilterChip(
                         selected = filters.location is LocationFilter.CountryTag,
                         onClick = { onLocationFilter(LocationFilter.CountryTag(country.code, country.name)) },
-                        label = { Text("All ${country.name}") },
+                        label = { Text(stringResource(R.string.feed_all_country_name, country.name)) },
                     )
                 }
                 items(nearbyPlaces.filter { it.name != userLocation.place?.name }) { place ->
@@ -409,7 +426,7 @@ private fun FilterBar(
                     FilterChip(
                         selected = filters.location is LocationFilter.Everywhere,
                         onClick = { onLocationFilter(LocationFilter.Everywhere) },
-                        label = { Text("Everywhere") },
+                        label = { Text(stringResource(R.string.location_everywhere)) },
                     )
                 }
             }
@@ -423,7 +440,7 @@ private fun FilterBar(
                 FilterChip(
                     selected = selected,
                     onClick = { onCategoryToggle(cat) },
-                    label = { Text(cat.label) },
+                    label = { Text(stringResource(cat.labelRes)) },
                     leadingIcon = { Text(cat.emoji, fontSize = 14.sp) },
                     colors = FilterChipDefaults.filterChipColors(
                         selectedContainerColor = cat.accent.copy(alpha = 0.18f),
@@ -437,9 +454,9 @@ private fun FilterBar(
                 InputChip(
                     selected = true,
                     onClick = onClearKeyword,
-                    label = { Text("“${filters.keyword}”") },
+                    label = { Text(stringResource(R.string.feed_keyword_chip, filters.keyword)) },
                     trailingIcon = {
-                        Icon(Icons.Default.Close, contentDescription = "Clear search",
+                        Icon(Icons.Default.Close, contentDescription = stringResource(R.string.feed_cd_clear_search),
                             modifier = Modifier.size(16.dp))
                     },
                 )
@@ -485,8 +502,8 @@ private fun EventList(
 private fun DayHeader(date: LocalDate, today: LocalDate, count: Int) {
     val fmt = remember { DateTimeFormatter.ofPattern("EEEE, MMMM d") }
     val label = when (date) {
-        today -> "Today"
-        today.plusDays(1) -> "Tomorrow"
+        today -> stringResource(R.string.feed_today)
+        today.plusDays(1) -> stringResource(R.string.feed_tomorrow)
         else -> date.format(fmt)
     }
     Row(
@@ -506,7 +523,7 @@ private fun DayHeader(date: LocalDate, today: LocalDate, count: Int) {
                 .background(MaterialTheme.colorScheme.outlineVariant))
         Spacer(Modifier.width(8.dp))
         Text(
-            if (count == 1) "1 event" else "$count events",
+            pluralStringResource(R.plurals.feed_event_count, count, count),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.outline,
         )
@@ -545,7 +562,7 @@ fun EventCard(
                         modifier = Modifier.size(14.dp),
                         tint = MaterialTheme.colorScheme.outline)
                     Text(
-                        event.venue.ifBlank { event.island?.displayName ?: "TBA" },
+                        event.venue.ifBlank { event.island?.displayName ?: stringResource(R.string.feed_tba) },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.outline,
                         maxLines = 1, overflow = TextOverflow.Ellipsis,
@@ -585,7 +602,8 @@ fun EventCard(
                 Icon(
                     if (event.isSaved) Icons.Default.Favorite
                     else Icons.Default.FavoriteBorder,
-                    contentDescription = if (event.isSaved) "Unsave" else "Save",
+                    contentDescription = if (event.isSaved) stringResource(R.string.feed_cd_unsave)
+                    else stringResource(R.string.feed_cd_save),
                     tint = if (event.isSaved) MaterialTheme.colorScheme.tertiary
                     else MaterialTheme.colorScheme.outline,
                 )
@@ -619,20 +637,20 @@ private fun EmptyState(
         ) {
             Text(if (launchMarket) "🏝️" else "🧭", style = MaterialTheme.typography.displayMedium)
             Text(
-                if (launchMarket) "No events match these filters"
-                else "Nothing listed for ${location.label} yet",
+                if (launchMarket) stringResource(R.string.feed_empty_no_events_market)
+                else stringResource(R.string.feed_empty_no_events_location, location.label),
                 style = MaterialTheme.typography.titleMedium,
             )
             Text(
-                if (launchMarket) "Try widening the date range or island"
-                else "0 FOMO is growing city by city. Widen the area, or check back soon.",
+                if (launchMarket) stringResource(R.string.feed_empty_hint_market)
+                else stringResource(R.string.feed_empty_hint_location),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.outline,
             )
             Spacer(Modifier.height(8.dp))
             Row {
-                TextButton(onClick = onClearFilters) { Text("Clear filters") }
-                TextButton(onClick = onChangeLocation) { Text("Change location") }
+                TextButton(onClick = onClearFilters) { Text(stringResource(R.string.feed_clear_filters)) }
+                TextButton(onClick = onChangeLocation) { Text(stringResource(R.string.feed_change_location)) }
             }
         }
     }
@@ -652,7 +670,7 @@ private fun CustomDateRangeSheet(
                 Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.End,
             ) {
-                TextButton(onClick = onDismiss) { Text("Cancel") }
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.feed_cancel)) }
                 TextButton(
                     onClick = {
                         val start = pickerState.selectedStartDateMillis
@@ -661,7 +679,7 @@ private fun CustomDateRangeSheet(
                             onConfirm(toLocalDate(start), toLocalDate(end))
                         }
                     },
-                ) { Text("Apply") }
+                ) { Text(stringResource(R.string.feed_apply)) }
             }
         }
     }
@@ -680,17 +698,17 @@ private fun KeywordSheet(
     var keyword by remember { mutableStateOf(currentKeyword) }
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("What are you looking for?", style = MaterialTheme.typography.titleMedium)
+            Text(stringResource(R.string.feed_keyword_title), style = MaterialTheme.typography.titleMedium)
             OutlinedTextField(
                 value = keyword,
                 onValueChange = { keyword = it },
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("Keyword: reggae, brunch, comedy…") },
+                placeholder = { Text(stringResource(R.string.feed_keyword_placeholder)) },
                 singleLine = true,
             )
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                TextButton(onClick = onDismiss) { Text("Cancel") }
-                TextButton(onClick = { onApply(keyword) }) { Text("Apply") }
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.feed_cancel)) }
+                TextButton(onClick = { onApply(keyword) }) { Text(stringResource(R.string.feed_apply)) }
             }
         }
     }
@@ -736,7 +754,7 @@ private fun LocationSheet(
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             item {
-                Text("Where are you?", style = MaterialTheme.typography.titleLarge)
+                Text(stringResource(R.string.feed_location_title), style = MaterialTheme.typography.titleLarge)
             }
             item {
                 FilledTonalButton(
@@ -755,7 +773,8 @@ private fun LocationSheet(
                             modifier = Modifier.size(18.dp))
                     }
                     Spacer(Modifier.width(8.dp))
-                    Text(if (isLocating) "Finding your city…" else "Use my location (approximate)")
+                    Text(if (isLocating) stringResource(R.string.feed_locating)
+                    else stringResource(R.string.feed_use_my_location))
                 }
             }
             item {
@@ -763,11 +782,11 @@ private fun LocationSheet(
                     value = query,
                     onValueChange = { query = it; onQueryChange(it) },
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text("City, island, zip code or region") },
+                    placeholder = { Text(stringResource(R.string.feed_location_search_placeholder)) },
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                     trailingIcon = {
                         if (query.isNotEmpty()) IconButton(onClick = { query = ""; onQueryChange("") }) {
-                            Icon(Icons.Default.Close, contentDescription = "Clear")
+                            Icon(Icons.Default.Close, contentDescription = stringResource(R.string.feed_cd_clear))
                         }
                     },
                     singleLine = true,
@@ -787,14 +806,14 @@ private fun LocationSheet(
                 if (suggestions.isEmpty()) {
                     item {
                         TextButton(onClick = { onFreeText(query) }) {
-                            Text("Search \"$query\" online")
+                            Text(stringResource(R.string.feed_search_online, query))
                         }
                     }
                 }
             } else {
                 if (nearbyPlaces.isNotEmpty() && userLocation != null) {
                     item {
-                        Text("Popular in ${userLocation.country.name}",
+                        Text(stringResource(R.string.feed_popular_in, userLocation.country.name),
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.outline)
                     }
@@ -812,7 +831,7 @@ private fun LocationSheet(
                 }
                 item { HorizontalDivider() }
                 item {
-                    Text("Country", style = MaterialTheme.typography.labelMedium,
+                    Text(stringResource(R.string.feed_country_section_label), style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.outline)
                 }
                 val list = if (showAllCountries) countries else featured
@@ -822,7 +841,7 @@ private fun LocationSheet(
                         leadingContent = { Text(country.flagEmoji, fontSize = 20.sp) },
                         trailingContent = {
                             if (userLocation?.country?.code == country.code)
-                                Icon(Icons.Default.LocationOn, contentDescription = "Selected",
+                                Icon(Icons.Default.LocationOn, contentDescription = stringResource(R.string.feed_cd_selected),
                                     tint = MaterialTheme.colorScheme.primary)
                         },
                         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
@@ -832,7 +851,7 @@ private fun LocationSheet(
                 if (!showAllCountries) {
                     item {
                         TextButton(onClick = { showAllCountries = true }) {
-                            Text("All ${countries.size} countries")
+                            Text(stringResource(R.string.feed_all_countries_count, countries.size))
                         }
                     }
                 }

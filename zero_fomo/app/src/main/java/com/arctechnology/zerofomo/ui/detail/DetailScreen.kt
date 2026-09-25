@@ -55,6 +55,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -63,6 +64,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.arctechnology.zerofomo.R
 import com.arctechnology.zerofomo.data.EventRepository
 import com.arctechnology.zerofomo.model.Event
 import com.arctechnology.zerofomo.ui.calendar.CalendarExporter
@@ -130,19 +132,20 @@ fun DetailScreen(
                     ?: start.format(fmt)
                 InfoRow(ev, Icons.Default.Schedule, label)
             }
+            val locationTba = stringResource(R.string.detail_location_tba)
             Row(verticalAlignment = Alignment.CenterVertically) {
                 InfoRow(ev, Icons.Default.LocationOn,
                     listOfNotNull(
                         ev.venue.ifBlank { null },
                         ev.island?.displayName).joinToString(" · ")
-                        .ifBlank { "Location TBA" })
+                        .ifBlank { locationTba })
                 if (ev.venue.isNotBlank()) {
                     Spacer(Modifier.width(4.dp))
                     TextButton(onClick = {
                         val q = Uri.encode("${ev.venue}, ${ev.countryName}")
                         context.startSafely(
                             Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=$q")))
-                    }) { Text("Directions") }
+                    }) { Text(stringResource(R.string.detail_directions_button)) }
                 }
             }
             if (ev.priceLabel.isNotBlank()) {
@@ -152,7 +155,9 @@ fun DetailScreen(
                     shape = RoundedCornerShape(50),
                 ) {
                     Text(
-                        if (ev.priceLabel == "Free") "Free entry" else ev.priceLabel,
+                        if (ev.priceLabel == stringResource(R.string.price_free))
+                            stringResource(R.string.detail_price_free_badge)
+                        else ev.priceLabel,
                         Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
@@ -164,7 +169,7 @@ fun DetailScreen(
                 Button(onClick = { showCalendarSheet = true }, modifier = Modifier.weight(1f)) {
                     Icon(Icons.Default.CalendarMonth, null, Modifier.size(18.dp))
                     Spacer(Modifier.width(6.dp))
-                    Text("Add to Calendar")
+                    Text(stringResource(R.string.detail_add_to_calendar_button))
                 }
                 if (ev.sourceUrl.isNotBlank()) {
                     OutlinedButton(
@@ -173,12 +178,13 @@ fun DetailScreen(
                                 Uri.parse(ev.sourceUrl)))
                         },
                         modifier = Modifier.weight(1f),
-                    ) { Text(sourceActionLabel(ev.sourceUrl)) }
+                    ) { Text(stringResource(sourceActionLabelRes(ev.sourceUrl))) }
                 }
             }
 
             if (ev.description.isNotBlank()) {
-                Text("About", style = MaterialTheme.typography.titleMedium,
+                Text(stringResource(R.string.detail_about_heading),
+                    style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold)
                 Text(ev.description, style = MaterialTheme.typography.bodyMedium)
             }
@@ -187,17 +193,20 @@ fun DetailScreen(
     }
 
     if (showCalendarSheet) {
+        val shareCalendarFileChooserTitle =
+            stringResource(R.string.detail_share_calendar_file_chooser_title)
         CalendarTargetSheet(
             onDismiss = { showCalendarSheet = false },
             onTarget = { target ->
                 showCalendarSheet = false
                 val intent = when (target) {
-                    CalendarTarget.GOOGLE_DEVICE -> CalendarExporter.systemInsertIntent(ev)
-                    CalendarTarget.OUTLOOK -> CalendarExporter.outlookIntent(ev)
+                    CalendarTarget.GOOGLE_DEVICE ->
+                        CalendarExporter.systemInsertIntent(context, ev)
+                    CalendarTarget.OUTLOOK -> CalendarExporter.outlookIntent(context, ev)
                     CalendarTarget.ICAL_FILE ->
                         Intent.createChooser(
                             CalendarExporter.icsShareIntent(context, ev),
-                            "Share calendar file")
+                            shareCalendarFileChooserTitle)
                 }
                 context.startSafely(intent)
             },
@@ -228,17 +237,22 @@ private fun HeroHeader(
             Row(Modifier.fillMaxWidth()) {
                 IconButton(onClick = onBack) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back", tint = onHero)
+                        contentDescription = stringResource(R.string.detail_back_content_description),
+                        tint = onHero)
                 }
                 Spacer(Modifier.weight(1f))
                 IconButton(onClick = onShare) {
-                    Icon(Icons.Default.Share, contentDescription = "Share", tint = onHero)
+                    Icon(Icons.Default.Share,
+                        contentDescription = stringResource(R.string.detail_share_content_description),
+                        tint = onHero)
                 }
                 IconButton(onClick = onToggleFavorite) {
                     Icon(
                         if (event.isSaved) Icons.Default.Favorite
                         else Icons.Default.FavoriteBorder,
-                        contentDescription = if (event.isSaved) "Unsave" else "Save",
+                        contentDescription = stringResource(
+                            if (event.isSaved) R.string.detail_unsave_content_description
+                            else R.string.detail_save_content_description),
                         tint = if (event.isSaved) Gold else onHero,
                     )
                 }
@@ -250,7 +264,7 @@ private fun HeroHeader(
                     shape = RoundedCornerShape(50),
                 ) {
                     Text(
-                        "${event.category.emoji}  ${event.category.label}",
+                        "${event.category.emoji}  ${stringResource(event.category.labelRes)}",
                         Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
                         style = MaterialTheme.typography.labelLarge,
                     )
@@ -306,7 +320,7 @@ private fun Context.shareEvent(ev: Event) {
         Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, text)
-        }, "Share event"))
+        }, getString(R.string.detail_share_event_chooser_title)))
 }
 
 enum class CalendarTarget { GOOGLE_DEVICE, OUTLOOK, ICAL_FILE }
@@ -319,22 +333,28 @@ private fun CalendarTargetSheet(
 ) {
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Column(Modifier.padding(bottom = 24.dp)) {
-            Text("Add to calendar",
+            Text(stringResource(R.string.detail_add_to_calendar_sheet_title),
                 Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                 style = MaterialTheme.typography.titleMedium)
             ListItem(
-                headlineContent = { Text("Google / device calendar") },
-                supportingContent = { Text("Opens your calendar app's event editor") },
+                headlineContent = { Text(stringResource(R.string.detail_calendar_target_google)) },
+                supportingContent = {
+                    Text(stringResource(R.string.detail_calendar_target_google_subtitle))
+                },
                 modifier = Modifier.clickableTarget { onTarget(CalendarTarget.GOOGLE_DEVICE) },
             )
             ListItem(
-                headlineContent = { Text("Outlook") },
-                supportingContent = { Text("Opens Outlook's new-event page") },
+                headlineContent = { Text(stringResource(R.string.detail_calendar_target_outlook)) },
+                supportingContent = {
+                    Text(stringResource(R.string.detail_calendar_target_outlook_subtitle))
+                },
                 modifier = Modifier.clickableTarget { onTarget(CalendarTarget.OUTLOOK) },
             )
             ListItem(
-                headlineContent = { Text("iCal file (.ics)") },
-                supportingContent = { Text("Share a universal calendar file") },
+                headlineContent = { Text(stringResource(R.string.detail_calendar_target_ical)) },
+                supportingContent = {
+                    Text(stringResource(R.string.detail_calendar_target_ical_subtitle))
+                },
                 modifier = Modifier.clickableTarget { onTarget(CalendarTarget.ICAL_FILE) },
             )
         }
@@ -350,7 +370,7 @@ private fun Context.startSafely(intent: Intent) {
     try {
         startActivity(intent)
     } catch (_: ActivityNotFoundException) {
-        Toast.makeText(this, "No app on this phone can open that",
+        Toast.makeText(this, getString(R.string.detail_no_app_toast),
             Toast.LENGTH_SHORT).show()
     }
 }

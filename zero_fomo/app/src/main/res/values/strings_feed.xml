@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- FeedScreen -->
+    <string name="feed_cd_search">Search</string>
+    <string name="feed_not_synced_yet">Not synced yet. Pull to refresh</string>
+    <string name="feed_updated_just_now">Updated just now</string>
+    <plurals name="time_freshness_minutes">
+        <item quantity="one">Updated %1$d min ago</item>
+        <item quantity="other">Updated %1$d min ago</item>
+    </plurals>
+    <plurals name="time_freshness_hours">
+        <item quantity="one">Updated %1$dh ago</item>
+        <item quantity="other">Updated %1$dh ago</item>
+    </plurals>
+    <plurals name="time_freshness_days">
+        <item quantity="one">Updated %1$dd ago</item>
+        <item quantity="other">Updated %1$dd ago</item>
+    </plurals>
+    <string name="feed_choose_a_place">Choose a place</string>
+    <string name="feed_cd_change_location">Change location</string>
+    <string name="feed_date_custom">Custom…</string>
+    <string name="feed_all_islands">All islands</string>
+    <string name="feed_near_place">Near %1$s</string>
+    <string name="feed_all_country_name">All %1$s</string>
+    <string name="feed_keyword_chip">“%1$s”</string>
+    <string name="feed_cd_clear_search">Clear search</string>
+    <string name="feed_today">Today</string>
+    <string name="feed_tomorrow">Tomorrow</string>
+    <plurals name="feed_event_count">
+        <item quantity="one">%1$d event</item>
+        <item quantity="other">%1$d events</item>
+    </plurals>
+    <string name="feed_tba">TBA</string>
+    <string name="feed_cd_unsave">Unsave</string>
+    <string name="feed_cd_save">Save</string>
+    <string name="feed_empty_no_events_market">No events match these filters</string>
+    <string name="feed_empty_no_events_location">Nothing listed for %1$s yet</string>
+    <string name="feed_empty_hint_market">Try widening the date range or island</string>
+    <string name="feed_empty_hint_location">0 FOMO is growing city by city. Widen the area, or check back soon.</string>
+    <string name="feed_clear_filters">Clear filters</string>
+    <string name="feed_change_location">Change location</string>
+    <string name="feed_cancel">Cancel</string>
+    <string name="feed_apply">Apply</string>
+    <string name="feed_keyword_title">What are you looking for?</string>
+    <string name="feed_keyword_placeholder">Keyword: reggae, brunch, comedy…</string>
+    <string name="feed_location_title">Where are you?</string>
+    <string name="feed_locating">Finding your city…</string>
+    <string name="feed_use_my_location">Use my location (approximate)</string>
+    <string name="feed_location_search_placeholder">City, island, zip code or region</string>
+    <string name="feed_cd_clear">Clear</string>
+    <string name="feed_search_online">Search \"%1$s\" online</string>
+    <string name="feed_popular_in">Popular in %1$s</string>
+    <string name="feed_country_section_label">Country</string>
+    <string name="feed_cd_selected">Selected</string>
+    <string name="feed_all_countries_count">All %1$d countries</string>
+
+    <!-- FeedViewModel status messages -->
+    <string name="feed_status_offline">Offline. Showing cached events.</string>
+    <string name="feed_status_location_off">Location is off. Pick a city instead.</string>
+    <string name="feed_status_near_place">You\'re near %1$s</string>
+    <string name="feed_status_no_fix">Couldn\'t get a fix. Pick a city instead.</string>
+
+    <!-- SavedScreen -->
+    <string name="saved_title">Saved 💛</string>
+    <string name="saved_empty_title">Nothing saved yet</string>
+    <string name="saved_empty_subtitle">Tap the heart on any event to keep it here — even offline</string>
+    <string name="saved_forwarded_header">Forwarded to 0 FOMO</string>
+    <string name="saved_forwarded_subtitle">Posts you shared are reviewed before they reach the feed</string>
+    <string name="saved_section_header">Saved events</string>
+    <string name="saved_section_subtitle">Tap the heart on any event to keep it here</string>
+    <string name="saved_status_sent">Sent · in review</string>
+    <string name="saved_status_failed">Couldn\'t send</string>
+    <string name="saved_status_failed_with_error">Couldn\'t send · %1$s</string>
+    <string name="saved_status_retrying">Retrying when online…</string>
+    <string name="saved_status_queued">Queued</string>
+    <string name="saved_retry">Retry</string>
+    <string name="saved_cd_remove">Remove</string>
+    <string name="saved_from_ago">from %1$s · %2$s</string>
+    <string name="saved_from_another_app">another app</string>
+    <string name="saved_photo_fallback">Photo</string>
+    <string name="time_ago_just_now">just now</string>
+    <plurals name="time_ago_minutes">
+        <item quantity="one">%1$dm ago</item>
+        <item quantity="other">%1$dm ago</item>
+    </plurals>
+    <plurals name="time_ago_hours">
+        <item quantity="one">%1$dh ago</item>
+        <item quantity="other">%1$dh ago</item>
+    </plurals>
+    <plurals name="time_ago_days">
+        <item quantity="one">%1$dd ago</item>
+        <item quantity="other">%1$dd ago</item>
+    </plurals>
+    <plurals name="saved_purged_title">
+        <item quantity="one">A saved event is no longer listed</item>
+        <item quantity="other">%1$d saved events are no longer listed</item>
+    </plurals>
+    <string name="saved_purged_removed_more">%1$s and %2$d more were removed from Saved.</string>
+    <plurals name="saved_purged_removed">
+        <item quantity="one">%1$s was removed from Saved.</item>
+        <item quantity="other">%1$s were removed from Saved.</item>
+    </plurals>
+    <string name="saved_cd_dismiss_notice">Dismiss notice</string>
+</resources>

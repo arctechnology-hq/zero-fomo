@@ -1,5 +1,8 @@
 package com.arctechnology.zerofomo.model
 
+import androidx.annotation.StringRes
+import com.arctechnology.zerofomo.R
+
 /** Simple lat/lng axis-aligned box; the lingua franca between the island
  *  gazetteer, the world gazetteer, geocoded lookups, and Room range queries. */
 data class BoundingBox(
@@ -43,6 +46,11 @@ sealed interface LocationQuery {
  */
 sealed interface LocationFilter {
     val label: String
+    /** null for the variants whose label is built from live data (island
+     *  display name, geocoder result, etc.); only [Everywhere] has a static
+     *  resource. */
+    @get:StringRes
+    val labelRes: Int? get() = null
 
     /** Exact tag match on the events table: instant, offline (Bahamas). */
     data class IslandTag(val island: BahamianIsland) : LocationFilter {
@@ -67,5 +75,7 @@ sealed interface LocationFilter {
 
     data object Everywhere : LocationFilter {
         override val label: String get() = "Everywhere"
+        @get:StringRes
+        override val labelRes: Int get() = R.string.location_everywhere
     }
 }

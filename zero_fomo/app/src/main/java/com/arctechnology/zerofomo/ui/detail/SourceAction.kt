@@ -1,5 +1,7 @@
 package com.arctechnology.zerofomo.ui.detail
 
+import androidx.annotation.StringRes
+import com.arctechnology.zerofomo.R
 import java.net.URI
 
 /** Ticket sellers get "Get Tickets"; a Facebook / Reddit / Telegram post is
@@ -16,12 +18,22 @@ private val POST_HOSTS = listOf(
     "threads.net", "whatsapp.com",
 )
 
-fun sourceActionLabel(url: String): String {
+/** Resource id for the button label — what [DetailScreen] renders. */
+@StringRes
+fun sourceActionLabelRes(url: String): Int {
     val host = runCatching { URI(url.trim()).host }.getOrNull()?.lowercase()
-        ?: return "More info"
+        ?: return R.string.action_more_info
     return when {
-        TICKET_HOSTS.any { host.contains(it) } -> "Get Tickets"
-        POST_HOSTS.any { host == it || host.endsWith(".$it") } -> "View post"
-        else -> "More info"
+        TICKET_HOSTS.any { host.contains(it) } -> R.string.action_get_tickets
+        POST_HOSTS.any { host == it || host.endsWith(".$it") } -> R.string.action_view_post
+        else -> R.string.action_more_info
     }
+}
+
+/** English label, kept for context-less (unit test) callers; the UI reads
+ *  [sourceActionLabelRes] through stringResource instead. */
+fun sourceActionLabel(url: String): String = when (sourceActionLabelRes(url)) {
+    R.string.action_get_tickets -> "Get Tickets"
+    R.string.action_view_post -> "View post"
+    else -> "More info"
 }

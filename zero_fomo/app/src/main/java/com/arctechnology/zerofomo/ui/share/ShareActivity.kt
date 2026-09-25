@@ -33,9 +33,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.core.content.IntentCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.arctechnology.zerofomo.R
 import com.arctechnology.zerofomo.data.inbox.InboxRepository
 import com.arctechnology.zerofomo.data.location.UserLocationStore
 import com.arctechnology.zerofomo.ui.theme.BrandMark
@@ -82,15 +84,24 @@ class ShareActivity : ComponentActivity() {
                             BrandMark(Modifier.size(26.dp), armA = onDark.armA, armB = onDark.armB,
                                 bar = MaterialTheme.colorScheme.onSurface)
                             Spacer(Modifier.width(8.dp))
-                            Text("Send to 0 FOMO", style = MaterialTheme.typography.titleLarge,
+                            Text(stringResource(R.string.share_title),
+                                style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Bold)
                         }
+                        val kindLabel = stringResource(
+                            if (imageUri != null) R.string.share_kind_flyer
+                            else if (url.isNotBlank()) R.string.share_kind_link
+                            else R.string.share_kind_post)
+                        val fromHint = if (hint.isNotBlank())
+                            stringResource(R.string.share_from_hint, hint) else ""
+                        val forAreaPrefix = stringResource(R.string.share_for_area_prefix)
+                        val defaultArea = stringResource(R.string.share_default_area)
                         Text(
                             buildString {
-                                append(if (imageUri != null) "Flyer" else if (url.isNotBlank()) "Link" else "Post")
-                                if (hint.isNotBlank()) append(" from $hint")
-                                append(" · for ")
-                                append(ul?.label ?: "your area")
+                                append(kindLabel)
+                                if (fromHint.isNotBlank()) append(" ").append(fromHint)
+                                append(" ").append(forAreaPrefix).append(" ")
+                                append(ul?.label ?: defaultArea)
                                 ul?.country?.let { append(" ${it.flagEmoji}") }
                             },
                             style = MaterialTheme.typography.bodyMedium,
@@ -104,16 +115,19 @@ class ShareActivity : ComponentActivity() {
                         OutlinedTextField(
                             value = note, onValueChange = { note = it },
                             modifier = Modifier.fillMaxWidth(),
-                            placeholder = { Text("Anything to add? Venue, price, date…") },
+                            placeholder = { Text(stringResource(R.string.share_note_placeholder)) },
                             minLines = 2,
                         )
-                        Text("A reviewer checks it before it appears. No account needed; nothing else is read from your apps.",
+                        Text(stringResource(R.string.share_reviewer_disclaimer),
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.outline)
                         Spacer(Modifier.height(4.dp))
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                            TextButton(onClick = { finish() }) { Text("Cancel") }
+                            TextButton(onClick = { finish() }) {
+                                Text(stringResource(R.string.share_cancel_button))
+                            }
                             Spacer(Modifier.width(8.dp))
+                            val sentToast = stringResource(R.string.share_sent_toast)
                             Button(enabled = !sending, onClick = {
                                 sending = true
                                 lifecycleScope.launch {
@@ -121,10 +135,14 @@ class ShareActivity : ComponentActivity() {
                                         .joinToString("\n\n")
                                     inbox.enqueue(body, url, imageUri, hint)
                                     Toast.makeText(this@ShareActivity,
-                                        "Sent to 0 FOMO for review", Toast.LENGTH_SHORT).show()
+                                        sentToast, Toast.LENGTH_SHORT).show()
                                     finish()
                                 }
-                            }) { Text(if (sending) "Sending…" else "Send") }
+                            }) {
+                                Text(stringResource(
+                                    if (sending) R.string.share_sending_button
+                                    else R.string.share_send_button))
+                            }
                         }
                     }
                 }

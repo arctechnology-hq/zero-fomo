@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.CalendarContract
 import androidx.core.content.FileProvider
+import com.arctechnology.zerofomo.R
 import com.arctechnology.zerofomo.model.Event
 import android.content.ClipData
 import java.io.File
@@ -47,21 +48,32 @@ object CalendarExporter {
         return end ?: start.plusHours(3)
     }
 
-    private fun bodyOf(event: Event): String = buildString {
+    /** Calendar entry description. Localized when a [Context] is available;
+     *  falls back to the original English copy when it isn't (the JVM unit
+     *  tests exercise ICS generation without an Android Context). */
+    private fun bodyOf(event: Event, context: Context? = null): String = buildString {
         if (event.description.isNotBlank()) appendLine(event.description).appendLine()
-        if (event.priceLabel.isNotBlank()) appendLine("Price: ${event.priceLabel}")
-        if (event.sourceUrl.isNotBlank()) appendLine("Tickets/info: ${event.sourceUrl}")
-        appendLine("Added from 0 FOMO")
+        if (event.priceLabel.isNotBlank()) {
+            appendLine(
+                context?.getString(R.string.calendar_price_prefix, event.priceLabel)
+                    ?: "Price: ${event.priceLabel}")
+        }
+        if (event.sourceUrl.isNotBlank()) {
+            appendLine(
+                context?.getString(R.string.calendar_tickets_info_prefix, event.sourceUrl)
+                    ?: "Tickets/info: ${event.sourceUrl}")
+        }
+        appendLine(context?.getString(R.string.calendar_added_from) ?: "Added from 0 FOMO")
     }.trim()
 
     // ── 1. Google Calendar / device calendar via system insert sheet ───────
 
-    fun systemInsertIntent(event: Event): Intent =
+    fun systemInsertIntent(context: Context, event: Event): Intent =
         Intent(Intent.ACTION_INSERT).apply {
             data = CalendarContract.Events.CONTENT_URI
             putExtra(CalendarContract.Events.TITLE, event.name)
             putExtra(CalendarContract.Events.EVENT_LOCATION, event.venue)
-            putExtra(CalendarContract.Events.DESCRIPTION, bodyOf(event))
+            putExtra(CalendarContract.Events.DESCRIPTION, bodyOf(event, context))
             putExtra(CalendarContract.Events.EVENT_TIMEZONE, NASSAU.id)
             if (event.timeStart == null) {
                 // CalendarProvider reads all-day begin/end as UTC midnights;
@@ -82,7 +94,7 @@ object CalendarExporter {
 
     // ── 2. Outlook deep link (work/school + personal variants) ─────────────
 
-    fun outlookIntent(event: Event, personalAccount: Boolean = false): Intent {
+    fun outlookIntent(context: Context, event: Event, personalAccount: Boolean = false): Intent {
         val host = if (personalAccount) "outlook.live.com" else "outlook.office.com"
         fun enc(s: String) = URLEncoder.encode(s, "UTF-8")
         val url = buildString {
@@ -99,7 +111,7 @@ object CalendarExporter {
                 append("&enddt=").append(enc(endOf(event).toLocalDateTime().format(ISO_LOCAL)))
             }
             append("&location=").append(enc(event.venue))
-            append("&body=").append(enc(bodyOf(event)))
+            append("&body=").append(enc(bodyOf(event, context)))
         }
         return Intent(Intent.ACTION_VIEW, Uri.parse(url))
     }
@@ -110,7 +122,7 @@ object CalendarExporter {
         val dir = File(context.cacheDir, "ics").apply { mkdirs() }
         val safeName = event.name.replace(Regex("[^A-Za-z0-9 ]"), "").take(40).trim()
         val file = File(dir, "${safeName.ifBlank { "event" }}.ics")
-        file.writeText(buildIcs(event))
+        file.writeText(buildIcs(event, context))
 
         val uri = FileProvider.getUriForFile(
             context, "${context.packageName}.fileprovider", file)
@@ -140,7 +152,7 @@ object CalendarExporter {
         }
     }
 
-    internal fun buildIcs(event: Event): String {
+    internal fun buildIcs(event: Event, context: Context? = null): String {
         fun esc(s: String) = s.replace("\\", "\\\\").replace(";", "\\;")
             .replace(",", "\\,").replace("\n", "\\n")
         val nowUtc = ZonedDateTime.now(ZoneId.of("UTC"))
@@ -165,7 +177,7 @@ object CalendarExporter {
             }
             add("SUMMARY:${esc(event.name)}")
             if (event.venue.isNotBlank()) add("LOCATION:${esc(event.venue)}")
-            add("DESCRIPTION:${esc(bodyOf(event))}")
+            add("DESCRIPTION:${esc(bodyOf(event, context))}")
             if (event.sourceUrl.isNotBlank()) add("URL:${esc(event.sourceUrl)}")
             add("END:VEVENT")
             add("END:VCALENDAR")

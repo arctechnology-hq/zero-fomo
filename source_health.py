@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""source_health.py — the active watch over every scraper (2026-09-26).
+"""source_health.py — the active watch over every scraper (2026-09-25).
 
 The pipeline writes feeds/<market>/status.json after each run. This script
 rolls those into a history, spots sources that went quiet or broke, watches

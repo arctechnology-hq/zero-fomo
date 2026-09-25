@@ -1997,7 +1997,7 @@ class TikketsScraper(BaseScraper):
 
 
 # =============================================================================
-# CARIBBEAN-WIDE SOURCES  (added 2026-09-26 — see docs/SOURCES_CARIBBEAN.md)
+# CARIBBEAN-WIDE SOURCES  (added 2026-09-25 — see docs/SOURCES_CARIBBEAN.md)
 #
 # Two kinds of adapter live here:
 #   * generic, config-driven readers (tribe, wp-posts, jsonld) that a market

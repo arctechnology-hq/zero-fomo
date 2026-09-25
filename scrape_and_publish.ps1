@@ -101,7 +101,7 @@ try {
     python "$here\build_markets_manifest.py" 2>&1 | Add-Content $log
     if ($failed.Count) { "Markets below floor / failed: $($failed -join ', ')" | Add-Content $log }
 
-    # 2b. Source health (2026-09-26): roll every market's status.json into
+    # 2b. Source health (2026-09-25): roll every market's status.json into
     #     feeds/health/history.jsonl, flag dead / failed / revived sources and
     #     market collapses, and push a phone alert (status text only). Sundays
     #     also re-probe sources_watchlist.json so a parked site that comes

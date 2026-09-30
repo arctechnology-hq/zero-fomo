@@ -1,0 +1,44 @@
+{
+ "market": "us-atlanta",
+ "generated_at": "2026-09-30T14:27:43Z",
+ "sources_run": [
+  "ticketmaster",
+  "seatgeek",
+  "eventbrite",
+  "community"
+ ],
+ "raw": 2238,
+ "unique": 1607,
+ "exported": 1604,
+ "review": 3,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 1200,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "seatgeek",
+   "ok": true,
+   "events": 999,
+   "pages": 10,
+   "note": ""
+  },
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 38,
+   "pages": 5,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 1,
+   "pages": 0,
+   "note": ""
+  }
+ ]
+}

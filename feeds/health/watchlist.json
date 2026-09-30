@@ -1,0 +1,254 @@
+{
+ "generated_at": "2026-09-25T16:00:59Z",
+ "results": [
+  {
+   "name": "Bahamas Carnival (tribe)",
+   "kind": "tribe",
+   "url": "https://bahamascarnival.com/wp-json/tribe/events/v1/events?per_page=20",
+   "adopt": "bs-nassau: tribe base=https://bahamascarnival.com",
+   "alive": false,
+   "detail": "0 events",
+   "checked_at": "2026-09-25T16:00:17Z"
+  },
+  {
+   "name": "National Art Gallery of The Bahamas (tribe)",
+   "kind": "tribe",
+   "url": "https://nagb.org.bs/wp-json/tribe/events/v1/events?per_page=20",
+   "adopt": "bs-nassau: tribe base=https://nagb.org.bs",
+   "alive": false,
+   "detail": "0 events",
+   "checked_at": "2026-09-25T16:00:18Z"
+  },
+  {
+   "name": "GBPA EventHub upcoming",
+   "kind": "html",
+   "url": "https://events.gbpa.com/",
+   "marker": "Upcoming Event<",
+   "min": 2,
+   "adopt": "bs-freeport: new adapter",
+   "alive": true,
+   "detail": "2 marker hit(s)",
+   "checked_at": "2026-09-25T16:00:21Z"
+  },
+  {
+   "name": "Tikkets Barbados",
+   "kind": "json",
+   "url": "https://barbados.tikkets.com/api/events",
+   "path": "data",
+   "adopt": "bb-bridgetown: tikkets base",
+   "alive": false,
+   "detail": "error ConnectionError",
+   "checked_at": "2026-09-25T16:00:21Z"
+  },
+  {
+   "name": "Tikkets Cayman",
+   "kind": "json",
+   "url": "https://cayman.tikkets.com/api/events",
+   "path": "data",
+   "adopt": "ky-george-town: tikkets base",
+   "alive": false,
+   "detail": "error ConnectionError",
+   "checked_at": "2026-09-25T16:00:22Z"
+  },
+  {
+   "name": "Tikkets Trinidad (>1 event)",
+   "kind": "json",
+   "url": "https://trinidad.tikkets.com/api/events",
+   "path": "data",
+   "alert_when_alive": false,
+   "alive": true,
+   "detail": "1 items",
+   "checked_at": "2026-09-25T16:00:22Z"
+  },
+  {
+   "name": "Beats To Rap On Barbados",
+   "kind": "html",
+   "url": "https://beatstorapon.com/events/bb/",
+   "marker": "class=\"event-card\"",
+   "adopt": "bb-bridgetown: beatstorapon cc=bb",
+   "alive": false,
+   "detail": "0 marker hit(s)",
+   "checked_at": "2026-09-25T16:00:23Z"
+  },
+  {
+   "name": "Beats To Rap On Bahamas",
+   "kind": "html",
+   "url": "https://beatstorapon.com/events/bs/",
+   "marker": "class=\"event-card\"",
+   "adopt": "bs-nassau: beatstorapon cc=bs",
+   "alive": false,
+   "detail": "0 marker hit(s)",
+   "checked_at": "2026-09-25T16:00:24Z"
+  },
+  {
+   "name": "Beats To Rap On Puerto Rico",
+   "kind": "html",
+   "url": "https://beatstorapon.com/events/pr/",
+   "marker": "class=\"event-card\"",
+   "adopt": "pr-san-juan: beatstorapon cc=pr",
+   "alive": false,
+   "detail": "0 marker hit(s)",
+   "checked_at": "2026-09-25T16:00:24Z"
+  },
+  {
+   "name": "Beats To Rap On Dominican Republic",
+   "kind": "html",
+   "url": "https://beatstorapon.com/events/do/",
+   "marker": "class=\"event-card\"",
+   "adopt": "do-*: beatstorapon cc=do",
+   "alive": false,
+   "detail": "0 marker hit(s)",
+   "checked_at": "2026-09-25T16:00:25Z"
+  },
+  {
+   "name": "TicketsPlus events grid (server-rendered?)",
+   "kind": "html",
+   "url": "https://www.ticketsplus.ky/en/events",
+   "marker": "href=\"/en/event/",
+   "min": 3,
+   "adopt": "ticketsplus: add /en/events listing",
+   "alive": false,
+   "detail": "0 marker hit(s)",
+   "checked_at": "2026-09-25T16:00:26Z"
+  },
+  {
+   "name": "Eventbrite Tobago slug",
+   "kind": "html",
+   "url": "https://www.eventbrite.com/d/trinidad-and-tobago--scarborough/events/",
+   "marker": "\"@type\": *\"Event\"",
+   "adopt": "tt-scarborough: eventbrite slug",
+   "alive": true,
+   "detail": "24 marker hit(s)",
+   "checked_at": "2026-09-25T16:00:27Z"
+  },
+  {
+   "name": "Eventbrite Bonaire slug",
+   "kind": "html",
+   "url": "https://www.eventbrite.com/d/bonaire-sint-eustatius-and-saba--kralendijk/events/",
+   "marker": "\"@type\": *\"Event\"",
+   "adopt": "bq-kralendijk: eventbrite slug",
+   "alive": false,
+   "detail": "http 404",
+   "checked_at": "2026-09-25T16:00:28Z"
+  },
+  {
+   "name": "Eventbrite Anguilla slug",
+   "kind": "html",
+   "url": "https://www.eventbrite.com/d/anguilla--the-valley/events/",
+   "marker": "\"@type\": *\"Event\"",
+   "adopt": "new ai-the-valley market",
+   "alive": false,
+   "detail": "http 404",
+   "checked_at": "2026-09-25T16:00:29Z"
+  },
+  {
+   "name": "Eventbrite BVI slug",
+   "kind": "html",
+   "url": "https://www.eventbrite.com/d/british-virgin-islands--road-town/events/",
+   "marker": "\"@type\": *\"Event\"",
+   "adopt": "new vg-road-town market",
+   "alive": false,
+   "detail": "http 404",
+   "checked_at": "2026-09-25T16:00:29Z"
+  },
+  {
+   "name": "Eventbrite Martinique slug",
+   "kind": "html",
+   "url": "https://www.eventbrite.com/d/martinique--fort-de-france/events/",
+   "marker": "\"@type\": *\"Event\"",
+   "adopt": "new mq-fort-de-france market",
+   "alive": false,
+   "detail": "http 404",
+   "checked_at": "2026-09-25T16:00:30Z"
+  },
+  {
+   "name": "Eventbrite Guadeloupe slug",
+   "kind": "html",
+   "url": "https://www.eventbrite.com/d/guadeloupe--pointe-a-pitre/events/",
+   "marker": "\"@type\": *\"Event\"",
+   "adopt": "new gp-pointe-a-pitre market",
+   "alive": false,
+   "detail": "http 404",
+   "checked_at": "2026-09-25T16:00:31Z"
+  },
+  {
+   "name": "Ticket Federation (TT)",
+   "kind": "status",
+   "url": "https://www.ticketfederation.com/",
+   "adopt": "tt-port-of-spain: new adapter",
+   "alive": false,
+   "detail": "http 403",
+   "checked_at": "2026-09-25T16:00:31Z"
+  },
+  {
+   "name": "Wesplash",
+   "kind": "html",
+   "url": "https://www.wesplash.com/",
+   "marker": "event",
+   "min": 5,
+   "adopt": "new adapter once launched",
+   "alive": false,
+   "detail": "error SSLError",
+   "checked_at": "2026-09-25T16:00:31Z"
+  },
+  {
+   "name": "Cayman Compass events",
+   "kind": "status",
+   "url": "https://www.caymancompass.com/events/",
+   "adopt": "ky-george-town: jsonld/tribe probe",
+   "alive": false,
+   "detail": "http 403",
+   "checked_at": "2026-09-25T16:00:33Z"
+  },
+  {
+   "name": "BVI Tourism tribe",
+   "kind": "tribe",
+   "url": "https://www.bvitourism.com/wp-json/tribe/events/v1/events?per_page=20",
+   "adopt": "new vg-road-town market: tribe base",
+   "alive": false,
+   "detail": "not json",
+   "checked_at": "2026-09-25T16:00:34Z"
+  },
+  {
+   "name": "Discover SVG events with dates",
+   "kind": "json",
+   "url": "https://www.discoversvg.com/wp-json/wp/v2/events?per_page=5",
+   "path": "",
+   "alert_when_alive": false,
+   "alive": true,
+   "detail": "5 items",
+   "checked_at": "2026-09-25T16:00:36Z"
+  },
+  {
+   "name": "Bahamas Local events page",
+   "kind": "html",
+   "url": "https://www.bahamaslocal.com/events.html",
+   "marker": "event",
+   "min": 5,
+   "alert_when_alive": false,
+   "alive": false,
+   "detail": "http 404",
+   "checked_at": "2026-09-25T16:00:37Z"
+  },
+  {
+   "name": "Fusion Superplex",
+   "kind": "status",
+   "url": "https://www.fusionsuperplex.com/",
+   "adopt": "bs-nassau: cinema/venue adapter",
+   "alive": false,
+   "detail": "error ConnectTimeout",
+   "checked_at": "2026-09-25T16:00:59Z"
+  },
+  {
+   "name": "100 JAMZ events",
+   "kind": "html",
+   "url": "https://www.100jamz.com/events/",
+   "marker": "event",
+   "min": 5,
+   "adopt": "bs-nassau: adapter",
+   "alive": false,
+   "detail": "http 429",
+   "checked_at": "2026-09-25T16:00:59Z"
+  }
+ ]
+}

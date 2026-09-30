@@ -1,0 +1,1784 @@
+{
+ "generated_at": "2026-09-30T14:30:41Z",
+ "alerts": [],
+ "markets": [
+  {
+   "market": "ag-st-johns",
+   "exported": 10,
+   "median_7": 10,
+   "state": "ok"
+  },
+  {
+   "market": "aw-oranjestad",
+   "exported": 11,
+   "median_7": 12,
+   "state": "ok"
+  },
+  {
+   "market": "bb-bridgetown",
+   "exported": 12,
+   "median_7": 13,
+   "state": "ok"
+  },
+  {
+   "market": "bm-hamilton",
+   "exported": 6,
+   "median_7": 6,
+   "state": "ok"
+  },
+  {
+   "market": "bq-kralendijk",
+   "exported": 40,
+   "median_7": 41,
+   "state": "ok"
+  },
+  {
+   "market": "bs-freeport",
+   "exported": 7,
+   "median_7": 7,
+   "state": "ok"
+  },
+  {
+   "market": "bz-belize-city",
+   "exported": 5,
+   "median_7": 7,
+   "state": "ok"
+  },
+  {
+   "market": "cu-havana",
+   "exported": 5,
+   "median_7": 6,
+   "state": "ok"
+  },
+  {
+   "market": "cw-willemstad",
+   "exported": 11,
+   "median_7": 16,
+   "state": "ok"
+  },
+  {
+   "market": "dm-roseau",
+   "exported": 18,
+   "median_7": 20,
+   "state": "ok"
+  },
+  {
+   "market": "do-punta-cana",
+   "exported": 20,
+   "median_7": 21,
+   "state": "ok"
+  },
+  {
+   "market": "do-santo-domingo",
+   "exported": 21,
+   "median_7": 24,
+   "state": "ok"
+  },
+  {
+   "market": "gd-st-georges",
+   "exported": 11,
+   "median_7": 12,
+   "state": "ok"
+  },
+  {
+   "market": "gy-georgetown",
+   "exported": 17,
+   "median_7": 17,
+   "state": "ok"
+  },
+  {
+   "market": "ht-port-au-prince",
+   "exported": 8,
+   "median_7": 8,
+   "state": "ok"
+  },
+  {
+   "market": "jm-kingston",
+   "exported": 48,
+   "median_7": 46,
+   "state": "ok"
+  },
+  {
+   "market": "jm-montego-bay",
+   "exported": 31,
+   "median_7": 28,
+   "state": "ok"
+  },
+  {
+   "market": "kn-basseterre",
+   "exported": 7,
+   "median_7": 7,
+   "state": "ok"
+  },
+  {
+   "market": "ky-george-town",
+   "exported": 9,
+   "median_7": 9,
+   "state": "ok"
+  },
+  {
+   "market": "lc-castries",
+   "exported": 8,
+   "median_7": 10,
+   "state": "ok"
+  },
+  {
+   "market": "ms-brades",
+   "exported": 16,
+   "median_7": 16.0,
+   "state": "ok"
+  },
+  {
+   "market": "pr-san-juan",
+   "exported": 83,
+   "median_7": 79,
+   "state": "ok"
+  },
+  {
+   "market": "sx-philipsburg",
+   "exported": 11,
+   "median_7": 11,
+   "state": "ok"
+  },
+  {
+   "market": "tc-providenciales",
+   "exported": 6,
+   "median_7": 7,
+   "state": "ok"
+  },
+  {
+   "market": "tt-port-of-spain",
+   "exported": 77,
+   "median_7": 78,
+   "state": "ok"
+  },
+  {
+   "market": "tt-scarborough",
+   "exported": 12,
+   "median_7": 13.5,
+   "state": "ok"
+  },
+  {
+   "market": "us-atlanta",
+   "exported": 1604,
+   "median_7": 1746,
+   "state": "ok"
+  },
+  {
+   "market": "us-fort-lauderdale",
+   "exported": 1590,
+   "median_7": 1569,
+   "state": "ok"
+  },
+  {
+   "market": "us-miami",
+   "exported": 1889,
+   "median_7": 1889,
+   "state": "ok"
+  },
+  {
+   "market": "us-orlando",
+   "exported": 1367,
+   "median_7": 1364,
+   "state": "ok"
+  },
+  {
+   "market": "vc-kingstown",
+   "exported": 9,
+   "median_7": 10.0,
+   "state": "ok"
+  },
+  {
+   "market": "vi-charlotte-amalie",
+   "exported": 27,
+   "median_7": 27.0,
+   "state": "ok"
+  }
+ ],
+ "sources": [
+  {
+   "market": "ag-st-johns",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:10:46Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "ag-st-johns",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 11,
+   "baseline_median": 10,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:10:46Z",
+   "note": ""
+  },
+  {
+   "market": "ag-st-johns",
+   "source": "ticketpal",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:10:46Z",
+   "note": ""
+  },
+  {
+   "market": "ag-st-johns",
+   "source": "ticketsplus",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:10:46Z",
+   "note": ""
+  },
+  {
+   "market": "ag-st-johns",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:10:46Z",
+   "note": ""
+  },
+  {
+   "market": "ag-st-johns",
+   "source": "wp-posts",
+   "state": "ok",
+   "last_events": 35,
+   "baseline_median": 35,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:10:46Z",
+   "note": ""
+  },
+  {
+   "market": "aw-oranjestad",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:10:54Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "aw-oranjestad",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 13,
+   "baseline_median": 14,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:10:54Z",
+   "note": ""
+  },
+  {
+   "market": "aw-oranjestad",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:10:54Z",
+   "note": ""
+  },
+  {
+   "market": "bb-bridgetown",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:13:26Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "bb-bridgetown",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 12,
+   "baseline_median": 13,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:13:26Z",
+   "note": ""
+  },
+  {
+   "market": "bb-bridgetown",
+   "source": "islandetickets",
+   "state": "ok",
+   "last_events": 1,
+   "baseline_median": 1,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:13:26Z",
+   "note": ""
+  },
+  {
+   "market": "bb-bridgetown",
+   "source": "ticketpal",
+   "state": "ok",
+   "last_events": 1,
+   "baseline_median": 1,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:13:26Z",
+   "note": ""
+  },
+  {
+   "market": "bb-bridgetown",
+   "source": "ticketsplus",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:13:26Z",
+   "note": ""
+  },
+  {
+   "market": "bb-bridgetown",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:13:26Z",
+   "note": ""
+  },
+  {
+   "market": "bm-hamilton",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:14:03Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "bm-hamilton",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 9,
+   "baseline_median": 8,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:14:03Z",
+   "note": "rendered via Playwright"
+  },
+  {
+   "market": "bm-hamilton",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:14:03Z",
+   "note": ""
+  },
+  {
+   "market": "bq-kralendijk",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:14:07Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "bq-kralendijk",
+   "source": "tribe",
+   "state": "ok",
+   "last_events": 41,
+   "baseline_median": 42,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:14:07Z",
+   "note": ""
+  },
+  {
+   "market": "bs-freeport",
+   "source": "bahamas.com",
+   "state": "ok",
+   "last_events": 8,
+   "baseline_median": 8,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:14:45Z",
+   "note": ""
+  },
+  {
+   "market": "bs-freeport",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:14:45Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "bs-freeport",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:14:45Z",
+   "note": "rendered via Playwright"
+  },
+  {
+   "market": "bs-freeport",
+   "source": "tikkets",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:14:45Z",
+   "note": ""
+  },
+  {
+   "market": "bz-belize-city",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:14:57Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "bz-belize-city",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 8,
+   "baseline_median": 9,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:14:57Z",
+   "note": ""
+  },
+  {
+   "market": "bz-belize-city",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:14:57Z",
+   "note": ""
+  },
+  {
+   "market": "cu-havana",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:15:06Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "cu-havana",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 8,
+   "baseline_median": 8,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:15:06Z",
+   "note": ""
+  },
+  {
+   "market": "cu-havana",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:15:06Z",
+   "note": ""
+  },
+  {
+   "market": "cw-willemstad",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:17:40Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "cw-willemstad",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 13,
+   "baseline_median": 19,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:17:40Z",
+   "note": ""
+  },
+  {
+   "market": "cw-willemstad",
+   "source": "islandetickets",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:17:40Z",
+   "note": ""
+  },
+  {
+   "market": "cw-willemstad",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:17:40Z",
+   "note": ""
+  },
+  {
+   "market": "dm-roseau",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:17:54Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "dm-roseau",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 16,
+   "baseline_median": 17,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:17:54Z",
+   "note": ""
+  },
+  {
+   "market": "dm-roseau",
+   "source": "ticketpal",
+   "state": "ok",
+   "last_events": 4,
+   "baseline_median": 4,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:17:54Z",
+   "note": ""
+  },
+  {
+   "market": "dm-roseau",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 2,
+   "baseline_median": 2,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:17:54Z",
+   "note": ""
+  },
+  {
+   "market": "do-punta-cana",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:18:04Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "do-punta-cana",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 22,
+   "baseline_median": 23,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:18:04Z",
+   "note": ""
+  },
+  {
+   "market": "do-punta-cana",
+   "source": "ticketmaster",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:18:04Z",
+   "note": ""
+  },
+  {
+   "market": "do-punta-cana",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:18:04Z",
+   "note": ""
+  },
+  {
+   "market": "do-santo-domingo",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:18:12Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "do-santo-domingo",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 22,
+   "baseline_median": 25,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:18:12Z",
+   "note": ""
+  },
+  {
+   "market": "do-santo-domingo",
+   "source": "ticketmaster",
+   "state": "ok",
+   "last_events": 1,
+   "baseline_median": 1,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:18:12Z",
+   "note": ""
+  },
+  {
+   "market": "do-santo-domingo",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:18:12Z",
+   "note": ""
+  },
+  {
+   "market": "gd-st-georges",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:18:28Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "gd-st-georges",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 8,
+   "baseline_median": 8,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:18:28Z",
+   "note": ""
+  },
+  {
+   "market": "gd-st-georges",
+   "source": "ticketpal",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:18:28Z",
+   "note": ""
+  },
+  {
+   "market": "gd-st-georges",
+   "source": "ticketsplus",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:18:28Z",
+   "note": ""
+  },
+  {
+   "market": "gd-st-georges",
+   "source": "tribe",
+   "state": "ok",
+   "last_events": 6,
+   "baseline_median": 6,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:18:28Z",
+   "note": ""
+  },
+  {
+   "market": "gd-st-georges",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:18:28Z",
+   "note": ""
+  },
+  {
+   "market": "gy-georgetown",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:06Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "gy-georgetown",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 17,
+   "baseline_median": 17,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:06Z",
+   "note": "rendered via Playwright"
+  },
+  {
+   "market": "gy-georgetown",
+   "source": "tikkets",
+   "state": "ok",
+   "last_events": 2,
+   "baseline_median": 2,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:06Z",
+   "note": ""
+  },
+  {
+   "market": "gy-georgetown",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:06Z",
+   "note": ""
+  },
+  {
+   "market": "ht-port-au-prince",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:17Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "ht-port-au-prince",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 11,
+   "baseline_median": 10,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:17Z",
+   "note": ""
+  },
+  {
+   "market": "ht-port-au-prince",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:17Z",
+   "note": ""
+  },
+  {
+   "market": "jm-kingston",
+   "source": "beatstorapon",
+   "state": "ok",
+   "last_events": 5,
+   "baseline_median": 3,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:36Z",
+   "note": ""
+  },
+  {
+   "market": "jm-kingston",
+   "source": "caribtix",
+   "state": "ok",
+   "last_events": 48,
+   "baseline_median": 47,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:36Z",
+   "note": ""
+  },
+  {
+   "market": "jm-kingston",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:36Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "jm-kingston",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 23,
+   "baseline_median": 23,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:36Z",
+   "note": ""
+  },
+  {
+   "market": "jm-kingston",
+   "source": "seatgeek",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:36Z",
+   "note": ""
+  },
+  {
+   "market": "jm-kingston",
+   "source": "ticketmaster",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:36Z",
+   "note": ""
+  },
+  {
+   "market": "jm-kingston",
+   "source": "ticketpal",
+   "state": "ok",
+   "last_events": 1,
+   "baseline_median": 1,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:36Z",
+   "note": ""
+  },
+  {
+   "market": "jm-kingston",
+   "source": "tikkets",
+   "state": "ok",
+   "last_events": 1,
+   "baseline_median": 1,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:36Z",
+   "note": ""
+  },
+  {
+   "market": "jm-kingston",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:36Z",
+   "note": ""
+  },
+  {
+   "market": "jm-montego-bay",
+   "source": "beatstorapon",
+   "state": "ok",
+   "last_events": 11,
+   "baseline_median": 9,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:55Z",
+   "note": ""
+  },
+  {
+   "market": "jm-montego-bay",
+   "source": "caribtix",
+   "state": "ok",
+   "last_events": 3,
+   "baseline_median": 4,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:55Z",
+   "note": ""
+  },
+  {
+   "market": "jm-montego-bay",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:55Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "jm-montego-bay",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 22,
+   "baseline_median": 21,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:55Z",
+   "note": ""
+  },
+  {
+   "market": "jm-montego-bay",
+   "source": "seatgeek",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:55Z",
+   "note": ""
+  },
+  {
+   "market": "jm-montego-bay",
+   "source": "ticketmaster",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:55Z",
+   "note": ""
+  },
+  {
+   "market": "jm-montego-bay",
+   "source": "tikkets",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:55Z",
+   "note": ""
+  },
+  {
+   "market": "jm-montego-bay",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:19:55Z",
+   "note": ""
+  },
+  {
+   "market": "kn-basseterre",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:20:08Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "kn-basseterre",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 10,
+   "baseline_median": 9,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:20:08Z",
+   "note": ""
+  },
+  {
+   "market": "kn-basseterre",
+   "source": "ticketpal",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:20:08Z",
+   "note": ""
+  },
+  {
+   "market": "kn-basseterre",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:20:08Z",
+   "note": ""
+  },
+  {
+   "market": "ky-george-town",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:20:47Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "ky-george-town",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:20:47Z",
+   "note": "rendered via Playwright"
+  },
+  {
+   "market": "ky-george-town",
+   "source": "jsonld",
+   "state": "ok",
+   "last_events": 8,
+   "baseline_median": 8,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:20:47Z",
+   "note": ""
+  },
+  {
+   "market": "ky-george-town",
+   "source": "ticketsplus",
+   "state": "ok",
+   "last_events": 2,
+   "baseline_median": 2,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:20:47Z",
+   "note": ""
+  },
+  {
+   "market": "ky-george-town",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:20:47Z",
+   "note": ""
+  },
+  {
+   "market": "lc-castries",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:00Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "lc-castries",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 11,
+   "baseline_median": 12,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:00Z",
+   "note": ""
+  },
+  {
+   "market": "lc-castries",
+   "source": "ticketpal",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:00Z",
+   "note": ""
+  },
+  {
+   "market": "lc-castries",
+   "source": "ticketsplus",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:00Z",
+   "note": ""
+  },
+  {
+   "market": "lc-castries",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:00Z",
+   "note": ""
+  },
+  {
+   "market": "ms-brades",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0.0,
+   "zero_streak": 3,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:02Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "ms-brades",
+   "source": "tribe",
+   "state": "ok",
+   "last_events": 16,
+   "baseline_median": 16.0,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:02Z",
+   "note": ""
+  },
+  {
+   "market": "pr-san-juan",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:16Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "pr-san-juan",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 63,
+   "baseline_median": 59,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:16Z",
+   "note": ""
+  },
+  {
+   "market": "pr-san-juan",
+   "source": "seatgeek",
+   "state": "ok",
+   "last_events": 24,
+   "baseline_median": 24,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:16Z",
+   "note": ""
+  },
+  {
+   "market": "pr-san-juan",
+   "source": "ticketmaster",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:16Z",
+   "note": ""
+  },
+  {
+   "market": "pr-san-juan",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:16Z",
+   "note": ""
+  },
+  {
+   "market": "sx-philipsburg",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:26Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "sx-philipsburg",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 13,
+   "baseline_median": 13,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:26Z",
+   "note": ""
+  },
+  {
+   "market": "sx-philipsburg",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:26Z",
+   "note": ""
+  },
+  {
+   "market": "tc-providenciales",
+   "source": "caribtix",
+   "state": "ok",
+   "last_events": 1,
+   "baseline_median": 1,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:45Z",
+   "note": ""
+  },
+  {
+   "market": "tc-providenciales",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:45Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "tc-providenciales",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 9,
+   "baseline_median": 9,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:45Z",
+   "note": ""
+  },
+  {
+   "market": "tc-providenciales",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:21:45Z",
+   "note": ""
+  },
+  {
+   "market": "tt-port-of-spain",
+   "source": "beatstorapon",
+   "state": "ok",
+   "last_events": 10,
+   "baseline_median": 9,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:24:18Z",
+   "note": ""
+  },
+  {
+   "market": "tt-port-of-spain",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:24:18Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "tt-port-of-spain",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 16,
+   "baseline_median": 16,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:24:18Z",
+   "note": ""
+  },
+  {
+   "market": "tt-port-of-spain",
+   "source": "islandetickets",
+   "state": "ok",
+   "last_events": 46,
+   "baseline_median": 46,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:24:18Z",
+   "note": ""
+  },
+  {
+   "market": "tt-port-of-spain",
+   "source": "tikkets",
+   "state": "ok",
+   "last_events": 1,
+   "baseline_median": 1,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:24:18Z",
+   "note": ""
+  },
+  {
+   "market": "tt-port-of-spain",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 13,
+   "baseline_median": 13,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:24:18Z",
+   "note": ""
+  },
+  {
+   "market": "tt-scarborough",
+   "source": "beatstorapon",
+   "state": "ok",
+   "last_events": 4,
+   "baseline_median": 4.0,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:26:52Z",
+   "note": ""
+  },
+  {
+   "market": "tt-scarborough",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0.0,
+   "zero_streak": 3,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:26:52Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "tt-scarborough",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 12,
+   "baseline_median": 12.0,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:26:52Z",
+   "note": ""
+  },
+  {
+   "market": "tt-scarborough",
+   "source": "islandetickets",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 1.0,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:26:52Z",
+   "note": ""
+  },
+  {
+   "market": "tt-scarborough",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 1,
+   "baseline_median": 1.0,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:26:52Z",
+   "note": ""
+  },
+  {
+   "market": "us-atlanta",
+   "source": "community",
+   "state": "ok",
+   "last_events": 1,
+   "baseline_median": 1,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:27:43Z",
+   "note": ""
+  },
+  {
+   "market": "us-atlanta",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 38,
+   "baseline_median": 36,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:27:43Z",
+   "note": ""
+  },
+  {
+   "market": "us-atlanta",
+   "source": "seatgeek",
+   "state": "ok",
+   "last_events": 999,
+   "baseline_median": 999,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:27:43Z",
+   "note": ""
+  },
+  {
+   "market": "us-atlanta",
+   "source": "ticketmaster",
+   "state": "ok",
+   "last_events": 1200,
+   "baseline_median": 1200,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:27:43Z",
+   "note": ""
+  },
+  {
+   "market": "us-fort-lauderdale",
+   "source": "caribtix",
+   "state": "ok",
+   "last_events": 34,
+   "baseline_median": 32,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:28:38Z",
+   "note": ""
+  },
+  {
+   "market": "us-fort-lauderdale",
+   "source": "community",
+   "state": "ok",
+   "last_events": 37,
+   "baseline_median": 37,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:28:38Z",
+   "note": ""
+  },
+  {
+   "market": "us-fort-lauderdale",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 68,
+   "baseline_median": 70,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:28:38Z",
+   "note": ""
+  },
+  {
+   "market": "us-fort-lauderdale",
+   "source": "seatgeek",
+   "state": "ok",
+   "last_events": 856,
+   "baseline_median": 855,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:28:38Z",
+   "note": ""
+  },
+  {
+   "market": "us-fort-lauderdale",
+   "source": "ticketmaster",
+   "state": "ok",
+   "last_events": 1037,
+   "baseline_median": 1016,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:28:38Z",
+   "note": ""
+  },
+  {
+   "market": "us-fort-lauderdale",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 30,
+   "baseline_median": 30,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:28:38Z",
+   "note": ""
+  },
+  {
+   "market": "us-miami",
+   "source": "caribtix",
+   "state": "ok",
+   "last_events": 35,
+   "baseline_median": 33,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:29:34Z",
+   "note": ""
+  },
+  {
+   "market": "us-miami",
+   "source": "community",
+   "state": "ok",
+   "last_events": 19,
+   "baseline_median": 19,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:29:34Z",
+   "note": ""
+  },
+  {
+   "market": "us-miami",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 39,
+   "baseline_median": 40,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:29:34Z",
+   "note": ""
+  },
+  {
+   "market": "us-miami",
+   "source": "seatgeek",
+   "state": "ok",
+   "last_events": 1000,
+   "baseline_median": 1000,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:29:34Z",
+   "note": ""
+  },
+  {
+   "market": "us-miami",
+   "source": "ticketmaster",
+   "state": "ok",
+   "last_events": 1200,
+   "baseline_median": 1200,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:29:34Z",
+   "note": ""
+  },
+  {
+   "market": "us-miami",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 30,
+   "baseline_median": 30,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:29:34Z",
+   "note": ""
+  },
+  {
+   "market": "us-orlando",
+   "source": "community",
+   "state": "ok",
+   "last_events": 6,
+   "baseline_median": 5,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:30:20Z",
+   "note": ""
+  },
+  {
+   "market": "us-orlando",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 36,
+   "baseline_median": 37,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:30:20Z",
+   "note": ""
+  },
+  {
+   "market": "us-orlando",
+   "source": "seatgeek",
+   "state": "ok",
+   "last_events": 1000,
+   "baseline_median": 1000,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:30:20Z",
+   "note": ""
+  },
+  {
+   "market": "us-orlando",
+   "source": "ticketmaster",
+   "state": "ok",
+   "last_events": 1200,
+   "baseline_median": 1200,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:30:20Z",
+   "note": ""
+  },
+  {
+   "market": "vc-kingstown",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0.0,
+   "zero_streak": 3,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:30:31Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "vc-kingstown",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 12,
+   "baseline_median": 12.0,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:30:31Z",
+   "note": ""
+  },
+  {
+   "market": "vc-kingstown",
+   "source": "ticketpal",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0.5,
+   "zero_streak": 2,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:30:31Z",
+   "note": ""
+  },
+  {
+   "market": "vc-kingstown",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0.0,
+   "zero_streak": 3,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:30:31Z",
+   "note": ""
+  },
+  {
+   "market": "vi-charlotte-amalie",
+   "source": "community",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0.0,
+   "zero_streak": 3,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:30:40Z",
+   "note": "no approved submissions yet"
+  },
+  {
+   "market": "vi-charlotte-amalie",
+   "source": "eventbrite",
+   "state": "ok",
+   "last_events": 30,
+   "baseline_median": 30.5,
+   "zero_streak": 0,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:30:40Z",
+   "note": ""
+  },
+  {
+   "market": "vi-charlotte-amalie",
+   "source": "seatgeek",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0.0,
+   "zero_streak": 3,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:30:40Z",
+   "note": ""
+  },
+  {
+   "market": "vi-charlotte-amalie",
+   "source": "ticketmaster",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0.0,
+   "zero_streak": 3,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:30:40Z",
+   "note": ""
+  },
+  {
+   "market": "vi-charlotte-amalie",
+   "source": "trinijunglejuice",
+   "state": "ok",
+   "last_events": 0,
+   "baseline_median": 0.0,
+   "zero_streak": 3,
+   "fail_streak": 0,
+   "last_run": "2026-09-30T14:30:40Z",
+   "note": ""
+  }
+ ]
+}

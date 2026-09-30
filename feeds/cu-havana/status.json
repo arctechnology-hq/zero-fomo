@@ -1,0 +1,36 @@
+{
+ "market": "cu-havana",
+ "generated_at": "2026-09-30T14:15:06Z",
+ "sources_run": [
+  "eventbrite",
+  "trinijunglejuice",
+  "community"
+ ],
+ "raw": 8,
+ "unique": 8,
+ "exported": 5,
+ "review": 3,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 8,
+   "pages": 3,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

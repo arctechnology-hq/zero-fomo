@@ -1,0 +1,60 @@
+{
+ "market": "ag-st-johns",
+ "generated_at": "2026-09-30T14:10:46Z",
+ "sources_run": [
+  "eventbrite",
+  "wp-posts",
+  "ticketpal",
+  "ticketsplus",
+  "trinijunglejuice",
+  "community"
+ ],
+ "raw": 46,
+ "unique": 46,
+ "exported": 10,
+ "review": 36,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 11,
+   "pages": 4,
+   "note": ""
+  },
+  {
+   "name": "wp-posts",
+   "ok": true,
+   "events": 35,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "ticketpal",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "ticketsplus",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

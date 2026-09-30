@@ -1,0 +1,60 @@
+{
+ "market": "gd-st-georges",
+ "generated_at": "2026-09-30T14:18:28Z",
+ "sources_run": [
+  "eventbrite",
+  "tribe",
+  "ticketpal",
+  "ticketsplus",
+  "trinijunglejuice",
+  "community"
+ ],
+ "raw": 14,
+ "unique": 14,
+ "exported": 11,
+ "review": 3,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 8,
+   "pages": 3,
+   "note": ""
+  },
+  {
+   "name": "tribe",
+   "ok": true,
+   "events": 6,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "ticketpal",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "ticketsplus",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

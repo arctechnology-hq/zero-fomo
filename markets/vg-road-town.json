@@ -1,0 +1,30 @@
+{
+  "id": "vg-road-town",
+  "name": "Road Town, British Virgin Islands",
+  "country": "VG",
+  "tz": "America/Tortola",
+  "lat": 18.4269,
+  "lng": -64.6208,
+  "radius_km": 25,
+  "currency": "USD",
+  "auto": true,
+  "created": "2026-10-01",
+  "sources": {
+    "allevents.in": {
+      "city": "road-town",
+      "countries": [
+        "british virgin islands",
+        "virgin islands",
+        "tortola",
+        "virgin gorda"
+      ],
+      "_auto": {
+        "adopted": "2026-10-01",
+        "via": "guess",
+        "probe_events": 8,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

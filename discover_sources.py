@@ -503,7 +503,7 @@ class Prober:
 _reddit_tripped = False
 
 
-def probe_subreddit(engine: S.RequestEngine, name: str) -> tuple[bool, str]:
+def probe_subreddit(engine: S.RequestEngine, name: str, aliases: list[str] | None = None) -> tuple[bool, str]:
     """Plain request, no retry: Reddit answers bursts with 429 even on RSS and
     every retry only lengthens the ban. One 429 parks Reddit for this run."""
     global _reddit_tripped
@@ -536,7 +536,15 @@ def probe_subreddit(engine: S.RequestEngine, name: str) -> tuple[bool, str]:
                 recent += 1
         except ValueError:
             continue
-    return recent >= 3, f"{recent} posts in 90d"
+    if recent < 3:
+        return False, f"{recent} posts in 90d"
+    # r/Hamilton is Ontario, not Bermuda: a city-named subreddit must show the
+    # country in its name or its recent posts (feed title, titles, bodies).
+    if aliases:
+        text = (name + " " + resp.text).lower()
+        if not any(a in text for a in aliases):
+            return False, f"{recent} posts in 90d but no mention of the country"
+    return True, f"{recent} posts in 90d"
 
 
 def probe_telegram_channel(engine: S.RequestEngine, channel: str) -> tuple[bool, str]:
@@ -791,7 +799,8 @@ class Discovery:
         for sub in subs[:3]:
             if sub.lower() in {k.lower() for k in self.reddit_map} or _reddit_tripped:
                 continue
-            alive, note = probe_subreddit(self.engine, sub)
+            alive, note = probe_subreddit(
+                self.engine, sub, self.t.country_aliases(cc, self.geo.country_name(cc)))
             log.info("  r/%-28s %s %s", sub, "ALIVE" if alive else "quiet", note)
             if alive:
                 self.reddit_map[sub] = market.id

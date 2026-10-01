@@ -1,0 +1,27 @@
+{
+  "id": "mq-fort-de-france",
+  "name": "Fort-de-France, Martinique",
+  "country": "MQ",
+  "tz": "America/Martinique",
+  "lat": 14.6037,
+  "lng": -61.0742,
+  "radius_km": 25,
+  "currency": "EUR",
+  "auto": true,
+  "created": "2026-10-01",
+  "sources": {
+    "allevents.in": {
+      "city": "fort-de-france",
+      "countries": [
+        "martinique"
+      ],
+      "_auto": {
+        "adopted": "2026-10-01",
+        "via": "guess",
+        "probe_events": 9,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

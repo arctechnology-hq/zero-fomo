@@ -167,6 +167,39 @@
       "marker": "event",
       "min": 5,
       "adopt": "bs-nassau: adapter"
+    },
+    {
+      "name": "ai-the-valley tribe#whatwedoinanguilla (2 upcoming)",
+      "kind": "status",
+      "url": "https://whatwedoinanguilla.com/calendar/",
+      "alert_when_alive": false,
+      "adopt": "ai-the-valley: tribe#whatwedoinanguilla {\"base\": \"https://whatwedoinanguilla.com\"}",
+      "_auto": {
+        "seen": "2026-10-01",
+        "probe_events": 2
+      }
+    },
+    {
+      "name": "ai-the-valley html-cards#islandsinfoguide (pruned by hand 2026-10-01: day headers / blog dates)",
+      "kind": "status",
+      "url": "https://islandsinfoguide.com/anguilla/Events",
+      "alert_when_alive": false,
+      "adopt": "ai-the-valley: html-cards#islandsinfoguide {\"urls\": [\"https://islandsinfoguide.com/anguilla/Events\"], \"href_marker\": \"/events/\", \"venue_default\": \"The Valley, Anguilla\", \"detail_cap\": 20}",
+      "_auto": {
+        "pruned": "2026-10-01",
+        "probe_events": 0
+      }
+    },
+    {
+      "name": "ai-the-valley rss#anguillabeaches (pruned by hand 2026-10-01: day headers / blog dates)",
+      "kind": "status",
+      "url": "https://www.anguilla-beaches.com/anguilla.xml",
+      "alert_when_alive": false,
+      "adopt": "ai-the-valley: rss#anguillabeaches {\"urls\": [\"https://www.anguilla-beaches.com/anguilla.xml\"], \"venue_default\": \"The Valley, Anguilla\"}",
+      "_auto": {
+        "pruned": "2026-10-01",
+        "probe_events": 0
+      }
     }
   ]
 }

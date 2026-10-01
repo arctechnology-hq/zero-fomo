@@ -3460,6 +3460,7 @@ class RssFeedScraper(BaseScraper):
     venue_default, keywords[] (any must appear; default = none)."""
     name = "rss"
     MAX_ITEMS = 120
+    NOYEAR_HORIZON_DAYS = 120
 
     def scrape(self) -> list[Event]:
         urls = [str(u) for u in (self.params.get("urls") or []) if u]
@@ -3493,6 +3494,13 @@ class RssFeedScraper(BaseScraper):
                 if not date:
                     date, raw = span_dates(body[:1500])
                 if not date or date < today:
+                    continue
+                # A blog post titled "Aug 11, Anguilla's off season" carries a
+                # date without a year; span_dates rolls past ones a year ahead,
+                # which is right for a listing and wrong for an archive. Without
+                # an explicit year, only the next few months count as an event.
+                if not re.search(r"\b20\d{2}\b", raw or "") and date > (
+                        datetime.now() + timedelta(days=self.NOYEAR_HORIZON_DAYS)).strftime("%Y-%m-%d"):
                     continue
                 ev = Event(source_name=self.name, name=title[:200], date=date, raw_date=raw)
                 ev.time = parse_time(blob[:1500])
@@ -3563,7 +3571,9 @@ class HtmlCardsScraper(BaseScraper):
             for ev in self.parse_listing_cards(soup, base, marker):
                 if not ev.date:
                     ev.date, ev.raw_date = span_dates(ev.raw_date or ev.name)
-                events.append(ev)
+                ev.name = clean_card_title(ev.name)[:200]
+                if ev.name:
+                    events.append(ev)
         events = dedupe_by_url(events)
         # Detail enrichment with its own cap: this reader is adopted by the
         # discovery engine for sites nobody has looked at, so it must not
@@ -3583,6 +3593,26 @@ class HtmlCardsScraper(BaseScraper):
             if keep_for_market(ev, self.market, self.params, ev.venue):
                 kept.append(ev)
         return _dedupe_name_date(kept)
+
+
+_DATEWORD_RX = re.compile(
+    r"\b(mon|tue|wed|thu|fri|sat|sun)[a-z]*\b|\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b"
+    r"|\b(today|tomorrow|tonight)\b|\d+|[,.\-–:/@|•]|(st|nd|rd|th)\b", re.I)
+_CARD_PREFIX_RX = re.compile(
+    r"^\s*(?:(?:mon|tue|wed|thu|fri|sat|sun)[a-z]*\.?,?\s+)?\d{1,2}(?:st|nd|rd|th)?\s+"
+    r"(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?(?:\s+\d{4})?\s*[-–:|]?\s*", re.I)
+
+
+def clean_card_title(name: str) -> str:
+    """Card text often starts with the date ("Fri 2 Oct Friday Night @ …") and
+    runs on into a pin / venue line ("… 📍 The Lounge"); keep the title. A
+    name that is nothing but date words ("Monday Mon, Oct 5" — a day header
+    scraped as a card) comes back empty so the caller drops it."""
+    text = _CARD_PREFIX_RX.sub("", name or "")
+    text = re.split(r"\s*(?:📍|🗓|⏰|\s{2,}\|)", text, 1)[0].strip(" -–|")
+    if len(re.sub(r"\W", "", _DATEWORD_RX.sub("", text))) < 3:
+        return ""
+    return text
 
 
 def _next_data(html_text: str) -> Optional[dict]:

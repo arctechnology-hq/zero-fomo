@@ -1,0 +1,43 @@
+{
+  "id": "ai-the-valley",
+  "name": "The Valley, Anguilla",
+  "country": "AI",
+  "tz": "America/Anguilla",
+  "lat": 18.217,
+  "lng": -63.0578,
+  "radius_km": 25,
+  "currency": "XCD",
+  "auto": true,
+  "created": "2026-10-01",
+  "sources": {
+    "html-cards#anguillaferrytimes": {
+      "urls": [
+        "https://www.anguillaferrytimes.com/events"
+      ],
+      "href_marker": "/events/",
+      "venue_default": "The Valley, Anguilla",
+      "detail_cap": 20,
+      "_auto": {
+        "adopted": "2026-10-01",
+        "via": "search:The Valley Anguilla what's on this week",
+        "probe_events": 15,
+        "from": "https://www.anguillaferrytimes.com/events"
+      }
+    },
+    "html-cards#goanguilla": {
+      "urls": [
+        "https://goanguilla.ai/events/"
+      ],
+      "href_marker": "/events/",
+      "venue_default": "The Valley, Anguilla",
+      "detail_cap": 20,
+      "_auto": {
+        "adopted": "2026-10-01",
+        "via": "search:The Valley Anguilla what's on this week",
+        "probe_events": 8,
+        "from": "https://goanguilla.ai/"
+      }
+    },
+    "community": {}
+  }
+}

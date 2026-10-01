@@ -629,6 +629,28 @@ class Discovery:
         summary = {"market": market.id, "adopted": [], "watch": [], "probed": 0, "searches": 0}
         log.info("=== %s (%s) ===", market.id, market.name)
 
+        # 0. re-validate what discovery adopted earlier: a reader that no
+        #    longer yields (site changed, or a reader fix now rejects what it
+        #    once counted) goes back to the watchlist instead of lingering
+        #    until the health watch calls it dead.
+        for key in list(existing):
+            params = existing[key] or {}
+            if not params.get("_auto"):
+                continue
+            kept, raw, note = prober.evaluate(key, params)
+            summary["probed"] += 1
+            if kept < self.t.adopt_min:
+                log.info("  %-12s re-check kept=%d raw=%d -> pruned %s", key, kept, raw, note)
+                self.add_watch({"name": f"{market.id} {key} (pruned, {kept} upcoming)", "kind": "status",
+                                "url": str(params.get("base") or (params.get("urls") or [""])[0] or key),
+                                "alert_when_alive": False,
+                                "adopt": f"{market.id}: {key} {json.dumps({k: v for k, v in params.items() if k != '_auto'})}",
+                                "_auto": {"pruned": today_iso(), "probe_events": kept}})
+                del existing[key]
+                self.changes.append(f"PRUNE {market.id}: {key} ({kept} upcoming)")
+            else:
+                log.info("  %-12s re-check kept=%d raw=%d ok", key, kept, raw)
+
         # 1. search the web in the market's language(s); a result must at
         #    least mention the city or the country to be looked at.
         mention = [city] + aliases

@@ -53,8 +53,16 @@
     <string name="feed_country_section_label">Country</string>
     <string name="feed_cd_selected">Selected</string>
     <string name="feed_all_countries_count">All %1$d countries</string>
+    <!-- G5 adaptive scope -->
+    <string name="feed_near_place_radius">Near %1$s · %2$d km</string>
+    <string name="feed_radius_title">Search radius</string>
+    <string name="feed_within_km">Within %1$d km</string>
+    <string name="feed_browse_markets">Browse markets</string>
+    <string name="feed_coming_soon">Coming soon</string>
+    <string name="feed_cd_region_chip">Show the whole region</string>
 
     <!-- FeedViewModel status messages -->
+    <string name="feed_status_widened">Not much listed for %1$s yet — showing %2$s</string>
     <string name="feed_status_offline">Offline. Showing cached events.</string>
     <string name="feed_status_location_off">Location is off. Pick a city instead.</string>
     <string name="feed_status_near_place">You\'re near %1$s</string>

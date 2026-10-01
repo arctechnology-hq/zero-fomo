@@ -101,8 +101,19 @@ LINK_RX = re.compile(r'<a href="([^"]+)">\s*\[link\]\s*</a>')
 _oauth: dict = {"token": "", "expires": 0.0}
 
 
+MAP_FILE = os.environ.get("REDDIT_SUBREDDIT_FILE", "/var/lib/zerofomo-inbox/bridges/reddit_markets.json")
+
+
 def subreddit_markets() -> dict[str, str]:
-    out = {}
+    """Env map plus the JSON map discover_sources.py maintains (G5); the env
+    wins on conflicts. Re-read every poll so new subreddits need no restart."""
+    out: dict[str, str] = {}
+    try:
+        with open(MAP_FILE, encoding="utf-8") as fh:
+            for k, v in json.load(fh).items():
+                out[str(k).lstrip("/").removeprefix("r/")] = str(v).lower()
+    except (OSError, ValueError):
+        pass
     for pair in os.environ.get("REDDIT_SUBREDDIT_MARKETS", "").split(","):
         if "=" in pair:
             k, v = pair.split("=", 1)
@@ -356,6 +367,7 @@ def main(argv: list[str]) -> int:
     while True:
         poll_once(markets, state)
         time.sleep(POLL)
+        markets = subreddit_markets() or markets   # pick up subreddits discovery added
 
 
 if __name__ == "__main__":

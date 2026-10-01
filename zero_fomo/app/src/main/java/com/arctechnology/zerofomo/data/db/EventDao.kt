@@ -37,6 +37,15 @@ interface EventDao {
            ORDER BY epochDay, timeStart""")
     fun byCountry(countryCode: String, fromDay: Long, toDay: Long): Flow<List<EventEntity>>
 
+    /** Region scope (G5): every country of a region. Regions hold at most a
+     *  few dozen codes, far below SQLite's bind-variable cap. */
+    @Query(
+        """SELECT * FROM events
+           WHERE countryCode IN (:countryCodes)
+             AND epochDay BETWEEN :fromDay AND :toDay
+           ORDER BY epochDay, timeStart""")
+    fun byCountries(countryCodes: List<String>, fromDay: Long, toDay: Long): Flow<List<EventEntity>>
+
     @Query(
         """SELECT * FROM events
            WHERE epochDay BETWEEN :fromDay AND :toDay

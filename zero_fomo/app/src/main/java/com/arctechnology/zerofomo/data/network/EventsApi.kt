@@ -4,6 +4,8 @@ import com.arctechnology.zerofomo.data.db.EventEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import com.arctechnology.zerofomo.model.Market
+import com.arctechnology.zerofomo.model.MarketSize
+import com.arctechnology.zerofomo.model.Region
 import retrofit2.http.GET
 import retrofit2.http.Path
 import java.time.LocalDate
@@ -27,8 +29,12 @@ interface EventsApi {
 data class MarketsManifestDto(
     @SerialName("schema_version") val schemaVersion: Int = 1,
     @SerialName("generated_at") val generatedAt: String = "",
+    val regions: List<RegionDto> = emptyList(),          // schema v2
     val markets: List<MarketDto> = emptyList(),
 )
+
+@Serializable
+data class RegionDto(val id: String, val name: String = "", val order: Int = 0)
 
 @Serializable
 data class MarketDto(
@@ -41,9 +47,20 @@ data class MarketDto(
     @SerialName("radius_km") val radiusKm: Double = 50.0,
     val available: Boolean = true,
     val events: Int = 0,
+    // schema v2 (G5): region id, size tier, source count, auto-created flag
+    val region: String = "",
+    val size: String = "",
+    val sources: Int = 0,
+    val auto: Boolean = false,
 )
 
-fun MarketDto.toModel() = Market(id, name, country.uppercase(), tz, lat, lng, radiusKm, available, events)
+fun MarketDto.toModel() = Market(
+    id, name, country.uppercase(), tz, lat, lng, radiusKm, available, events,
+    region = region,
+    size = MarketSize.fromKey(size) ?: MarketSize.fromCount(events),
+)
+
+fun RegionDto.toModel() = Region(id, name.ifBlank { id }, order)
 
 @Serializable
 data class EventsFeedDto(

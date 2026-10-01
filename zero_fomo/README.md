@@ -18,6 +18,13 @@ kotlinx.serialization · WorkManager (6-hour feed sync) · min SDK 26.
   approximate only (`ACCESS_COARSE_LOCATION`), matched to the nearest
   gazetteer place on-device; `UserLocationStore` persists the choice and
   `ZeroFomoTheme(country)` tints the mark and accents with the flag colours.
+- **Scope** (adaptive since v0.10.0, G5): the manifest's market `size` picks
+  the default radius (metro 25 km, medium 60 km, small 150 km, empty/no
+  market → whole country); `MarketSelector` keeps adding neighbouring feeds
+  in the same region until ≥ 40 events; the view model widens an automatic
+  scope Near → Country → Region while fewer than 8 events sit in the next
+  30 days (one snackbar, never over a chip the user tapped). Regions come from
+  `assets/geo/regions.json`; the location sheet browses markets by region.
 
 ## Wiring the feed
 1. Run the pipeline: `python comprehensive_bahamas_scraper.py`

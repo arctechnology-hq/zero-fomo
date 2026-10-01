@@ -73,6 +73,15 @@ sealed interface LocationFilter {
     /** Whole-country view. */
     data class CountryTag(val countryCode: String, override val label: String) : LocationFilter
 
+    /** Every country in a region ("Caribbean", "Pacific Islands"): the widest
+     *  scope that still means "my part of the world" — what a small island
+     *  widens to when its own listings run thin (G5). */
+    data class RegionTag(
+        val regionId: String,
+        val countryCodes: List<String>,
+        override val label: String,
+    ) : LocationFilter
+
     data object Everywhere : LocationFilter {
         override val label: String get() = "Everywhere"
         @get:StringRes

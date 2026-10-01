@@ -1,0 +1,120 @@
+{
+  "_doc": "discover_sources.py input: how to find candidate sources for a market. {city} {country} {city_slug} {cc} {cc_lower} {City} {country_nospace} are filled per market. Search engines are tried in order; a query's results are cached 30 days in feeds/health/search_cache.json.",
+  "search": {
+    "engines": ["ddg", "bing"],
+    "_queries_doc": "Every city query carries the country: 'Hamilton events' is Ontario, 'Hamilton Bermuda events' is the market (2026-10-01 lesson).",
+    "queries": {
+      "en": [
+        "{city} {country} events calendar",
+        "{city} {country} what's on this week",
+        "{country} events tickets",
+        "{city} {country} concerts parties tickets",
+        "{city} {country} things to do this weekend"
+      ],
+      "es": [
+        "{city} {country} agenda de eventos",
+        "{city} {country} eventos esta semana",
+        "{country} boletos eventos conciertos"
+      ],
+      "fr": [
+        "{city} {country} agenda événements",
+        "{city} {country} sorties cette semaine",
+        "{country} billetterie événements"
+      ],
+      "nl": [
+        "{city} {country} evenementen agenda",
+        "{city} {country} uitgaan deze week"
+      ],
+      "pt": [
+        "{city} {country} agenda de eventos",
+        "{city} {country} eventos esta semana ingressos"
+      ],
+      "de": [
+        "{city} {country} veranstaltungen kalender",
+        "{city} {country} events diese woche tickets"
+      ],
+      "it": [
+        "{city} {country} eventi calendario",
+        "{city} {country} eventi questa settimana biglietti"
+      ]
+    },
+    "social": [
+      "site:t.me {city} {country} events",
+      "site:t.me {country} events",
+      "site:reddit.com {city} {country} events"
+    ]
+  },
+  "_country_aliases_doc": "Words that prove a page or a venue belongs to the market's country (lower-case substrings; the ISO code is matched as a whole token separately). Default = the gazetteer country name plus St./Saint variants; list here only what the name alone misses.",
+  "country_aliases": {
+    "US": ["united states", "usa", "u.s.a", "u.s."],
+    "GB": ["united kingdom", "england", "scotland", "wales", "northern ireland", " uk"],
+    "TT": ["trinidad", "tobago"],
+    "KN": ["st. kitts", "st kitts", "saint kitts", "nevis"],
+    "VC": ["st. vincent", "st vincent", "saint vincent", "grenadines"],
+    "LC": ["st. lucia", "st lucia", "saint lucia", "sainte-lucie"],
+    "AG": ["antigua", "barbuda"],
+    "DO": ["dominican republic", "república dominicana", "republica dominicana", "rep. dom"],
+    "KY": ["cayman"],
+    "VI": ["virgin islands", "st. thomas", "st thomas", "st. croix", "st croix", "st. john"],
+    "VG": ["virgin islands", "tortola", "virgin gorda"],
+    "TC": ["turks", "caicos"],
+    "BQ": ["bonaire", "saba", "statia", "st. eustatius"],
+    "CW": ["curaçao", "curacao"],
+    "SX": ["sint maarten", "st. maarten", "st maarten", "saint-martin"],
+    "MF": ["saint-martin", "saint martin", "st. martin", "st martin"],
+    "BS": ["bahamas"],
+    "BM": ["bermuda"],
+    "AE": ["united arab emirates", "uae", "dubai", "abu dhabi"],
+    "KR": ["south korea", "korea"],
+    "CZ": ["czech", "czechia"],
+    "NL": ["netherlands", "nederland", "holland"],
+    "CH": ["switzerland", "schweiz", "suisse", "svizzera"],
+    "DE": ["germany", "deutschland"],
+    "ES": ["spain", "españa"],
+    "IT": ["italy", "italia"],
+    "FR": ["france"],
+    "BR": ["brazil", "brasil"],
+    "MX": ["mexico", "méxico"],
+    "GP": ["guadeloupe"],
+    "MQ": ["martinique"],
+    "HT": ["haiti", "haïti", "ayiti"],
+    "PR": ["puerto rico"],
+    "CA": ["canada"]
+  },
+  "_postal_doc": "Federations with many same-named cities: a page also passes the country gate when it shows this postal pattern (US ZIP, CA/GB/AU postcodes).",
+  "postal_patterns": {
+    "US": "\\b[A-Z]{2}\\s?\\d{5}(?:-\\d{4})?\\b",
+    "CA": "\\b[A-Z]\\d[A-Z]\\s?\\d[A-Z]\\d\\b",
+    "GB": "\\b[A-Z]{1,2}\\d[A-Z\\d]?\\s?\\d[A-Z]{2}\\b",
+    "AU": "\\b(NSW|VIC|QLD|WA|SA|TAS|ACT|NT)\\s?\\d{4}\\b"
+  },
+  "languages": {
+    "es": "AR BO CL CO CR CU DO EC ES GQ GT HN MX NI PA PE PR PY SV UY VE",
+    "fr": "BE BF BI BJ BL CD CF CG CH CI CM DJ FR GA GF GN GP HT KM LU MC MF MG ML MQ NC NE PF PM RE RW SN TD TG VU WF YT",
+    "nl": "AW BQ CW NL SR SX",
+    "pt": "AO BR CV GW MZ PT ST TL",
+    "de": "AT DE LI",
+    "it": "IT SM VA"
+  },
+  "platforms": {
+    "eventbrite": {"url_rx": "eventbrite\\.[a-z.]+/d/([a-z0-9-]+(?:--[a-z0-9-]+)*)/", "param": "slug"},
+    "allevents.in": {"url_rx": "allevents\\.in/([a-z0-9-]+)(?:/|$)", "param": "city", "guess": ["{city_slug}"]},
+    "luma": {"url_rx": "luma\\.com/([a-z0-9-]+)(?:/|$)", "param": "slug", "guess": ["{city_slug}", "{city_slug}-{cc_lower}"]},
+    "meetup": {"param": "location", "guess": ["{cc_lower}--{City}"]}
+  },
+  "subreddit_guesses": ["{country_nospace}", "{city_nospace}"],
+  "blocklist_domains": [
+    "facebook.com", "instagram.com", "tiktok.com", "twitter.com", "x.com", "youtube.com", "threads.net",
+    "tripadvisor.", "wikipedia.org", "wikivoyage.org", "pinterest.", "linkedin.com", "booking.com",
+    "expedia.", "airbnb.", "yelp.", "google.", "apple.com", "amazon.", "bing.com", "duckduckgo.com",
+    "viator.com", "getyourguide.", "hotels.com", "kayak.", "trip.com", "lonelyplanet.", "songkick.com",
+    "bandsintown.com", "ra.co", "10times.com", "ticketmaster.", "seatgeek.com", "stubhub.", "vividseats.",
+    "eventbrite.", "allevents.in", "meetup.com", "luma.com", "lu.ma", "reddit.com", "t.me", "telegram.me",
+    "quora.com", "medium.com", "britannica.com", "msn.com", "yahoo.com", "timeanddate.com", "holidays",
+    "calendarlabs", "officeholidays", "publicholidays", "weather.", "numbeo.", "glassdoor", "indeed."
+  ],
+  "ticketmaster_countries": "US CA MX GB IE DE AT CH NL BE FR ES IT PL CZ SE NO DK FI PT AU NZ AE ZA LU",
+  "seatgeek_countries": "US CA GB",
+  "adopt_min_events": 3,
+  "watch_min_events": 1
+}

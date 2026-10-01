@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-
+<resources xmlns:tools="http://schemas.android.com/tools">
 <string name="detail_back_content_description">Retour</string>
     
 <string name="detail_share_content_description">Partager</string>
@@ -23,7 +22,7 @@
     
 <string name="detail_calendar_target_google">Google / calendrier de l\'appareil</string>
     
-<string name="detail_calendar_target_google_subtitle">Ouvre l\'éditeur d\'événements de votre appli calendrier</string>
+<string name="detail_calendar_target_google_subtitle">Ouvre l\'éditeur d\'événements de votre calendrier</string>
     
 <string name="detail_calendar_target_outlook">Outlook</string>
     
@@ -37,11 +36,11 @@
     
 <string name="detail_share_event_chooser_title">Partager l\'événement</string>
     
-<string name="detail_no_app_toast">Aucune appli sur ce téléphone ne peut ouvrir ceci</string>
+<string name="detail_no_app_toast">Aucune app sur ce téléphone ne peut ouvrir ça</string>
 
     
     
-<string name="action_get_tickets">Obtenir des billets</string>
+<string name="action_get_tickets">Billets</string>
     
 <string name="action_view_post">Voir la publication</string>
     
@@ -63,9 +62,9 @@
     
 <string name="share_default_area">votre région</string>
     
-<string name="share_note_placeholder">Quelque chose à ajouter ? Lieu, prix, date…</string>
+<string name="share_note_placeholder">Quelque chose à ajouter? Lieu, prix, date…</string>
     
-<string name="share_reviewer_disclaimer">Un réviseur le vérifie avant sa parution. Aucun compte requis ; rien d\'autre n\'est lu dans vos applis.</string>
+<string name="share_reviewer_disclaimer">Un réviseur le vérifie avant sa parution. Aucun compte requis; rien d\'autre n\'est lu dans vos apps.</string>
     
 <string name="share_cancel_button">Annuler</string>
     
@@ -157,13 +156,13 @@
     
 <string name="feed_apply">Appliquer</string>
     
-<string name="feed_keyword_title">Que cherchez-vous ?</string>
+<string name="feed_keyword_title">Que cherchez-vous?</string>
     
 <string name="feed_keyword_placeholder">Mot-clé : reggae, brunch, humour…</string>
     
-<string name="feed_location_title">Où êtes-vous ?</string>
+<string name="feed_location_title">Où êtes-vous?</string>
     
-<string name="feed_locating">Localisation de votre ville…</string>
+<string name="feed_locating">Recherche de votre ville…</string>
     
 <string name="feed_use_my_location">Utiliser ma position (approximative)</string>
     
@@ -180,28 +179,43 @@
 <string name="feed_cd_selected">Sélectionné</string>
     
 <string name="feed_all_countries_count">Les %1$d pays</string>
+    
+    
+<string name="feed_near_place_radius">Près de %1$s · %2$d km</string>
+    
+<string name="feed_radius_title">Rayon de recherche</string>
+    
+<string name="feed_within_km">Dans un rayon de %1$d km</string>
+    
+<string name="feed_browse_markets">Parcourir les marchés</string>
+    
+<string name="feed_coming_soon">Bientôt disponible</string>
+    
+<string name="feed_cd_region_chip">Afficher toute la région</string>
 
     
     
+<string name="feed_status_widened">Pas grand-chose pour %1$s encore — affichage de %2$s</string>
+    
 <string name="feed_status_offline">Hors ligne. Affichage des événements en cache.</string>
     
-<string name="feed_status_location_off">La localisation est désactivée. Choisissez plutôt une ville.</string>
+<string name="feed_status_location_off">La localisation est désactivée. Choisissez une ville.</string>
     
 <string name="feed_status_near_place">Vous êtes près de %1$s</string>
     
-<string name="feed_status_no_fix">Impossible de vous localiser. Choisissez plutôt une ville.</string>
+<string name="feed_status_no_fix">Position introuvable. Choisissez une ville.</string>
 
     
     
 <string name="saved_title">Enregistrés 💛</string>
     
-<string name="saved_empty_title">Rien d\'enregistré pour l\'instant</string>
+<string name="saved_empty_title">Rien d\'enregistré encore</string>
     
 <string name="saved_empty_subtitle">Touchez le cœur sur un événement pour le garder ici — même hors ligne</string>
     
 <string name="saved_forwarded_header">Transmis à 0 FOMO</string>
     
-<string name="saved_forwarded_subtitle">Les publications que vous partagez sont révisées avant d\'atteindre le fil</string>
+<string name="saved_forwarded_subtitle">Les publications partagées sont révisées avant d\'atteindre le fil</string>
     
 <string name="saved_section_header">Événements enregistrés</string>
     
@@ -223,7 +237,7 @@
     
 <string name="saved_from_ago">de %1$s · %2$s</string>
     
-<string name="saved_from_another_app">une autre appli</string>
+<string name="saved_from_another_app">une autre app</string>
     
 <string name="saved_photo_fallback">Photo</string>
     
@@ -244,8 +258,8 @@
         <item quantity="other">il y a %1$d j</item>
     </plurals>
     
-<plurals name="saved_purged_title">
-        <item quantity="one">%1$d événement enregistré n\'est plus listé</item>
+<plurals name="saved_purged_title" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Un événement enregistré n\'est plus listé</item>
         <item quantity="other">%1$d événements enregistrés ne sont plus listés</item>
     </plurals>
     
@@ -280,17 +294,17 @@
     
 <string name="category_pageant">Concours de beauté</string>
     
-<string name="category_food_drink">Nourriture &amp; boissons</string>
+<string name="category_food_drink">Bouffe &amp; Boissons</string>
     
-<string name="category_sports_fitness">Sports &amp; fitness</string>
+<string name="category_sports_fitness">Sports &amp; Forme</string>
     
-<string name="category_arts_theatre">Arts &amp; théâtre</string>
+<string name="category_arts_theatre">Arts &amp; Théâtre</string>
     
 <string name="category_conference_expo">Conférence / Expo</string>
     
 <string name="category_business_networking">Affaires / Réseautage</string>
     
-<string name="category_faith_community">Foi &amp; communauté</string>
+<string name="category_faith_community">Foi &amp; Communauté</string>
     
 <string name="category_general">Général</string>
     
@@ -308,7 +322,7 @@
     
 <string name="filter_today">Aujourd\'hui</string>
     
-<string name="filter_this_weekend">Ce week-end</string>
+<string name="filter_this_weekend">Cette fin de semaine</string>
     
 <string name="filter_next_7_days">7 prochains jours</string>
     

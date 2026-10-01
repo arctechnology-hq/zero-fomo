@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-
+<resources xmlns:tools="http://schemas.android.com/tools">
 <string name="detail_back_content_description">Voltar</string>
     
 <string name="detail_share_content_description">Compartilhar</string>
@@ -31,7 +30,7 @@
     
 <string name="detail_calendar_target_ical">Arquivo iCal (.ics)</string>
     
-<string name="detail_calendar_target_ical_subtitle">Compartilhar um arquivo de agenda universal</string>
+<string name="detail_calendar_target_ical_subtitle">Compartilhe um arquivo de agenda universal</string>
     
 <string name="detail_share_calendar_file_chooser_title">Compartilhar arquivo de agenda</string>
     
@@ -49,7 +48,7 @@
 
     
     
-<string name="share_title">Enviar para o 0 FOMO</string>
+<string name="share_title">Enviar para 0 FOMO</string>
     
 <string name="share_kind_flyer">Flyer</string>
     
@@ -65,7 +64,7 @@
     
 <string name="share_note_placeholder">Algo a acrescentar? Local, preço, data…</string>
     
-<string name="share_reviewer_disclaimer">Um revisor confere antes de aparecer. Não precisa de conta; nada mais é lido dos seus apps.</string>
+<string name="share_reviewer_disclaimer">Um revisor verifica antes de aparecer. Não precisa de conta; nada mais é lido dos seus apps.</string>
     
 <string name="share_cancel_button">Cancelar</string>
     
@@ -73,7 +72,7 @@
     
 <string name="share_sending_button">Enviando…</string>
     
-<string name="share_sent_toast">Enviado ao 0 FOMO para revisão</string>
+<string name="share_sent_toast">Enviado para 0 FOMO para revisão</string>
 
     
     
@@ -112,7 +111,7 @@
     
 <string name="feed_choose_a_place">Escolha um lugar</string>
     
-<string name="feed_cd_change_location">Mudar localização</string>
+<string name="feed_cd_change_location">Alterar local</string>
     
 <string name="feed_date_custom">Personalizado…</string>
     
@@ -120,7 +119,7 @@
     
 <string name="feed_near_place">Perto de %1$s</string>
     
-<string name="feed_all_country_name">Todo o %1$s</string>
+<string name="feed_all_country_name">Todo %1$s</string>
     
 <string name="feed_keyword_chip">“%1$s”</string>
     
@@ -147,11 +146,11 @@
     
 <string name="feed_empty_hint_market">Tente ampliar o período ou a ilha</string>
     
-<string name="feed_empty_hint_location">O 0 FOMO cresce cidade por cidade. Amplie a área ou volte em breve.</string>
+<string name="feed_empty_hint_location">O 0 FOMO está crescendo cidade por cidade. Amplie a área ou volte em breve.</string>
     
 <string name="feed_clear_filters">Limpar filtros</string>
     
-<string name="feed_change_location">Mudar localização</string>
+<string name="feed_change_location">Alterar local</string>
     
 <string name="feed_cancel">Cancelar</string>
     
@@ -180,8 +179,23 @@
 <string name="feed_cd_selected">Selecionado</string>
     
 <string name="feed_all_countries_count">Todos os %1$d países</string>
+    
+    
+<string name="feed_near_place_radius">Perto de %1$s · %2$d km</string>
+    
+<string name="feed_radius_title">Raio de busca</string>
+    
+<string name="feed_within_km">Em até %1$d km</string>
+    
+<string name="feed_browse_markets">Explorar mercados</string>
+    
+<string name="feed_coming_soon">Em breve</string>
+    
+<string name="feed_cd_region_chip">Mostrar toda a região</string>
 
     
+    
+<string name="feed_status_widened">Pouca coisa listada para %1$s ainda — mostrando %2$s</string>
     
 <string name="feed_status_offline">Offline. Mostrando eventos em cache.</string>
     
@@ -197,11 +211,11 @@
     
 <string name="saved_empty_title">Nada salvo ainda</string>
     
-<string name="saved_empty_subtitle">Toque no coração de qualquer evento para guardá-lo aqui — até offline</string>
+<string name="saved_empty_subtitle">Toque no coração de qualquer evento para guardá-lo aqui — mesmo offline</string>
     
-<string name="saved_forwarded_header">Encaminhado ao 0 FOMO</string>
+<string name="saved_forwarded_header">Encaminhado para 0 FOMO</string>
     
-<string name="saved_forwarded_subtitle">As publicações que você compartilhou passam por revisão antes de chegar ao feed</string>
+<string name="saved_forwarded_subtitle">As publicações que você compartilhou são revisadas antes de chegar ao feed</string>
     
 <string name="saved_section_header">Eventos salvos</string>
     
@@ -213,11 +227,11 @@
     
 <string name="saved_status_failed_with_error">Não foi possível enviar · %1$s</string>
     
-<string name="saved_status_retrying">Tentando de novo quando online…</string>
+<string name="saved_status_retrying">Tentando novamente quando online…</string>
     
 <string name="saved_status_queued">Na fila</string>
     
-<string name="saved_retry">Tentar de novo</string>
+<string name="saved_retry">Tentar novamente</string>
     
 <string name="saved_cd_remove">Remover</string>
     
@@ -230,8 +244,8 @@
 <string name="time_ago_just_now">agora mesmo</string>
     
 <plurals name="time_ago_minutes">
-        <item quantity="one">há %1$d min</item>
-        <item quantity="other">há %1$d min</item>
+        <item quantity="one">há %1$dm</item>
+        <item quantity="other">há %1$dm</item>
     </plurals>
     
 <plurals name="time_ago_hours">
@@ -244,8 +258,8 @@
         <item quantity="other">há %1$dd</item>
     </plurals>
     
-<plurals name="saved_purged_title">
-        <item quantity="one">%1$d evento salvo não está mais listado</item>
+<plurals name="saved_purged_title" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Um evento salvo não está mais listado</item>
         <item quantity="other">%1$d eventos salvos não estão mais listados</item>
     </plurals>
     
@@ -270,7 +284,7 @@
     
 <string name="category_concert_live_music">Show / Música ao vivo</string>
     
-<string name="category_club_promotion">Festa de balada</string>
+<string name="category_club_promotion">Divulgação de balada</string>
     
 <string name="category_nightlife_party">Vida noturna / Festa</string>
     
@@ -286,7 +300,7 @@
     
 <string name="category_arts_theatre">Artes &amp; Teatro</string>
     
-<string name="category_conference_expo">Conferência / Exposição</string>
+<string name="category_conference_expo">Conferência / Expo</string>
     
 <string name="category_business_networking">Negócios / Networking</string>
     
@@ -324,7 +338,7 @@
     
 <string name="reminder_channel_name">Lembretes de eventos</string>
     
-<string name="reminder_channel_description">Lembretes dos eventos que você salvou</string>
+<string name="reminder_channel_description">Lembretes para eventos que você salvou</string>
     
 <string name="reminder_notification_title_format">Amanhã: %1$s</string>
     
@@ -336,7 +350,7 @@
 
     
     
-<string name="error_photo_gone">A foto não está mais neste celular — compartilhe de novo</string>
+<string name="error_photo_gone">A foto não está mais neste celular — compartilhe novamente</string>
     
 <string name="error_http_format">HTTP %1$d</string>
 

@@ -2,6 +2,7 @@ package com.arctechnology.zerofomo.data.location
 
 import com.arctechnology.zerofomo.model.Country
 import com.arctechnology.zerofomo.model.Place
+import com.arctechnology.zerofomo.model.Region
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
@@ -34,8 +35,21 @@ class Gazetteer(private val open: (String) -> InputStream) {
         @SerialName("cap") val capital: Int = 0,
     )
 
-    private class Data(val countries: List<Country>, val places: List<Place>) {
+    @Serializable
+    private data class RegionRow(val id: String, val name: String = "", val order: Int = 0)
+
+    @Serializable
+    private data class RegionsFile(
+        val regions: List<RegionRow> = emptyList(),
+        val countries: Map<String, String> = emptyMap(),
+    )
+
+    private class Data(
+        val countries: List<Country>, val places: List<Place>,
+        val regions: List<Region>, val regionByCountry: Map<String, String>,
+    ) {
         val byCode = countries.associateBy { it.code }
+        val regionById = regions.associateBy { it.id }
     }
 
     private val json = Json { ignoreUnknownKeys = true; coerceInputValues = true }
@@ -49,7 +63,19 @@ class Gazetteer(private val open: (String) -> InputStream) {
             open("geo/cities.json").bufferedReader().use { it.readText() })
             .map { Place(it.n, it.cc.uppercase(), it.lat, it.lng, it.p, it.tz,
                 it.capital == 1, it.a ?: it.n) }
-        Data(countries, places)
+        // Regions (G5) ship with the same asset bundle; a build without the
+        // file simply has no region scope.
+        val regionsFile = try {
+            json.decodeFromString<RegionsFile>(
+                open("geo/regions.json").bufferedReader().use { it.readText() })
+        } catch (_: Exception) {
+            RegionsFile()
+        }
+        Data(
+            countries, places,
+            regionsFile.regions.sortedBy { it.order }.map { Region(it.id, it.name.ifBlank { it.id }, it.order) },
+            regionsFile.countries.mapKeys { it.key.uppercase() },
+        )
     }
 
     private fun hex(s: String): Long = 0xFF000000L or s.trim().removePrefix("#").toLong(16)
@@ -61,6 +87,19 @@ class Gazetteer(private val open: (String) -> InputStream) {
 
     suspend fun country(code: String?): Country? = withContext(Dispatchers.IO) {
         code?.let { data.byCode[it.uppercase()] }
+    }
+
+    /** Regions in UI order (Caribbean first, Antarctica last). */
+    suspend fun regions(): List<Region> = withContext(Dispatchers.IO) { data.regions }
+
+    /** The region a country belongs to; null for an unmapped code. */
+    suspend fun regionOf(countryCode: String?): Region? = withContext(Dispatchers.IO) {
+        countryCode?.let { data.regionByCountry[it.uppercase()] }?.let { data.regionById[it] }
+    }
+
+    /** ISO codes of every country in a region, for the RegionTag query. */
+    suspend fun countriesIn(regionId: String): List<String> = withContext(Dispatchers.IO) {
+        data.regionByCountry.filterValues { it == regionId }.keys.sorted()
     }
 
     /** Largest places in a country, capital first. */

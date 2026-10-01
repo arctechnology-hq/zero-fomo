@@ -47,6 +47,29 @@ slugs, Beats To Rap On country pages) so a site that comes alive is named in
 the alert with the market key to adopt it under. `scrape_and_publish.ps1` runs
 `--record --report --notify` after the market loop; run `--probe` by hand any time.
 
+### Source discovery (self-expanding, since 2026-10-01)
+
+`discover_sources.py` finds sources on its own: it searches the public web in
+each market's language(s) (DuckDuckGo lite, Bing RSS), harvests Eventbrite /
+allevents.in / Luma slugs, probes every other domain for something readable
+(The Events Calendar REST, WordPress event post types, schema.org Event
+nodes, iCalendar links, RSS feeds, card listings), runs the matching reader
+in-process to count upcoming events for the market, and adopts what yields
+≥ 3 into `markets/<id>.json` with `_auto` provenance (thin results go to the
+watchlist; `_auto` sources the health watch reports dead are retired). It
+also finds subreddits and public Telegram channels for the bridges
+(`inbox/bridges/*.json`) and, with `--expand`, opens markets in countries that
+have none, keeping a country only when a real source was found. Sundays the
+daily task runs the weakest ten markets, ten new countries and retirements,
+then commits the market changes to `main`. Readers it can adopt: `ics`,
+`rss`, `html-cards`, `jsonld`, `tribe`, `wp-posts`, `allevents.in` (any
+city), `meetup`, `luma`. Full story: `docs/SOURCE_DISCOVERY.md`.
+
+```
+python discover_sources.py --market lc-castries --dry-run -v
+python discover_sources.py --needy --limit 10 --expand --expand-limit 10 --retire
+```
+
 ```
 pip install requests beautifulsoup4 lxml pandas python-dateutil openpyxl rapidfuzz playwright
 playwright install chromium

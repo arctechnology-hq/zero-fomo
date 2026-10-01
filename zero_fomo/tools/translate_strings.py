@@ -6,6 +6,7 @@ Claude tokens. Review before shipping; machine output is a first draft.
     python tools/translate_strings.py                 # all languages in LANGS
     python tools/translate_strings.py es fr           # a subset
     python tools/translate_strings.py --check         # validate existing translations only
+    python tools/translate_strings.py --fix-plurals   # tools:ignore ImpliedQuantity on existing files
 
 Every <string> and <plurals> from app/src/main/res/values/strings*.xml is sent
 as one XML document per language with a translator system prompt. The reply
@@ -86,6 +87,30 @@ def extract_xml(text: str) -> str:
     return '<?xml version="1.0" encoding="utf-8"?>\n' + m.group(0) + "\n"
 
 
+def annotate_implied_quantity(xml_text: str, english: list[tuple[str, str, str]]) -> str:
+    """Lint's ImpliedQuantity: in French and Portuguese `one` also covers 0, so
+    a `one` item without a number ("A saved event is no longer listed") is an
+    error there. The English copy deliberately has no number in those items;
+    mark such plurals `tools:ignore` in every locale so a regenerated file
+    passes lint without hand edits (the 2026-09-25 and 2026-10-01 lesson)."""
+    affected = []
+    for kind, name, frag in english:
+        if kind != "plurals":
+            continue
+        src = ET.fromstring(frag)
+        one = next((i.text or "" for i in src if i.get("quantity") == "one"), None)
+        if one is not None and not PLACEHOLDER_RX.search(one):
+            affected.append(name)
+    if not affected:
+        return xml_text
+    if "xmlns:tools" not in xml_text:
+        xml_text = xml_text.replace("<resources>", '<resources xmlns:tools="http://schemas.android.com/tools">', 1)
+    for name in affected:
+        xml_text = re.sub(rf'<plurals name="{re.escape(name)}"(?![^>]*tools:ignore)',
+                          f'<plurals name="{name}" tools:ignore="ImpliedQuantity"', xml_text)
+    return xml_text
+
+
 def check(lang: str, english: list[tuple[str, str, str]], xml_text: str) -> list[str]:
     problems = []
     try:
@@ -134,6 +159,7 @@ def main() -> int:
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     check_only = "--check" in sys.argv
     from_raw = "--from-raw" in sys.argv      # re-validate the last replies without a new tier call
+    fix_plurals = "--fix-plurals" in sys.argv   # annotate existing files only, no tier call
     langs = args or list(LANGS)
     english = load_english()
     print(f"{len(english)} English resources")
@@ -141,6 +167,15 @@ def main() -> int:
     for lang in langs:
         dest_dir = os.path.join(APP_RES, f"values-{lang}")
         dest = os.path.join(dest_dir, "strings.xml")
+        if fix_plurals:
+            if os.path.exists(dest):
+                before = open(dest, encoding="utf-8").read()
+                after = annotate_implied_quantity(before, english)
+                if after != before:
+                    with open(dest, "w", encoding="utf-8", newline="\n") as fh:
+                        fh.write(after)
+                    print(f"[{lang}] annotated ImpliedQuantity plurals")
+            continue
         if check_only:
             if not os.path.exists(dest):
                 print(f"[{lang}] no translation yet")
@@ -165,7 +200,7 @@ def main() -> int:
             else:
                 os.makedirs(dest_dir, exist_ok=True)
                 with open(dest, "w", encoding="utf-8", newline="\n") as fh:
-                    fh.write(xml_text)
+                    fh.write(annotate_implied_quantity(xml_text, english))
                 print(f"[{lang}] wrote {dest}")
         for p in probs:
             print(f"    - {p}")

@@ -19,28 +19,37 @@ import com.arctechnology.zerofomo.model.Event
 import com.arctechnology.zerofomo.model.EventCategory
 import com.arctechnology.zerofomo.model.LocationFilter
 import com.arctechnology.zerofomo.model.LocationQuery
+import com.arctechnology.zerofomo.model.Market
+import com.arctechnology.zerofomo.model.MarketSize
 import com.arctechnology.zerofomo.model.Place
+import com.arctechnology.zerofomo.model.Region
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /** A status message the ViewModel needs to surface — carried as a resource id
- *  (plus an optional format arg) rather than built English text, so
+ *  (plus optional format args) rather than built English text, so
  *  FeedScreen is the only layer that resolves it via stringResource. */
 sealed interface StatusMessage {
     data class Res(@StringRes val resId: Int) : StatusMessage
     data class ResArg(@StringRes val resId: Int, val arg: String) : StatusMessage
+    data class ResArgs(@StringRes val resId: Int, val args: List<String>) : StatusMessage
 }
 
 /** One immutable filter state = MVI-style single source of UI truth. */
@@ -64,9 +73,14 @@ data class FeedUiState(
     val isLocating: Boolean = false,
     val locationMessage: StatusMessage? = null,
     val distanceOrigin: Pair<Double, Double>? = null,  // where card distances are measured from
+    // G5: adaptive scope
+    val region: Region? = null,                        // the user's region, for the region chip
+    val regions: List<Region> = emptyList(),           // every region, for the market browser
+    val markets: List<Market> = emptyList(),           // manifest (cached offline)
+    val nearRadiusKm: Double = PlaceResolver.DEFAULT_RADIUS_KM,
 )
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 @HiltViewModel
 class FeedViewModel @Inject constructor(
     private val repository: EventRepository,
@@ -84,10 +98,14 @@ class FeedViewModel @Inject constructor(
     private val countries = MutableStateFlow<List<Country>>(emptyList())
     private val isLocating = MutableStateFlow(false)
     private val locationMessage = MutableStateFlow<StatusMessage?>(null)
+    private val userRegion = MutableStateFlow<Region?>(null)
+    private val regions = MutableStateFlow<List<Region>>(emptyList())
+    private val nearRadiusKm = MutableStateFlow(PlaceResolver.DEFAULT_RADIUS_KM)
 
     /** True once the user picked a location chip by hand; the automatic
-     *  "follow the user's location" default then stops overriding it. */
-    private var locationPinned = false
+     *  "follow the user's location" default (and auto-widening) then stop
+     *  overriding it. A flow so the density watcher can observe it. */
+    private val locationPinned = MutableStateFlow(false)
     private var searchJob: Job? = null
 
     private data class Core(
@@ -125,13 +143,22 @@ class FeedViewModel @Inject constructor(
             arr[3] as List<Country>, arr[4] as Boolean, arr[5] as StatusMessage?)
     }
 
-    val uiState: StateFlow<FeedUiState> = combine(core, loc) { c, l ->
+    private data class Scope(
+        val region: Region?, val regions: List<Region>, val markets: List<Market>, val radius: Double,
+    )
+
+    private val scope = combine(userRegion, regions, repository.markets, nearRadiusKm) { r, rs, ms, rad ->
+        Scope(r, rs, ms, rad)
+    }
+
+    val uiState: StateFlow<FeedUiState> = combine(core, loc, scope) { c, l, s ->
         FeedUiState(
             events = c.events, filters = c.filters, isRefreshing = c.refreshing,
             syncError = c.error, lastSyncEpochMs = c.lastSync,
             userLocation = l.user, nearbyPlaces = l.nearby, placeSuggestions = l.suggestions,
             countries = l.countries, isLocating = l.locating, locationMessage = l.message,
             distanceOrigin = distanceOriginFor(c.filters.location, l.user),
+            region = s.region, regions = s.regions, markets = s.markets, nearRadiusKm = s.radius,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), FeedUiState())
 
@@ -148,11 +175,14 @@ class FeedViewModel @Inject constructor(
     init {
         refreshIfStale()   // sync on open only when cache is stale
         viewModelScope.launch { countries.value = gazetteer.countries() }
+        viewModelScope.launch { regions.value = gazetteer.regions() }
+        viewModelScope.launch { repository.loadMarkets() }
         viewModelScope.launch {
             // Follow the stored location: default filter + nearby chips.
             locationStore.state.filterNotNull().collect { ul ->
                 nearbyPlaces.value = gazetteer.placesIn(ul.country.code, limit = 8)
-                if (!locationPinned) filters.update { it.copy(location = defaultFilterFor(ul)) }
+                userRegion.value = gazetteer.regionOf(ul.country.code)
+                if (!locationPinned.value) filters.update { it.copy(location = defaultFilterFor(ul)) }
                 // A new city may map to different market feeds: sync them.
                 if (repository.needsResyncFor(ul.place?.lat, ul.place?.lng)) refresh()
             }
@@ -164,17 +194,75 @@ class FeedViewModel @Inject constructor(
             device.networkCountryCode()?.let { locationStore.suggestCountry(it) }
             if (device.hasPermission() && !locationStore.isManual) locate(quiet = true)
         }
+        watchDensity()
     }
 
     /** Bahamas keeps its island vocabulary; everywhere else is a radius
-     *  around the chosen city, or the whole country when only that is known. */
+     *  around the chosen city, or the whole country when only that is known.
+     *  The radius follows the market's size (G5): a metro gets a tight circle,
+     *  a small market the default, and a place with no curated market or an
+     *  empty one goes straight to the whole country. */
     private fun defaultFilterFor(ul: UserLocation): LocationFilter {
         if (ul.country.code == "BS") {
             val island = ul.place?.let { BahamianIsland.match(it.name) }
             return LocationFilter.IslandTag(island ?: BahamianIsland.NEW_PROVIDENCE)
         }
         val p = ul.place ?: return LocationFilter.CountryTag(ul.country.code, ul.country.name)
-        return LocationFilter.Near(p.lat, p.lng, PlaceResolver.DEFAULT_RADIUS_KM, p.name)
+        val market = repository.nearestMarket(p.lat, p.lng)
+        val radius = when (market?.size) {
+            MarketSize.LARGE -> RADIUS_METRO_KM
+            MarketSize.MEDIUM -> PlaceResolver.DEFAULT_RADIUS_KM
+            MarketSize.SMALL -> RADIUS_WIDE_KM
+            MarketSize.EMPTY, null -> return LocationFilter.CountryTag(ul.country.code, ul.country.name)
+        }
+        nearRadiusKm.value = radius
+        return LocationFilter.Near(p.lat, p.lng, radius, p.name)
+    }
+
+    /**
+     * Auto-widen (G5): while the automatic scope lists fewer than
+     * [AUTO_WIDEN_MIN] events in the next 30 days, step out — radius → whole
+     * country → region — and say so once. Only automatic scopes widen; a chip
+     * the user tapped is never overridden, and nothing moves until the first
+     * sync has landed (an empty cache is not "few events").
+     */
+    private fun watchDensity() = viewModelScope.launch {
+        combine(filters, isRefreshing, repository.lastSyncEpochMs, locationPinned) { f, refreshing, sync, pinned ->
+            if (!refreshing && sync > 0L && !pinned) f.location else null
+        }
+            .distinctUntilChanged()
+            .flatMapLatest { location ->
+                when (location) {
+                    is LocationFilter.Near, is LocationFilter.CountryTag, is LocationFilter.IslandTag ->
+                        repository.observeEvents(location, DateRangeFilter.Next30Days)
+                            .map { location to it.size }
+                    else -> flowOf(null)
+                }
+            }
+            .debounce(400)
+            .collect { pair ->
+                val (location, count) = pair ?: return@collect
+                if (count < AUTO_WIDEN_MIN) widen(location)
+            }
+    }
+
+    private suspend fun widen(from: LocationFilter) {
+        val ul = locationStore.state.value ?: return
+        val next: LocationFilter = when (from) {
+            is LocationFilter.Near, is LocationFilter.IslandTag ->
+                LocationFilter.CountryTag(ul.country.code, ul.country.name)
+            is LocationFilter.CountryTag -> {
+                val region = userRegion.value ?: return
+                val codes = gazetteer.countriesIn(region.id)
+                if (codes.size < 2) return
+                LocationFilter.RegionTag(region.id, codes, region.name)
+            }
+            else -> return
+        }
+        if (locationPinned.value) return
+        filters.update { it.copy(location = next) }
+        locationMessage.value = StatusMessage.ResArgs(
+            R.string.feed_status_widened, listOf(from.label, next.label))
     }
 
     // ── Filters ─────────────────────────────────────────────────────────────
@@ -183,7 +271,7 @@ class FeedViewModel @Inject constructor(
         filters.update { it.copy(dateRange = range) }
 
     fun setIsland(island: BahamianIsland?) {
-        locationPinned = true
+        locationPinned.value = true
         filters.update {
             it.copy(location = island?.let { i -> LocationFilter.IslandTag(i) }
                 ?: LocationFilter.Everywhere)
@@ -191,8 +279,26 @@ class FeedViewModel @Inject constructor(
     }
 
     fun setLocationFilter(filter: LocationFilter) {
-        locationPinned = true
+        locationPinned.value = true
+        if (filter is LocationFilter.Near) nearRadiusKm.value = filter.radiusKm
         filters.update { it.copy(location = filter) }
+    }
+
+    /** Region chip: every country in the user's region. */
+    fun setRegionScope() {
+        val region = userRegion.value ?: return
+        viewModelScope.launch {
+            val codes = gazetteer.countriesIn(region.id)
+            setLocationFilter(LocationFilter.RegionTag(region.id, codes, region.name))
+        }
+    }
+
+    /** Radius menu on the "Near <city>" chip: re-scopes the current circle. */
+    fun setNearRadius(km: Double) {
+        nearRadiusKm.value = km
+        val current = filters.value.location as? LocationFilter.Near ?: return
+        locationPinned.value = true
+        filters.update { it.copy(location = current.copy(radiusKm = km)) }
     }
 
     fun toggleCategory(category: EventCategory) = filters.update {
@@ -206,7 +312,7 @@ class FeedViewModel @Inject constructor(
         viewModelScope.launch {
             val query = locationEngine.classifyAsync(raw)
             if (query is LocationQuery.Place) { selectPlace(query.place); return@launch }
-            locationPinned = true
+            locationPinned.value = true
             val filter = locationEngine.resolve(query)
             filters.update { it.copy(location = filter) }
         }
@@ -215,7 +321,7 @@ class FeedViewModel @Inject constructor(
     fun setKeyword(keyword: String) = filters.update { it.copy(keyword = keyword) }
 
     fun clearFilters() {
-        locationPinned = false
+        locationPinned.value = false
         filters.value = FilterState()
         locationStore.state.value?.let { ul ->
             filters.update { it.copy(location = defaultFilterFor(ul)) }
@@ -234,14 +340,23 @@ class FeedViewModel @Inject constructor(
     }
 
     fun selectPlace(place: Place) {
-        locationPinned = false
+        locationPinned.value = false
         placeSuggestions.value = emptyList()
         viewModelScope.launch { locationStore.setPlace(place, LocationSource.MANUAL) }
     }
 
     fun selectCountry(country: Country) {
-        locationPinned = false
+        locationPinned.value = false
         viewModelScope.launch { locationStore.setCountry(country, LocationSource.MANUAL) }
+    }
+
+    /** Market browser (G5): looking from a market's centre is the same as
+     *  picking its city, so the theme, chips and synced feeds all follow. */
+    fun selectMarket(market: Market) {
+        selectPlace(Place(
+            name = market.cityName, countryCode = market.country,
+            lat = market.lat, lng = market.lng, population = 0, timezone = market.tz,
+        ))
     }
 
     /** Called after the permission dialog closes (or immediately when it was
@@ -258,7 +373,7 @@ class FeedViewModel @Inject constructor(
                 val fix = device.current()
                 val place = fix?.let { gazetteer.nearest(it.lat, it.lng) }
                 if (place != null) {
-                    locationPinned = false
+                    locationPinned.value = false
                     locationStore.setPlace(place, LocationSource.DEVICE)
                     if (!quiet) locationMessage.value =
                         StatusMessage.ResArg(R.string.feed_status_near_place, place.name)
@@ -303,4 +418,11 @@ class FeedViewModel @Inject constructor(
     }
 
     fun dismissError() { syncError.value = null }
+
+    companion object {
+        const val AUTO_WIDEN_MIN = 8          // events in the next 30 days
+        const val RADIUS_METRO_KM = 25.0      // large markets: a metro, not a state
+        const val RADIUS_WIDE_KM = 150.0      // small markets: the whole island / district
+        val RADIUS_OPTIONS_KM = listOf(10.0, 25.0, 60.0, 150.0)
+    }
 }

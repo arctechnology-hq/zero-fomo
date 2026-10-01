@@ -6,6 +6,7 @@ import com.arctechnology.zerofomo.data.db.FavoriteEntity
 import com.arctechnology.zerofomo.data.db.toDomain
 import com.arctechnology.zerofomo.data.location.UserLocationStore
 import com.arctechnology.zerofomo.data.network.EventsApi
+import com.arctechnology.zerofomo.data.network.MarketDto
 import com.arctechnology.zerofomo.data.network.toEntity
 import com.arctechnology.zerofomo.data.network.toModel
 import com.arctechnology.zerofomo.model.Market
@@ -25,6 +26,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -54,6 +57,15 @@ class EventRepository @Inject constructor(
      *  across restarts until the user dismisses the Saved-tab notice. */
     val purgedSavedNames: StateFlow<List<String>> = _purgedSavedNames.asStateFlow()
 
+    private val manifestJson = Json { ignoreUnknownKeys = true; coerceInputValues = true }
+
+    private val _markets = MutableStateFlow(restoreMarkets())
+
+    /** The market manifest as last fetched (restored from prefs offline), so
+     *  the location sheet can browse markets and the view model can size its
+     *  default scope without a network round trip (G5). */
+    val markets: StateFlow<List<Market>> = _markets.asStateFlow()
+
     fun dismissPurgedNotice() {
         prefs.edit { remove(KEY_PURGED_SAVED) }
         _purgedSavedNames.value = emptyList()
@@ -71,6 +83,9 @@ class EventRepository @Inject constructor(
             is LocationFilter.Bounds -> byBox(location.box, from, to)
             is LocationFilter.Near -> byBox(location.box, from, to)
             is LocationFilter.CountryTag -> dao.byCountry(location.countryCode, from, to)
+            is LocationFilter.RegionTag ->
+                if (location.countryCodes.isEmpty()) dao.allBetween(from, to)
+                else dao.byCountries(location.countryCodes, from, to)
             LocationFilter.Everywhere -> dao.allBetween(from, to)
         }
 
@@ -108,6 +123,41 @@ class EventRepository @Inject constructor(
     private val syncedMarkets: Set<String>
         get() = prefs.getString(KEY_SYNCED_MARKETS, "")!!.split(',').filter { it.isNotBlank() }.toSet()
 
+    // ── Manifest ────────────────────────────────────────────────────────────
+
+    /** Fetch the manifest; on any failure keep (and return) the cached copy. */
+    suspend fun loadMarkets(): List<Market> {
+        try {
+            val dtos = api.fetchMarkets().markets
+            if (dtos.isNotEmpty()) {
+                prefs.edit {
+                    putString(KEY_MANIFEST, manifestJson.encodeToString(ListSerializer(MarketDto.serializer()), dtos))
+                }
+                _markets.value = dtos.map { it.toModel() }
+            }
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
+        } catch (_: Exception) {
+            // offline: the cached manifest stands
+        }
+        return _markets.value
+    }
+
+    private fun restoreMarkets(): List<Market> = try {
+        prefs.getString(KEY_MANIFEST, null)
+            ?.let { manifestJson.decodeFromString(ListSerializer(MarketDto.serializer()), it) }
+            ?.map { it.toModel() } ?: emptyList()
+    } catch (_: Exception) {
+        emptyList()
+    }
+
+    /** The market whose reach covers a point (nearest first), from the cached
+     *  manifest; null when the user is outside every curated market. */
+    fun nearestMarket(lat: Double, lng: Double): Market? =
+        _markets.value.filter { it.available }
+            .minByOrNull { it.distanceKm(lat, lng) }
+            ?.takeIf { it.distanceKm(lat, lng) <= it.radiusKm + MarketSelector.REACH_KM }
+
     /**
      * Pull the feeds for the markets nearest the user and replace those
      * markets' rows. Throws on network failure; callers decide whether that
@@ -115,13 +165,7 @@ class EventRepository @Inject constructor(
      * the manifest is unreachable, so an old host layout still works.
      */
     suspend fun refresh() {
-        val manifest = try {
-            api.fetchMarkets().markets.map { it.toModel() }
-        } catch (e: kotlinx.coroutines.CancellationException) {
-            throw e
-        } catch (_: Exception) {
-            emptyList()
-        }
+        val manifest = loadMarkets()
         if (manifest.isEmpty()) { refreshLegacy(); return }
 
         val place = locationStore.state.value?.place
@@ -154,13 +198,8 @@ class EventRepository @Inject constructor(
     /** True when the user's location now maps to a different market set than
      *  the last sync covered; the view model then triggers a refresh. */
     suspend fun needsResyncFor(lat: Double?, lng: Double?): Boolean {
-        val manifest = try {
-            api.fetchMarkets().markets.map { it.toModel() }
-        } catch (e: kotlinx.coroutines.CancellationException) {
-            throw e
-        } catch (_: Exception) {
-            return false
-        }
+        val manifest = loadMarkets()
+        if (manifest.isEmpty()) return false
         val wanted = MarketSelector.select(manifest, lat, lng).map { it.id }.toSet()
         return wanted.isNotEmpty() && wanted != syncedMarkets
     }
@@ -202,6 +241,7 @@ class EventRepository @Inject constructor(
         const val KEY_LAST_SYNC = "last_sync_epoch_ms"
         const val KEY_SYNCED_MARKETS = "synced_markets"
         const val KEY_PURGED_SAVED = "purged_saved_names"
+        const val KEY_MANIFEST = "markets_manifest_json"
         const val PURGE_SEP = "\u0001"   // never appears in an event name
     }
 }

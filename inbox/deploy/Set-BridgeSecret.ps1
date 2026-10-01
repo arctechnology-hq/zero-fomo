@@ -38,7 +38,7 @@
 #>
 [CmdletBinding(SupportsShouldProcess)]
 param(
-    [Parameter(Mandatory)][ValidateSet('discord', 'telegram', 'instagram', 'reddit')][string]$Bridge,
+    [Parameter(Mandatory)][ValidateSet('discord', 'telegram', 'instagram', 'reddit', 'telegram-public')][string]$Bridge,
     [string]$Token,
     [string]$Map,
     [string]$IgUserId,
@@ -54,6 +54,9 @@ $spec = @{
     telegram  = @{ unit = 'zerofomo-telegram';  token = 'TELEGRAM_BOT_TOKEN';    map = 'TELEGRAM_DEFAULT_MARKET';  required = 'TELEGRAM_BOT_TOKEN' }
     instagram = @{ unit = 'zerofomo-instagram'; token = 'IG_ACCESS_TOKEN';       map = 'IG_HASHTAGS';              required = 'IG_ACCESS_TOKEN' }
     reddit    = @{ unit = 'zerofomo-reddit';    token = 'REDDIT_CLIENT_SECRET';  map = 'REDDIT_SUBREDDIT_MARKETS'; required = 'REDDIT_SUBREDDIT_MARKETS' }
+    # No credential at all: public t.me/s previews. -Map 'channel=market,...' adds
+    # hand-picked channels on top of bridges/telegram_public.json from discovery.
+    'telegram-public' = @{ unit = 'zerofomo-telegram-public'; token = 'TELEGRAM_PUBLIC_UNUSED'; map = 'TELEGRAM_PUBLIC_CHANNELS'; required = 'TELEGRAM_PUBLIC_CHANNELS' }
 }[$Bridge]
 
 $vars = [ordered]@{}

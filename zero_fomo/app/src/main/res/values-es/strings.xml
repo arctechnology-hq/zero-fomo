@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-
+<resources xmlns:tools="http://schemas.android.com/tools">
 <string name="detail_back_content_description">Atrás</string>
     
 <string name="detail_share_content_description">Compartir</string>
@@ -65,7 +64,7 @@
     
 <string name="share_note_placeholder">¿Algo que agregar? Lugar, precio, fecha…</string>
     
-<string name="share_reviewer_disclaimer">Un revisor lo verifica antes de que aparezca. No necesitas cuenta; no se lee nada más de tus apps.</string>
+<string name="share_reviewer_disclaimer">Un revisor lo revisa antes de que aparezca. No necesitas cuenta; no se lee nada más de tus apps.</string>
     
 <string name="share_cancel_button">Cancelar</string>
     
@@ -101,13 +100,13 @@
     </plurals>
     
 <plurals name="time_freshness_hours">
-        <item quantity="one">Actualizado hace %1$dh</item>
-        <item quantity="other">Actualizado hace %1$dh</item>
+        <item quantity="one">Actualizado hace %1$d h</item>
+        <item quantity="other">Actualizado hace %1$d h</item>
     </plurals>
     
 <plurals name="time_freshness_days">
-        <item quantity="one">Actualizado hace %1$dd</item>
-        <item quantity="other">Actualizado hace %1$dd</item>
+        <item quantity="one">Actualizado hace %1$d d</item>
+        <item quantity="other">Actualizado hace %1$d d</item>
     </plurals>
     
 <string name="feed_choose_a_place">Elige un lugar</string>
@@ -180,8 +179,23 @@
 <string name="feed_cd_selected">Seleccionado</string>
     
 <string name="feed_all_countries_count">Los %1$d países</string>
+    
+    
+<string name="feed_near_place_radius">Cerca de %1$s · %2$d km</string>
+    
+<string name="feed_radius_title">Radio de búsqueda</string>
+    
+<string name="feed_within_km">A menos de %1$d km</string>
+    
+<string name="feed_browse_markets">Explorar mercados</string>
+    
+<string name="feed_coming_soon">Próximamente</string>
+    
+<string name="feed_cd_region_chip">Mostrar toda la región</string>
 
     
+    
+<string name="feed_status_widened">Aún no hay mucho para %1$s — mostrando %2$s</string>
     
 <string name="feed_status_offline">Sin conexión. Mostrando eventos en caché.</string>
     
@@ -189,7 +203,7 @@
     
 <string name="feed_status_near_place">Estás cerca de %1$s</string>
     
-<string name="feed_status_no_fix">No se pudo obtener tu ubicación. Elige una ciudad.</string>
+<string name="feed_status_no_fix">No se pudo ubicar. Elige una ciudad.</string>
 
     
     
@@ -197,11 +211,11 @@
     
 <string name="saved_empty_title">Aún no has guardado nada</string>
     
-<string name="saved_empty_subtitle">Toca el corazón en cualquier evento para guardarlo aquí, incluso sin conexión</string>
+<string name="saved_empty_subtitle">Toca el corazón en cualquier evento para guardarlo aquí — incluso sin conexión</string>
     
-<string name="saved_forwarded_header">Enviado a 0 FOMO</string>
+<string name="saved_forwarded_header">Reenviado a 0 FOMO</string>
     
-<string name="saved_forwarded_subtitle">Las publicaciones que compartes se revisan antes de llegar al feed</string>
+<string name="saved_forwarded_subtitle">Las publicaciones que compartiste se revisan antes de llegar al feed</string>
     
 <string name="saved_section_header">Eventos guardados</string>
     
@@ -230,22 +244,22 @@
 <string name="time_ago_just_now">ahora mismo</string>
     
 <plurals name="time_ago_minutes">
-        <item quantity="one">hace %1$dm</item>
-        <item quantity="other">hace %1$dm</item>
+        <item quantity="one">hace %1$d min</item>
+        <item quantity="other">hace %1$d min</item>
     </plurals>
     
 <plurals name="time_ago_hours">
-        <item quantity="one">hace %1$dh</item>
-        <item quantity="other">hace %1$dh</item>
+        <item quantity="one">hace %1$d h</item>
+        <item quantity="other">hace %1$d h</item>
     </plurals>
     
 <plurals name="time_ago_days">
-        <item quantity="one">hace %1$dd</item>
-        <item quantity="other">hace %1$dd</item>
+        <item quantity="one">hace %1$d d</item>
+        <item quantity="other">hace %1$d d</item>
     </plurals>
     
-<plurals name="saved_purged_title">
-        <item quantity="one">%1$d evento guardado ya no está listado</item>
+<plurals name="saved_purged_title" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Un evento guardado ya no está listado</item>
         <item quantity="other">%1$d eventos guardados ya no están listados</item>
     </plurals>
     
@@ -284,7 +298,7 @@
     
 <string name="category_sports_fitness">Deportes y fitness</string>
     
-<string name="category_arts_theatre">Arte y teatro</string>
+<string name="category_arts_theatre">Artes y teatro</string>
     
 <string name="category_conference_expo">Conferencia / Expo</string>
     
@@ -336,7 +350,7 @@
 
     
     
-<string name="error_photo_gone">La foto ya no está en este teléfono; compártela de nuevo</string>
+<string name="error_photo_gone">La foto ya no está en este teléfono — compártela de nuevo</string>
     
 <string name="error_http_format">HTTP %1$d</string>
 

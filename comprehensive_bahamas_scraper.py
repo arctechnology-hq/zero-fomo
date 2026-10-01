@@ -333,6 +333,7 @@ class Event:
     raw_date: str = ""        # original date text, kept for auditability
     lat: Optional[float] = None   # venue coordinates when the source has them
     lng: Optional[float] = None
+    country_text: str = ""    # country name or ISO code the source stated (G5: market gate)
 
     def completeness(self) -> int:
         return sum(
@@ -656,6 +657,8 @@ def event_from_json_ld(node: dict, source_name: str, fallback_url: str) -> Event
         if isinstance(addr, dict):
             parts.append(clean_text(addr.get("streetAddress")))
             parts.append(clean_text(addr.get("addressLocality")))
+            # "Hamilton" is Bermuda or Ontario: the country field decides.
+            ev.country_text = clean_text(addr.get("addressCountry"))
         elif isinstance(addr, str):
             parts.append(clean_text(addr))
         ev.venue = ", ".join(p for p in parts if p)
@@ -1353,7 +1356,19 @@ class AllEventsInScraper(BaseScraper):
 
     def scrape(self) -> list[Event]:
         events: list[Event] = []
-        for url in self.LISTINGS:
+        # G5: any allevents.in city slug (`bridgetown`, `castries`, `san-juan`)
+        # turns this into a global source; the Nassau listing set is the default.
+        city = str(self.params.get("city") or "").strip("/").lower()
+        listings = self.LISTINGS
+        venue_default = clean_text(self.params.get("venue_default") or "") or "Nassau, Bahamas"
+        if city:
+            listings = [f"{self.BASE}/{city}", f"{self.BASE}/{city}/all",
+                        f"{self.BASE}/{city}/parties", f"{self.BASE}/{city}/concerts",
+                        f"{self.BASE}/{city}/festivals", f"{self.BASE}/{city}/food-drinks",
+                        f"{self.BASE}/{city}/workshops", f"{self.BASE}/{city}/sports",
+                        f"{self.BASE}/{city}/business"][: max(self.max_pages, 3)]
+            venue_default = clean_text(self.params.get("venue_default") or "") or self.market.name
+        for url in listings:
             soup = self.engine.soup(url, referer=self.BASE)
             if soup is None:
                 continue
@@ -1364,8 +1379,11 @@ class AllEventsInScraper(BaseScraper):
                 events.extend(self.parse_listing_cards(soup, self.BASE, "allevents.in/"))
         for ev in events:
             if not ev.venue:
-                ev.venue = "Nassau, Bahamas"
-        return dedupe_by_url(events)
+                ev.venue = venue_default
+        events = dedupe_by_url(events)
+        if city:
+            events = [e for e in events if keep_for_market(e, self.market, self.params, e.venue)]
+        return events
 
 
 # -----------------------------------------------------------------------------
@@ -2077,8 +2095,11 @@ def keep_for_market(ev: Event, market: Market, params: dict,
     countries = [str(c).lower() for c in (params.get("countries") or [])]
     cities = [str(c).lower() for c in (params.get("cities") or [])]
     exclude = [str(c).lower() for c in (params.get("exclude") or [])]
-    blob = f"{country_text} {city_text} {ev.venue}".lower()
-    if countries and not any(c in blob for c in countries):
+    blob = f"{country_text} {city_text} {ev.venue} {ev.country_text}".lower()
+    # A source that states the country as an ISO code ("CA", "BM") is matched
+    # on the code alone — two letters must never be substring-matched.
+    code_ok = (market is not None and ev.country_text.strip().lower() == market.country.lower())
+    if countries and not (code_ok or any(c in blob for c in countries if len(c) > 2)):
         return False
     if cities and not any(c in blob for c in cities):
         return False
@@ -3268,10 +3289,482 @@ class Exporter:
 
 
 # =============================================================================
+# G5. CONFIG-ONLY READERS + GLOBAL PLATFORMS (2026-10-01) — what the discovery
+#     engine (discover_sources.py) adopts without anyone writing code.
+# =============================================================================
+
+def _today_iso() -> str:
+    return datetime.now().strftime("%Y-%m-%d")
+
+
+def _unfold_ics(text: str) -> list[str]:
+    """RFC 5545 line unfolding: a line starting with SPACE/TAB continues the
+    previous one. Handles CRLF, LF and the odd CR."""
+    lines: list[str] = []
+    for raw in text.replace("\r\n", "\n").replace("\r", "\n").split("\n"):
+        if raw[:1] in (" ", "\t") and lines:
+            lines[-1] += raw[1:]
+        else:
+            lines.append(raw)
+    return lines
+
+
+def _ics_unescape(value: str) -> str:
+    return (value.replace("\\n", "\n").replace("\\N", "\n").replace("\\,", ",")
+            .replace("\\;", ";").replace("\\\\", "\\"))
+
+
+def parse_ics_events(text: str, source_name: str, fallback_url: str,
+                     tz_name: str) -> list[Event]:
+    """Minimal iCalendar reader (stdlib only): one Event per VEVENT. Handles
+    DATE and DATE-TIME values, TZID / UTC, GEO, URL, LOCATION; recurring
+    events contribute their DTSTART only (the next instance is what a feed
+    reader can attend; past masters are dropped)."""
+    events: list[Event] = []
+    cur: Optional[dict] = None
+    for line in _unfold_ics(text):
+        if line == "BEGIN:VEVENT":
+            cur = {}
+            continue
+        if line == "END:VEVENT":
+            if cur is not None:
+                ev = _ics_to_event(cur, source_name, fallback_url, tz_name)
+                if ev is not None:
+                    events.append(ev)
+            cur = None
+            continue
+        if cur is None or ":" not in line:
+            continue
+        head, _, value = line.partition(":")
+        name, _, params = head.partition(";")
+        cur[name.upper()] = (params.upper(), value)
+    return events
+
+
+def _ics_datetime(entry: Optional[tuple[str, str]], tz_name: str) -> tuple[str, str]:
+    """(params, value) -> (iso_date, time_label)."""
+    if not entry:
+        return "", ""
+    params, value = entry
+    value = value.strip()
+    if "VALUE=DATE" in params or re.fullmatch(r"\d{8}", value):
+        try:
+            return datetime.strptime(value[:8], "%Y%m%d").strftime("%Y-%m-%d"), ""
+        except ValueError:
+            return "", ""
+    try:
+        dt = datetime.strptime(value[:15], "%Y%m%dT%H%M%S")
+    except ValueError:
+        iso, raw = parse_date_iso(value)
+        return iso, parse_time(value)
+    if value.endswith("Z"):
+        dt = _to_local(dt.replace(tzinfo=timezone.utc), tz_name)
+    label = dt.strftime("%I:%M %p").lstrip("0") if (dt.hour or dt.minute) else ""
+    return dt.strftime("%Y-%m-%d"), label
+
+
+def _ics_to_event(props: dict, source_name: str, fallback_url: str,
+                  tz_name: str) -> Optional[Event]:
+    name = clean_text(_ics_unescape(props.get("SUMMARY", ("", ""))[1]))
+    if not name:
+        return None
+    date, t_start = _ics_datetime(props.get("DTSTART"), tz_name)
+    if not date:
+        return None
+    end_date, t_end = _ics_datetime(props.get("DTEND"), tz_name)
+    if "RRULE" in props and date < _today_iso():
+        return None     # recurring master in the past; instances are not expanded
+    ev = Event(source_name=source_name, name=name[:200], date=date, raw_date=date)
+    ev.time = t_start
+    if t_start and t_end and end_date == date:
+        ev.time = f"{t_start} - {t_end}"
+    ev.venue = clean_text(_ics_unescape(props.get("LOCATION", ("", ""))[1]))
+    ev.description = clean_text(_ics_unescape(props.get("DESCRIPTION", ("", ""))[1]))[:600]
+    url = clean_text(props.get("URL", ("", ""))[1])
+    if not url.startswith("http"):
+        m = re.search(r"https?://\S+", ev.description)
+        url = m.group(0).rstrip(").,") if m else fallback_url
+    ev.source_url = url
+    geo = props.get("GEO", ("", ""))[1]
+    if geo and ";" in geo:
+        try:
+            ev.lat, ev.lng = float(geo.split(";")[0]), float(geo.split(";")[1])
+        except ValueError:
+            pass
+    ev.price = parse_price(ev.description)
+    ev.category = infer_category(ev.name, ev.description)
+    return ev
+
+
+class IcsFeedScraper(BaseScraper):
+    """`ics`: public iCalendar feeds (Google Calendar public ICS, WordPress
+    `?ical=1`, Modern Events Calendar, tourism boards). params: urls[],
+    venue_default, countries/cities/exclude (keep_for_market)."""
+    name = "ics"
+
+    def scrape(self) -> list[Event]:
+        urls = [str(u) for u in (self.params.get("urls") or []) if u]
+        if not urls:
+            self.status.note = "params.urls required"
+            return []
+        today = _today_iso()
+        venue_default = clean_text(self.params.get("venue_default") or "")
+        events: list[Event] = []
+        for url in urls[: max(self.max_pages, 4)]:
+            resp = self.engine.get(url)
+            if resp is None or "BEGIN:VCALENDAR" not in resp.text[:2000]:
+                continue
+            self.status.pages_fetched += 1
+            for ev in parse_ics_events(resp.text, self.name, url, self.market.tz):
+                if ev.date < today:
+                    continue
+                ev.venue = ev.venue or venue_default
+                events.append(ev)
+        return [e for e in _dedupe_name_date(events)
+                if keep_for_market(e, self.market, self.params, e.venue)]
+
+
+_RSS_VENUE_RX = re.compile(r"(?:venue|location|where|place)\s*[:\-]\s*([^\n|•]{3,80})", re.I)
+# Same shape as the Reddit bridge's strict prefilter: an item must announce
+# something (event word) rather than ask about it (question / recommendation
+# request), or a forum feed turns every "visiting next month?" into an event.
+_RSS_EVENT_RX = re.compile(
+    r"\b(events?|concerts?|festivals?|fest|tickets?|rsvp|doors (open|at)|line-?up|dj|live music|"
+    r"open mic|comedy|stand-?up|meet-?up|pop-?up|market|fair|expo|parade|party|brunch|"
+    r"happy hour|karaoke|trivia|gala|fundraiser|workshop|screening|premiere|tournament|"
+    r"5k|10k|marathon|regatta|junkanoo|carnival|fete|soca|exhibition|opening night|launch|"
+    r"tour|showcase|conference|summit|hackathon|free (admission|entry)|performing|performs?|"
+    r"headlin(er|ing)|hosted by|featuring|feat\.?|show|competition|giveaway|grand opening|"
+    r"open house|game ?night|movie night|what'?s on|agenda|evento|événement|evenement)\b", re.I)
+_RSS_ASK_RX = re.compile(r"\?\s*$|\b(recommend|anyone know|where (can|do|should) i|any (good|suggestions?)|"
+                         r"looking for|does anyone|is there a|what are some|best place)\b", re.I)
+
+
+class RssFeedScraper(BaseScraper):
+    """`rss`: RSS 2.0 / Atom feeds whose items announce events (Discourse and
+    phpBB forum categories, WordPress event categories, radio-station
+    what's-on pages). An item counts when its title or body carries a date on
+    or after today; pubDate is never the event date. params: urls[],
+    venue_default, keywords[] (any must appear; default = none)."""
+    name = "rss"
+    MAX_ITEMS = 120
+
+    def scrape(self) -> list[Event]:
+        urls = [str(u) for u in (self.params.get("urls") or []) if u]
+        if not urls:
+            self.status.note = "params.urls required"
+            return []
+        import xml.etree.ElementTree as ET
+        today = _today_iso()
+        venue_default = clean_text(self.params.get("venue_default") or "")
+        keywords = [str(k).lower() for k in (self.params.get("keywords") or [])]
+        events: list[Event] = []
+        for url in urls[: max(self.max_pages, 4)]:
+            resp = self.engine.get(url)
+            if resp is None:
+                continue
+            try:
+                root = ET.fromstring(resp.content)
+            except ET.ParseError:
+                continue
+            self.status.pages_fetched += 1
+            for item in self._items(root)[: self.MAX_ITEMS]:
+                title, link, body = item
+                if not title:
+                    continue
+                blob = f"{title} {body}"
+                if keywords and not any(k in blob.lower() for k in keywords):
+                    continue
+                if _RSS_ASK_RX.search(title) or not _RSS_EVENT_RX.search(blob[:2000]):
+                    continue
+                date, raw = span_dates(title)
+                if not date:
+                    date, raw = span_dates(body[:1500])
+                if not date or date < today:
+                    continue
+                ev = Event(source_name=self.name, name=title[:200], date=date, raw_date=raw)
+                ev.time = parse_time(blob[:1500])
+                ev.price = parse_price(blob[:1500])
+                m = _RSS_VENUE_RX.search(body)
+                ev.venue = clean_text(m.group(1)) if m else venue_default
+                ev.source_url = link or url
+                ev.description = body[:600]
+                ev.category = infer_category(ev.name, ev.description)
+                events.append(ev)
+        return [e for e in _dedupe_name_date(events)
+                if keep_for_market(e, self.market, self.params, e.venue)]
+
+    @staticmethod
+    def _items(root) -> list[tuple[str, str, str]]:
+        """Normalise RSS <item> and Atom <entry> to (title, link, text)."""
+        out: list[tuple[str, str, str]] = []
+
+        def local(tag: str) -> str:
+            return tag.rsplit("}", 1)[-1].lower()
+
+        for node in root.iter():
+            if local(node.tag) not in ("item", "entry"):
+                continue
+            title = link = ""
+            body_parts: list[str] = []
+            for child in node:
+                tag = local(child.tag)
+                text = (child.text or "").strip()
+                if tag == "title":
+                    title = clean_text(strip_html(text))
+                elif tag == "link":
+                    link = text or (child.get("href") or "")
+                elif tag in ("description", "summary", "content", "encoded"):
+                    body_parts.append(strip_html(text))
+            out.append((title, link.strip(), "\n".join(p for p in body_parts if p)))
+        return out
+
+
+class HtmlCardsScraper(BaseScraper):
+    """`html-cards`: any server-rendered listing where event links share a
+    path marker (`/event/`, `/events/`, `/whats-on/`). Cards are regexed for
+    date/time/price; JSON-LD on the listing page wins when present; detail
+    pages are visited (own cap, independent of --no-details) because listing
+    cards often omit the year. params: urls[], href_marker, venue_default,
+    detail_cap (default 25), countries/cities/exclude."""
+    name = "html-cards"
+
+    def scrape(self) -> list[Event]:
+        urls = [str(u) for u in (self.params.get("urls") or []) if u]
+        marker = str(self.params.get("href_marker") or "/event")
+        if not urls:
+            self.status.note = "params.urls required"
+            return []
+        venue_default = clean_text(self.params.get("venue_default") or "")
+        events: list[Event] = []
+        for url in urls[: max(self.max_pages, 4)]:
+            soup = self.engine.soup(url)
+            if soup is None:
+                continue
+            self.status.pages_fetched += 1
+            base = f"{urlparse(url).scheme}://{urlparse(url).netloc}"
+            ld = [event_from_json_ld(n, self.name, url) for n in extract_json_ld_events(soup)]
+            ld = [e for e in ld if e.name and e.date]
+            if ld:
+                events.extend(ld)
+                continue
+            for ev in self.parse_listing_cards(soup, base, marker):
+                if not ev.date:
+                    ev.date, ev.raw_date = span_dates(ev.raw_date or ev.name)
+                events.append(ev)
+        events = dedupe_by_url(events)
+        # Detail enrichment with its own cap: this reader is adopted by the
+        # discovery engine for sites nobody has looked at, so it must not
+        # depend on the scheduled run's --no-details economy.
+        saved = (self.fetch_details, self.detail_cap)
+        self.fetch_details, self.detail_cap = True, int(self.params.get("detail_cap", 25))
+        try:
+            self.enrich_from_detail_pages([e for e in events if not e.date or not e.venue])
+        finally:
+            self.fetch_details, self.detail_cap = saved
+        today = _today_iso()
+        kept: list[Event] = []
+        for ev in events:
+            if not ev.date or ev.date < today:
+                continue
+            ev.venue = ev.venue or venue_default
+            if keep_for_market(ev, self.market, self.params, ev.venue):
+                kept.append(ev)
+        return _dedupe_name_date(kept)
+
+
+def _next_data(html_text: str) -> Optional[dict]:
+    m = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>',
+                  html_text, re.S)
+    if not m:
+        return None
+    try:
+        return json.loads(m.group(1))
+    except ValueError:
+        return None
+
+
+class MeetupScraper(BaseScraper):
+    """`meetup`: the public "find events" page embeds an Apollo cache with the
+    first ~12 in-person events for a location (`us--fl--Miami`,
+    `bb--Bridgetown`, `jm--Kingston`). No login, no GraphQL key. Venues carry
+    city/state/country text, not coordinates, so markets filter by
+    countries/cities. params: location (required), extra_locations[]."""
+    name = "meetup"
+    BASE = "https://www.meetup.com"
+
+    def scrape(self) -> list[Event]:
+        locations = [str(self.params.get("location") or "")] + \
+            [str(x) for x in (self.params.get("extra_locations") or [])]
+        locations = [l for l in locations if l]
+        if not locations:
+            self.status.note = "params.location required (e.g. us--fl--Miami)"
+            return []
+        events: list[Event] = []
+        for loc in locations[: max(self.max_pages, 3)]:
+            for variant in ("&eventType=inPerson", ""):
+                url = f"{self.BASE}/find/?location={loc}&source=EVENTS{variant}"
+                resp = self.engine.get(url, referer=self.BASE)
+                if resp is None:
+                    continue
+                data = _next_data(resp.text)
+                apollo = ((data or {}).get("props") or {}).get("pageProps", {}).get("__APOLLO_STATE__") or {}
+                if not apollo:
+                    continue
+                self.status.pages_fetched += 1
+                found = 0
+                for key, rec in apollo.items():
+                    if not str(key).startswith("Event:") or not isinstance(rec, dict):
+                        continue
+                    ev = self._event(rec, apollo)
+                    if ev is not None:
+                        events.append(ev)
+                        found += 1
+                if found:
+                    break
+        today = _today_iso()
+        kept = []
+        for ev in _dedupe_name_date(events):
+            if ev.date and ev.date >= today and keep_for_market(
+                    ev, self.market, self.params, ev.venue, ev.venue):
+                kept.append(ev)
+        return dedupe_by_url(kept)
+
+    def _event(self, rec: dict, apollo: dict) -> Optional[Event]:
+        if str(rec.get("eventType") or "").upper() == "ONLINE":
+            return None
+        name = clean_text(rec.get("title"))
+        url = str(rec.get("eventUrl") or "")
+        if not name or not url:
+            return None
+        date, label, _ = _iso_local(str(rec.get("dateTime") or ""), self.market.tz)
+        venue = rec.get("venue")
+        if isinstance(venue, dict) and "__ref" in venue:
+            venue = apollo.get(venue["__ref"]) or {}
+        venue_text = ""
+        country_text = ""
+        if isinstance(venue, dict):
+            # Meetup silently falls back to a global listing when it does not
+            # know the location slug (bb--Bridgetown answered with Bogotá), so
+            # the venue country is a hard gate, not a hint.
+            cc = str(venue.get("country") or "").strip().upper()
+            if cc and cc != self.market.country.upper():
+                return None
+            country_text = cc
+            bits = [clean_text(venue.get(k)) for k in ("name", "address", "city")]
+            seen: dict[str, str] = {}
+            for b in bits:
+                if b and b.lower() not in seen:
+                    seen[b.lower()] = b
+            venue_text = ", ".join(seen.values())
+        group = rec.get("group")
+        if isinstance(group, dict) and "__ref" in group:
+            group = apollo.get(group["__ref"]) or {}
+        desc = clean_text(re.sub(r"[*_#\[\]]+", " ", str(rec.get("description") or "")))[:600]
+        fee = rec.get("feeSettings")
+        price = ""
+        if isinstance(fee, dict) and fee.get("amount") is not None:
+            try:
+                price = f"${float(fee['amount']):.2f}"
+            except (TypeError, ValueError):
+                price = ""
+        ev = Event(source_name=self.name, name=name[:200], date=date, raw_date=date,
+                   time=label, venue=venue_text, price=price, source_url=url,
+                   description=desc, country_text=country_text)
+        host = clean_text((group or {}).get("name")) if isinstance(group, dict) else ""
+        ev.category = infer_category(ev.name, f"{host} {desc}")
+        return ev
+
+
+class LumaScraper(BaseScraper):
+    """`luma`: luma.com city discovery pages (`luma.com/<slug>`) embed the
+    upcoming public events with UTC start, timezone, address and coordinates.
+    Tech, community and creator events in ~150 launched cities. params:
+    slug (required; `miami`, `kingston-jm`…), extra_slugs[]."""
+    name = "luma"
+    BASE = "https://luma.com"
+
+    def scrape(self) -> list[Event]:
+        slugs = [str(self.params.get("slug") or "")] + \
+            [str(x) for x in (self.params.get("extra_slugs") or [])]
+        slugs = [s.strip("/") for s in slugs if s]
+        if not slugs:
+            self.status.note = "params.slug required (luma.com/<slug>)"
+            return []
+        events: list[Event] = []
+        for slug in slugs[: max(self.max_pages, 3)]:
+            resp = self.engine.get(f"{self.BASE}/{slug}", referer=self.BASE)
+            if resp is None:
+                continue
+            data = _next_data(resp.text)
+            init = ((data or {}).get("props") or {}).get("pageProps", {}).get("initialData") or {}
+            entries = (init.get("data") or {}).get("events") or []
+            if not entries:
+                continue
+            self.status.pages_fetched += 1
+            for entry in entries:
+                ev = self._event(entry)
+                if ev is not None:
+                    events.append(ev)
+        today = _today_iso()
+        return [e for e in dedupe_by_url(events)
+                if e.date >= today and keep_for_market(e, self.market, self.params, e.venue)]
+
+    def _event(self, entry: dict) -> Optional[Event]:
+        e = entry.get("event") or {}
+        if str(e.get("location_type") or "offline") != "offline":
+            return None
+        name = clean_text(e.get("name"))
+        if not name:
+            return None
+        tz = str(e.get("timezone") or self.market.tz)
+        date, label, _ = _iso_local(str(e.get("start_at") or entry.get("start_at") or ""), tz)
+        if not date:
+            return None
+        _, end_label, _ = _iso_local(str(e.get("end_at") or ""), tz)
+        geo = e.get("geo_address_info") or {}
+        venue = ", ".join(x for x in (clean_text(geo.get("address")),
+                                      clean_text(geo.get("city_state") or geo.get("city")),
+                                      clean_text(geo.get("country"))) if x)
+        coord = e.get("coordinate") or (geo.get("place_coordinate") or {})
+        ticket = entry.get("ticket_info") or {}
+        price = ""
+        if ticket.get("is_free"):
+            price = "Free"
+        elif ticket.get("price") is not None:
+            try:
+                p = ticket["price"]
+                lo = float(p.get("cents", 0)) / 100 if isinstance(p, dict) else float(p)
+                price = f"${lo:.2f}"
+            except (TypeError, ValueError, AttributeError):
+                price = ""
+        hosts = ", ".join(clean_text(f"{h.get('first_name', '')} {h.get('last_name', '')}")
+                          for h in (entry.get("hosts") or []) if isinstance(h, dict))[:120]
+        ev = Event(source_name=self.name, name=name[:200], date=date, raw_date=date,
+                   time=f"{label} - {end_label}" if label and end_label else label,
+                   venue=venue, price=price,
+                   source_url=f"{self.BASE}/{str(e.get('url') or '').lstrip('/')}",
+                   description=(f"Hosted by {hosts}" if hosts else "")[:600],
+                   country_text=clean_text(geo.get("country_code") or geo.get("country")))
+        try:
+            if coord.get("latitude") is not None:
+                ev.lat, ev.lng = float(coord["latitude"]), float(coord["longitude"])
+        except (TypeError, ValueError):
+            pass
+        ev.category = infer_category(ev.name, ev.description)
+        return ev
+
+
+# =============================================================================
 # PIPELINE ORCHESTRATION
 # =============================================================================
 
 SCRAPER_REGISTRY: dict[str, type[BaseScraper]] = {
+    "ics": IcsFeedScraper,
+    "rss": RssFeedScraper,
+    "html-cards": HtmlCardsScraper,
+    "meetup": MeetupScraper,
+    "luma": LumaScraper,
     "ticket-flare": TicketFlareScraper,
     "eticketslive": ETicketsLiveScraper,
     "bahaevents": BahaEventsScraper,
@@ -3302,6 +3795,28 @@ SCRAPER_REGISTRY: dict[str, type[BaseScraper]] = {
     "community": CommunityEventsScraper,
     "manual": ManualEventsScraper,
 }
+
+
+def registry_key(source_key: str) -> str:
+    """'tribe#puregrenada' -> 'tribe' (the reader class); plain keys unchanged."""
+    return source_key.split("#", 1)[0].strip().lower()
+
+
+def build_scraper(key: str, engine: RequestEngine, market: "Optional[Market]",
+                  max_pages: int = 6, fetch_details: bool = True, detail_cap: int = 40,
+                  allow_js: bool = False, params: Optional[dict] = None) -> BaseScraper:
+    """Instantiate one source for a market (also used by discover_sources.py to
+    ground-truth a candidate before adopting it). Params default to the market
+    file's entry for `key`; `_auto` provenance keys are ignored by readers."""
+    cls = SCRAPER_REGISTRY[registry_key(key)]
+    if params is None and market is not None:
+        params = market.sources.get(key)
+    scraper = cls(engine, max_pages=max_pages, fetch_details=fetch_details,
+                  detail_cap=detail_cap, allow_js=allow_js, market=market,
+                  params=params)
+    scraper.name = key
+    scraper.status.name = key
+    return scraper
 
 
 def write_run_status(out_dir: str, market: "Optional[Market]", wanted: list[str],
@@ -3355,7 +3870,10 @@ def run_pipeline(args: argparse.Namespace) -> int:
         wanted = list(market.sources)
     else:
         wanted = list(SCRAPER_REGISTRY)
-    unknown = [s for s in wanted if s not in SCRAPER_REGISTRY]
+    # G5: a market may carry the same reader several times — "tribe#puregrenada",
+    # "ics#nagb" — the part before '#' picks the class, the whole key names the
+    # instance in status.json (so source_health tracks each site separately).
+    unknown = [s for s in wanted if registry_key(s) not in SCRAPER_REGISTRY]
     if unknown:
         log.error("Unknown source(s): %s. Valid: %s",
                   ", ".join(unknown), ", ".join(SCRAPER_REGISTRY))
@@ -3367,14 +3885,12 @@ def run_pipeline(args: argparse.Namespace) -> int:
     all_events: list[Event] = []
     statuses: list[SourceStatus] = []
     for key in wanted:
-        scraper = SCRAPER_REGISTRY[key](
-            engine,
+        scraper = build_scraper(
+            key, engine, market,
             max_pages=args.max_pages,
             fetch_details=not args.no_details,
             detail_cap=args.detail_cap,
             allow_js=allow_js,
-            market=market,
-            params=(market.sources.get(key) if market else None),
         )
         all_events.extend(scraper.run())   # error-isolated internally
         statuses.append(scraper.status)

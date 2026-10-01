@@ -16,6 +16,10 @@ param(
     [switch]$MarketsOnly,   # skip the Nassau workbook run; bs-nassau runs as a market
     [switch]$NoPublish,     # build feeds/ but do not push the feed-data branch
     [switch]$PublishOnly,   # skip every scrape step; push the feeds/ already on disk
+    [switch]$Discover,      # run source discovery now (otherwise Sundays only)
+    [switch]$NoDiscover,    # never run discovery in this invocation
+    [int]$DiscoverLimit = 10,       # weakest markets re-discovered per run
+    [int]$ExpandLimit = 10,         # new countries tried per run
     [switch]$Register       # (re)create the daily scheduled task and exit
 )
 $ErrorActionPreference = "Stop"
@@ -112,6 +116,41 @@ try {
         python "$here\source_health.py" @healthArgs 2>&1 | Add-Content $log
     } catch {
         "source health step skipped: $_" | Add-Content $log
+    }
+
+    # 2c. Source discovery (G5, 2026-10-01): Sundays (or -Discover) the pipeline
+    #     looks for new sources for its weakest markets, opens markets in
+    #     countries that have none, retires _auto sources the health watch
+    #     reported dead, and refreshes the bridges' subreddit / Telegram maps.
+    #     Market-file changes are committed to main so CI runs them too; the
+    #     commit only ever stages discovery's own files. Best effort.
+    if (($Discover -or (Get-Date).DayOfWeek -eq "Sunday") -and -not $NoDiscover) {
+        try {
+            "--- discovery ---" | Add-Content $log
+            python "$here\discover_sources.py" --needy --limit $DiscoverLimit --expand --expand-limit $ExpandLimit `
+                --retire --notify 2>&1 | Add-Content $log
+            $discoveryPaths = @("markets", "sources_watchlist.json", "inbox/bridges")
+            $dirty = (& git status --porcelain -- @discoveryPaths 2>&1 | Out-String).Trim()
+            if ($dirty) {
+                & git add -- @discoveryPaths 2>&1 | Add-Content $log
+                & git -c user.name="0 FOMO discovery" -c user.email="noreply@0fomo.app" commit -q `
+                    -m "discovery: sources/markets adopted on $(Get-Date -Format yyyy-MM-dd) (automated weekly run)" -- @discoveryPaths 2>&1 |
+                    Add-Content $log
+                $pushOut = (& git push origin HEAD:main 2>&1 | Out-String).Trim()
+                if ($pushOut) { $pushOut | Add-Content $log }
+                if ($LASTEXITCODE -ne 0) { "discovery commit not pushed ($LASTEXITCODE)" | Add-Content $log }
+            }
+            # Bridge maps to the node: the bridges re-read them every poll.
+            foreach ($f in @("reddit_markets.json", "telegram_public.json")) {
+                $local = Join-Path $here "inbox\bridges\$f"
+                if (Test-Path $local) {
+                    Get-Content $local -Raw | & ssh -o BatchMode=yes fie-worker "sudo install -d -o zerofomo -g zerofomo -m 0750 /var/lib/zerofomo-inbox/bridges && sudo tee /var/lib/zerofomo-inbox/bridges/$f >/dev/null && sudo chown zerofomo:zerofomo /var/lib/zerofomo-inbox/bridges/$f" 2>&1 |
+                        Add-Content $log
+                }
+            }
+        } catch {
+            "discovery step skipped: $_" | Add-Content $log
+        }
     }
     } # -not $PublishOnly
 

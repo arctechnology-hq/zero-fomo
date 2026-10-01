@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-
+<resources xmlns:tools="http://schemas.android.com/tools">
 <string name="detail_back_content_description">Terug</string>
     
 <string name="detail_share_content_description">Delen</string>
     
-<string name="detail_save_content_description">Opslaan</string>
+<string name="detail_save_content_description">Bewaren</string>
     
-<string name="detail_unsave_content_description">Niet meer opslaan</string>
+<string name="detail_unsave_content_description">Niet bewaren</string>
     
 <string name="detail_directions_button">Route</string>
     
-<string name="detail_location_tba">Locatie volgt</string>
+<string name="detail_location_tba">Locatie nog bekend</string>
     
 <string name="detail_price_free_badge">Gratis entree</string>
     
@@ -37,7 +36,7 @@
     
 <string name="detail_share_event_chooser_title">Evenement delen</string>
     
-<string name="detail_no_app_toast">Geen enkele app op deze telefoon kan dat openen</string>
+<string name="detail_no_app_toast">Geen app op deze telefoon kan dat openen</string>
 
     
     
@@ -61,7 +60,7 @@
     
 <string name="share_for_area_prefix">· voor</string>
     
-<string name="share_default_area">jouw regio</string>
+<string name="share_default_area">jouw omgeving</string>
     
 <string name="share_note_placeholder">Iets toevoegen? Locatie, prijs, datum…</string>
     
@@ -87,7 +86,7 @@
     
 <string name="nav_events_tab">Evenementen</string>
     
-<string name="nav_saved_tab">Opgeslagen</string>
+<string name="nav_saved_tab">Bewaard</string>
 
 <string name="feed_cd_search">Zoeken</string>
     
@@ -101,13 +100,13 @@
     </plurals>
     
 <plurals name="time_freshness_hours">
-        <item quantity="one">%1$du geleden bijgewerkt</item>
-        <item quantity="other">%1$du geleden bijgewerkt</item>
+        <item quantity="one">%1$d u geleden bijgewerkt</item>
+        <item quantity="other">%1$d u geleden bijgewerkt</item>
     </plurals>
     
 <plurals name="time_freshness_days">
-        <item quantity="one">%1$dd geleden bijgewerkt</item>
-        <item quantity="other">%1$dd geleden bijgewerkt</item>
+        <item quantity="one">%1$d d geleden bijgewerkt</item>
+        <item quantity="other">%1$d d geleden bijgewerkt</item>
     </plurals>
     
 <string name="feed_choose_a_place">Kies een plek</string>
@@ -135,19 +134,19 @@
         <item quantity="other">%1$d evenementen</item>
     </plurals>
     
-<string name="feed_tba">Volgt</string>
+<string name="feed_tba">Nog bekend</string>
     
-<string name="feed_cd_unsave">Niet meer opslaan</string>
+<string name="feed_cd_unsave">Niet bewaren</string>
     
-<string name="feed_cd_save">Opslaan</string>
+<string name="feed_cd_save">Bewaren</string>
     
 <string name="feed_empty_no_events_market">Geen evenementen met deze filters</string>
     
 <string name="feed_empty_no_events_location">Nog niets vermeld voor %1$s</string>
     
-<string name="feed_empty_hint_market">Probeer een breder datumbereik of eiland</string>
+<string name="feed_empty_hint_market">Probeer de periode of het eiland te verruimen</string>
     
-<string name="feed_empty_hint_location">0 FOMO groeit stad voor stad. Verbreed het gebied, of kom snel terug.</string>
+<string name="feed_empty_hint_location">0 FOMO groeit stad voor stad. Verruim het gebied of kom snel terug.</string>
     
 <string name="feed_clear_filters">Filters wissen</string>
     
@@ -165,7 +164,7 @@
     
 <string name="feed_locating">Je stad zoeken…</string>
     
-<string name="feed_use_my_location">Gebruik mijn locatie (bij benadering)</string>
+<string name="feed_use_my_location">Mijn locatie gebruiken (bij benadering)</string>
     
 <string name="feed_location_search_placeholder">Stad, eiland, postcode of regio</string>
     
@@ -180,30 +179,45 @@
 <string name="feed_cd_selected">Geselecteerd</string>
     
 <string name="feed_all_countries_count">Alle %1$d landen</string>
+    
+    
+<string name="feed_near_place_radius">Bij %1$s · %2$d km</string>
+    
+<string name="feed_radius_title">Zoekradius</string>
+    
+<string name="feed_within_km">Binnen %1$d km</string>
+    
+<string name="feed_browse_markets">Markten bekijken</string>
+    
+<string name="feed_coming_soon">Binnenkort</string>
+    
+<string name="feed_cd_region_chip">Toon de hele regio</string>
 
     
     
-<string name="feed_status_offline">Offline. Opgeslagen evenementen worden getoond.</string>
+<string name="feed_status_widened">Nog niet veel vermeld voor %1$s — toont %2$s</string>
+    
+<string name="feed_status_offline">Offline. Toont opgeslagen evenementen.</string>
     
 <string name="feed_status_location_off">Locatie staat uit. Kies een stad.</string>
     
 <string name="feed_status_near_place">Je bent bij %1$s</string>
     
-<string name="feed_status_no_fix">Kon je locatie niet bepalen. Kies een stad.</string>
+<string name="feed_status_no_fix">Kon je locatie niet vinden. Kies een stad.</string>
 
     
     
-<string name="saved_title">Opgeslagen 💛</string>
+<string name="saved_title">Bewaard 💛</string>
     
-<string name="saved_empty_title">Nog niets opgeslagen</string>
+<string name="saved_empty_title">Nog niets bewaard</string>
     
 <string name="saved_empty_subtitle">Tik op het hartje bij een evenement om het hier te bewaren — ook offline</string>
     
 <string name="saved_forwarded_header">Doorgestuurd naar 0 FOMO</string>
     
-<string name="saved_forwarded_subtitle">Posts die je deelt worden gecontroleerd voordat ze in de feed komen</string>
+<string name="saved_forwarded_subtitle">Posts die je deelde worden gecontroleerd voordat ze in de feed komen</string>
     
-<string name="saved_section_header">Opgeslagen evenementen</string>
+<string name="saved_section_header">Bewaarde evenementen</string>
     
 <string name="saved_section_subtitle">Tik op het hartje bij een evenement om het hier te bewaren</string>
     
@@ -235,25 +249,25 @@
     </plurals>
     
 <plurals name="time_ago_hours">
-        <item quantity="one">%1$du geleden</item>
-        <item quantity="other">%1$du geleden</item>
+        <item quantity="one">%1$d u geleden</item>
+        <item quantity="other">%1$d u geleden</item>
     </plurals>
     
 <plurals name="time_ago_days">
-        <item quantity="one">%1$dd geleden</item>
-        <item quantity="other">%1$dd geleden</item>
+        <item quantity="one">%1$d d geleden</item>
+        <item quantity="other">%1$d d geleden</item>
     </plurals>
     
-<plurals name="saved_purged_title">
-        <item quantity="one">%1$d opgeslagen evenement staat niet meer vermeld</item>
-        <item quantity="other">%1$d opgeslagen evenementen staan niet meer vermeld</item>
+<plurals name="saved_purged_title" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Een bewaard evenement staat niet meer vermeld</item>
+        <item quantity="other">%1$d bewaarde evenementen staan niet meer vermeld</item>
     </plurals>
     
-<string name="saved_purged_removed_more">%1$s en nog %2$d zijn verwijderd uit Opgeslagen.</string>
+<string name="saved_purged_removed_more">%1$s en %2$d meer zijn verwijderd uit Bewaard.</string>
     
 <plurals name="saved_purged_removed">
-        <item quantity="one">%1$s is verwijderd uit Opgeslagen.</item>
-        <item quantity="other">%1$s zijn verwijderd uit Opgeslagen.</item>
+        <item quantity="one">%1$s is verwijderd uit Bewaard.</item>
+        <item quantity="other">%1$s zijn verwijderd uit Bewaard.</item>
     </plurals>
     
 <string name="saved_cd_dismiss_notice">Melding sluiten</string>
@@ -324,7 +338,7 @@
     
 <string name="reminder_channel_name">Herinneringen aan evenementen</string>
     
-<string name="reminder_channel_description">Herinneringen voor evenementen die je hebt opgeslagen</string>
+<string name="reminder_channel_description">Herinneringen voor evenementen die je hebt bewaard</string>
     
 <string name="reminder_notification_title_format">Morgen: %1$s</string>
     

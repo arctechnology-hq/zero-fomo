@@ -124,6 +124,38 @@ Cruise, 2026-10-03 17:00, Arawak Cay Docks, $65–$80, Nightlife" at confidence
 1.0 → auto-approved → in the Nassau feed. Chat noise ("did you see that
 meme") extracts to zero events.
 
+## 2d. What shipped in slice 4 (G5 self-expanding sources + adaptive scope, 2026-10-01)
+
+```
+discover_sources.py          search (DDG lite / Bing RSS, per-language templates) -> platform slugs ->
+                             site probes (tribe, wp-posts, jsonld, ics, rss, html-cards) -> reader run
+                             -> adopt (>= 3 upcoming, `_auto` provenance) / watchlist / retire;
+                             subreddits + public Telegram channels -> inbox/bridges/*.json;
+                             --expand opens markets for countries without one (gazetteer capital)
+source_templates.json        queries per language, platform URL patterns, blocklist, API coverage
+readers                      ics, rss, html-cards, meetup, luma (new); allevents.in any city;
+                             `reader#site` keys so one market holds several sites per reader
+inbox/telegram_public_bridge.py   public t.me/s/<channel> previews -> /submit, no account needed
+markets/regions.json         21 regions x 252 countries (mirrored to assets/geo/regions.json)
+feeds/markets.json v2        + region, size (empty/small/medium/large), sources, auto, regions[]
+scrape_and_publish.ps1       Sundays (-Discover any day): needy 10 + expand 10 + retire, commit to main,
+                             bridge maps copied to the node
+app v0.10.0                  MarketSelector density pass (neighbours in the region until >= 40 events,
+                             <= 6 feeds, <= 1,500 km); size-aware default radius (25 / 60 / 150 km or
+                             whole country); auto-widen Near -> Country -> Region while < 8 events in
+                             30 days, with a one-line notice, never over a pinned chip; radius menu on
+                             the Near chip; Region chip (Caribbean) incl. Bahamas; location sheet
+                             "Browse markets" by region with counts / Coming soon; manifest cached
+                             offline; countries with live markets first
+```
+
+Small market (Montserrat, 3 events): the app syncs Antigua, Saint Kitts and
+Guadeloupe as well, opens on the whole island, and widens to "Caribbean" when
+the month is thin — with a notice, not an empty screen. Large market (Miami,
+1,900 events): opens on a 25 km circle with a radius menu, the same date and
+category chips, and the browser shows its neighbours by count. Details and
+limits: `SOURCE_DISCOVERY.md`.
+
 ## 3. Source matrix
 
 Legend: **API** = official, keyed, in-terms. **Scrape** = public pages, no login,
@@ -141,8 +173,12 @@ account the community adds to its own group/channel.
 | bahamas.com (Ministry of Tourism), Tourism Today, Nassau Paradise Island, Atlantis, Baha Mar, Tikkets | Scrape / JSON | live (Nassau, 2026-09-25) | Official + venue calendars; bahamas.com and Tikkets also feed Freeport. Survey and rejects: `SOURCES_BS.md`. |
 | TriniJungleJuice API, Caribtix, Ticketpal, Island E-Tickets, TicketsPlus, Beats To Rap On | JSON / Scrape | live (Caribbean, 2026-09-25) | Region-wide platforms; per-market `countries` / `cities` filters or venue coordinates decide which market keeps a record. |
 | `tribe` / `wp-posts` / `jsonld` generic readers | JSON / Scrape | live (2026-09-25) | Config-only sources: point a market file at a WordPress Events Calendar, a WP post type with a date, or any page with schema.org Event nodes (puregrenada, bonaireisland, visitmontserrat, visitantiguabarbuda, visitcaymanislands). `SOURCES_CARIBBEAN.md`. |
-| Resident Advisor, Dice, Skiddle (UK API), Luma public pages | Scrape / API | to build | Nightlife depth in EU/US/UK markets. Skiddle has a free API. |
-| Meetup | API (paid) | deferred | GraphQL API requires a Meetup Pro subscription; scrape public group pages instead. |
+| `ics` / `rss` / `html-cards` generic readers | Scrape | live (2026-10-01) | Public iCalendar feeds, RSS/Atom items with dates (forums, Discourse, WP categories; strict event prefilter), server-rendered card listings. Adopted by `discover_sources.py` on yield. |
+| Luma public city pages | Scrape | live (2026-10-01) | `luma.com/<slug>` embeds upcoming public events with coordinates and timezone; `luma` reader. |
+| Meetup | Scrape (public find page) | live (2026-10-01) | The GraphQL API needs Meetup Pro; the public find-events page embeds ~12 in-person events per location (`meetup` reader, venue-country gate). |
+| Resident Advisor, Dice, Skiddle (UK API), 10times | Scrape / API | parked | RA and 10times answered 403 from this network (2026-10-01); Skiddle has a free API (UK only). |
+| Public Telegram channels | Scrape (t.me/s preview) | live (2026-10-01) | `telegram_public_bridge.py` reads any public channel's web preview, no account; channels found by discovery or `Set-BridgeSecret -Bridge telegram-public -Map`. |
+| Web search discovery | DDG lite + Bing RSS | live (2026-10-01) | Per-language query templates find the sites above for any market; `SOURCE_DISCOVERY.md`. |
 | Instagram | API (hashtag search) | to build | Business account + app review; 30 hashtags / 7 days per account (`#nassauevents`, `#kingstonparty`, …). Posts are images: OCR + LLM extraction. |
 | Facebook events / pages | Scrape + Forward | to build | No public events API. Public event pages parse; everything else arrives by forwarding. |
 | TikTok, X, Threads | Forward | by design | No affordable search API; forwarding covers them. |

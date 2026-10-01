@@ -18,6 +18,16 @@ install -m 0644 "$SRC/instagram_bridge.py" /opt/zerofomo-inbox/instagram_bridge.
 install -m 0644 "$SRC/deploy/zerofomo-instagram.service" /etc/systemd/system/zerofomo-instagram.service
 install -m 0644 "$SRC/reddit_bridge.py" /opt/zerofomo-inbox/reddit_bridge.py
 install -m 0644 "$SRC/deploy/zerofomo-reddit.service" /etc/systemd/system/zerofomo-reddit.service
+install -m 0644 "$SRC/telegram_public_bridge.py" /opt/zerofomo-inbox/telegram_public_bridge.py
+install -m 0644 "$SRC/deploy/zerofomo-telegram-public.service" /etc/systemd/system/zerofomo-telegram-public.service
+# Channel / subreddit maps written by discover_sources.py (G5): the bridges
+# re-read these every poll, so a new community needs no restart.
+install -d -o zerofomo -g zerofomo -m 0750 /var/lib/zerofomo-inbox/bridges
+if [ -d "$SRC/bridges" ]; then
+  for f in "$SRC"/bridges/*.json; do
+    [ -f "$f" ] && install -o zerofomo -g zerofomo -m 0640 "$f" "/var/lib/zerofomo-inbox/bridges/$(basename "$f")"
+  done
+fi
 systemctl daemon-reload
 # Each bridge only starts once its credentials are in /etc/zerofomo-inbox.env.
 stage() {  # $1 unit, $2 required env var, $3 hint
@@ -32,6 +42,14 @@ stage zerofomo-telegram  TELEGRAM_BOT_TOKEN "BotFather token"
 stage zerofomo-discord   DISCORD_BOT_TOKEN  "Discord bot token + DISCORD_CHANNEL_MARKETS=channel_id=market,..."
 stage zerofomo-instagram IG_ACCESS_TOKEN    "long-lived token + IG_USER_ID + IG_HASHTAGS=tag=market,..."
 stage zerofomo-reddit    REDDIT_SUBREDDIT_MARKETS "subreddit=market,... (RSS mode, no creds; REDDIT_CLIENT_ID/SECRET optional for OAuth JSON)"
+# The public-channel bridge needs no credential: it runs whenever a channel map
+# exists (bridges/telegram_public.json from discovery, or TELEGRAM_PUBLIC_CHANNELS).
+if [ -s /var/lib/zerofomo-inbox/bridges/telegram_public.json ] || grep -q "^TELEGRAM_PUBLIC_CHANNELS=.\+" /etc/zerofomo-inbox.env 2>/dev/null; then
+  systemctl enable --now zerofomo-telegram-public >/dev/null 2>&1; systemctl restart zerofomo-telegram-public; echo "zerofomo-telegram-public: running"
+else
+  systemctl disable --now zerofomo-telegram-public >/dev/null 2>&1 || true
+  echo "zerofomo-telegram-public staged; add TELEGRAM_PUBLIC_CHANNELS=channel=market,... or let discover_sources.py write bridges/telegram_public.json"
+fi
 [ -f /etc/zerofomo-inbox.env ] || { echo "INBOX_TOKEN=$(head -c 24 /dev/urandom | base64 | tr -d '/+=' )" > /etc/zerofomo-inbox.env; chmod 0600 /etc/zerofomo-inbox.env; }
 install -m 0644 "$SRC/deploy/zerofomo-inbox.service" /etc/systemd/system/zerofomo-inbox.service
 systemctl daemon-reload

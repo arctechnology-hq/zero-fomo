@@ -36,6 +36,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DateRangePicker
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
@@ -87,7 +89,10 @@ import com.arctechnology.zerofomo.model.Event
 import com.arctechnology.zerofomo.model.EventCategory
 import com.arctechnology.zerofomo.model.Geo
 import com.arctechnology.zerofomo.model.LocationFilter
+import com.arctechnology.zerofomo.model.Market
+import com.arctechnology.zerofomo.model.MarketSize
 import com.arctechnology.zerofomo.model.Place
+import com.arctechnology.zerofomo.model.Region
 import com.arctechnology.zerofomo.ui.theme.AquaDeep
 import com.arctechnology.zerofomo.ui.theme.BrandMark
 import com.arctechnology.zerofomo.ui.theme.LocalCountryAccentsOnDark
@@ -146,6 +151,8 @@ fun FeedScreen(
                 filters = state.filters,
                 userLocation = state.userLocation,
                 nearbyPlaces = state.nearbyPlaces,
+                region = state.region,
+                nearRadiusKm = state.nearRadiusKm,
                 onDateChipClick = { preset ->
                     if (preset is DateRangeFilter.Custom) showDatePicker = true
                     else viewModel.setDateRange(preset)
@@ -153,6 +160,8 @@ fun FeedScreen(
                 onCustomRangeClick = { showDatePicker = true },
                 onIslandSelected = viewModel::setIsland,
                 onLocationFilter = viewModel::setLocationFilter,
+                onRadiusSelected = viewModel::setNearRadius,
+                onRegionScope = viewModel::setRegionScope,
                 onCategoryToggle = viewModel::toggleCategory,
                 onClearKeyword = { viewModel.setKeyword("") },
             )
@@ -205,10 +214,14 @@ fun FeedScreen(
             suggestions = state.placeSuggestions,
             nearbyPlaces = state.nearbyPlaces,
             countries = state.countries,
+            markets = state.markets,
+            regions = state.regions,
+            userRegion = state.region,
             isLocating = state.isLocating,
             onQueryChange = viewModel::queryPlaces,
             onPlaceSelected = { viewModel.selectPlace(it); showLocationSheet = false },
             onCountrySelected = { viewModel.selectCountry(it); showLocationSheet = false },
+            onMarketSelected = { viewModel.selectMarket(it); showLocationSheet = false },
             onFreeText = { viewModel.searchLocation(it); showLocationSheet = false },
             onPermissionResult = { granted ->
                 viewModel.onLocationPermissionResult(granted)
@@ -225,6 +238,7 @@ fun FeedScreen(
 private fun resolveStatusMessage(message: StatusMessage): String = when (message) {
     is StatusMessage.Res -> stringResource(message.resId)
     is StatusMessage.ResArg -> stringResource(message.resId, message.arg)
+    is StatusMessage.ResArgs -> stringResource(message.resId, *message.args.toTypedArray())
 }
 
 /** Branded masthead: the country-tinted mark as the "0" of "0 FOMO", the
@@ -336,10 +350,14 @@ private fun FilterBar(
     filters: FilterState,
     userLocation: UserLocation?,
     nearbyPlaces: List<Place>,
+    region: Region?,
+    nearRadiusKm: Double,
     onDateChipClick: (DateRangeFilter) -> Unit,
     onCustomRangeClick: () -> Unit,
     onIslandSelected: (BahamianIsland?) -> Unit,
     onLocationFilter: (LocationFilter) -> Unit,
+    onRadiusSelected: (Double) -> Unit,
+    onRegionScope: () -> Unit,
     onCategoryToggle: (EventCategory) -> Unit,
     onClearKeyword: () -> Unit,
 ) {
@@ -390,6 +408,9 @@ private fun FilterBar(
                         label = { Text(island.displayName) },
                     )
                 }
+                region?.let { r ->
+                    item { RegionChip(r, filters.location, onRegionScope) }
+                }
             }
         } else {
             LazyRow(
@@ -398,12 +419,43 @@ private fun FilterBar(
             ) {
                 userLocation.place?.let { p ->
                     item {
-                        val near = LocationFilter.Near(p.lat, p.lng, 60.0, p.name)
-                        FilterChip(
-                            selected = (filters.location as? LocationFilter.Near)?.label == p.name,
-                            onClick = { onLocationFilter(near) },
-                            label = { Text(stringResource(R.string.feed_near_place, p.name)) },
-                        )
+                        // "Near <city> · 25 km": selecting it scopes the circle; a
+                        // second tap opens the radius menu (G5 — a metro wants
+                        // 10 km, an island wants the whole thing).
+                        val current = filters.location as? LocationFilter.Near
+                        val selected = current?.label == p.name
+                        var showRadius by remember { mutableStateOf(false) }
+                        Box {
+                            FilterChip(
+                                selected = selected,
+                                onClick = {
+                                    if (selected) showRadius = true
+                                    else onLocationFilter(LocationFilter.Near(p.lat, p.lng, nearRadiusKm, p.name))
+                                },
+                                label = {
+                                    Text(
+                                        if (selected) stringResource(R.string.feed_near_place_radius, p.name,
+                                            (current?.radiusKm ?: nearRadiusKm).toInt())
+                                        else stringResource(R.string.feed_near_place, p.name))
+                                },
+                                trailingIcon = if (selected) ({
+                                    Icon(Icons.Default.ExpandMore, contentDescription = stringResource(R.string.feed_radius_title),
+                                        modifier = Modifier.size(16.dp))
+                                }) else null,
+                            )
+                            DropdownMenu(expanded = showRadius, onDismissRequest = { showRadius = false }) {
+                                FeedViewModel.RADIUS_OPTIONS_KM.forEach { km ->
+                                    DropdownMenuItem(
+                                        text = { Text(stringResource(R.string.feed_within_km, km.toInt())) },
+                                        onClick = { showRadius = false; onRadiusSelected(km) },
+                                        trailingIcon = if (current?.radiusKm == km) ({
+                                            Icon(Icons.Default.LocationOn, contentDescription = stringResource(R.string.feed_cd_selected),
+                                                modifier = Modifier.size(16.dp))
+                                        }) else null,
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
                 item {
@@ -413,11 +465,14 @@ private fun FilterBar(
                         label = { Text(stringResource(R.string.feed_all_country_name, country.name)) },
                     )
                 }
+                region?.let { r ->
+                    item { RegionChip(r, filters.location, onRegionScope) }
+                }
                 items(nearbyPlaces.filter { it.name != userLocation.place?.name }) { place ->
                     FilterChip(
                         selected = (filters.location as? LocationFilter.Near)?.label == place.name,
                         onClick = {
-                            onLocationFilter(LocationFilter.Near(place.lat, place.lng, 60.0, place.name))
+                            onLocationFilter(LocationFilter.Near(place.lat, place.lng, nearRadiusKm, place.name))
                         },
                         label = { Text(place.name) },
                     )
@@ -463,6 +518,17 @@ private fun FilterBar(
             }
         }
     }
+}
+
+/** "Caribbean" / "Pacific Islands": every country in the user's region. */
+@Composable
+private fun RegionChip(region: Region, location: LocationFilter, onRegionScope: () -> Unit) {
+    FilterChip(
+        selected = (location as? LocationFilter.RegionTag)?.regionId == region.id,
+        onClick = onRegionScope,
+        label = { Text(region.name) },
+        leadingIcon = { Text("🌐", fontSize = 14.sp) },
+    )
 }
 
 @Composable
@@ -726,10 +792,14 @@ private fun LocationSheet(
     suggestions: List<Place>,
     nearbyPlaces: List<Place>,
     countries: List<Country>,
+    markets: List<Market>,
+    regions: List<Region>,
+    userRegion: Region?,
     isLocating: Boolean,
     onQueryChange: (String) -> Unit,
     onPlaceSelected: (Place) -> Unit,
     onCountrySelected: (Country) -> Unit,
+    onMarketSelected: (Market) -> Unit,
     onFreeText: (String) -> Unit,
     onPermissionResult: (Boolean) -> Unit,
     onDismiss: () -> Unit,
@@ -741,10 +811,26 @@ private fun LocationSheet(
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission(), onPermissionResult)
     val countryByCode = remember(countries) { countries.associateBy { it.code } }
-    // Home + neighbours first: the launch market and the first-wave rollout.
-    val featured = remember(countries, userLocation) {
-        (listOfNotNull(userLocation?.country?.code) + FEATURED_COUNTRIES)
+    // Home first, then every country with a live market, then the first-wave
+    // rollout list — so a 3-event island is one tap away, not 250 rows down.
+    val featured = remember(countries, userLocation, markets) {
+        (listOfNotNull(userLocation?.country?.code) +
+            markets.filter { it.available }.sortedByDescending { it.eventCount }.map { it.country } +
+            FEATURED_COUNTRIES)
             .distinct().mapNotNull { countryByCode[it] }
+    }
+    // Market browser (G5): regions that have markets, the user's region open.
+    val marketsByRegion = remember(markets) { markets.groupBy { it.region } }
+    val browsableRegions = remember(regions, marketsByRegion) {
+        regions.filter { marketsByRegion[it.id]?.isNotEmpty() == true }
+    }
+    var openRegion by remember(userRegion, browsableRegions) {
+        mutableStateOf(userRegion?.takeIf { it in browsableRegions } ?: browsableRegions.firstOrNull())
+    }
+    // Market names also answer the search box ("montserrat", "st george's").
+    val marketHits = remember(query, markets) {
+        if (query.isBlank()) emptyList()
+        else markets.filter { it.name.contains(query.trim(), ignoreCase = true) }.take(6)
     }
 
     ModalBottomSheet(onDismissRequest = onDismiss) {
@@ -793,6 +879,10 @@ private fun LocationSheet(
                 )
             }
             if (query.isNotBlank()) {
+                items(marketHits, key = { "market-${it.id}" }) { market ->
+                    MarketRow(market, countryByCode[market.country], selected = false,
+                        onClick = { onMarketSelected(market) })
+                }
                 items(suggestions, key = { "${it.countryCode}-${it.name}-${it.lat}" }) { place ->
                     val c = countryByCode[place.countryCode]
                     ListItem(
@@ -803,7 +893,7 @@ private fun LocationSheet(
                         modifier = Modifier.clickable { onPlaceSelected(place) },
                     )
                 }
-                if (suggestions.isEmpty()) {
+                if (suggestions.isEmpty() && marketHits.isEmpty()) {
                     item {
                         TextButton(onClick = { onFreeText(query) }) {
                             Text(stringResource(R.string.feed_search_online, query))
@@ -811,6 +901,35 @@ private fun LocationSheet(
                     }
                 }
             } else {
+                if (browsableRegions.isNotEmpty()) {
+                    item {
+                        Text(stringResource(R.string.feed_browse_markets), style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.outline)
+                    }
+                    item {
+                        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            items(browsableRegions, key = { "region-${it.id}" }) { r ->
+                                FilterChip(
+                                    selected = openRegion?.id == r.id,
+                                    onClick = { openRegion = r },
+                                    label = { Text(r.name) },
+                                )
+                            }
+                        }
+                    }
+                    val shown = openRegion?.let { marketsByRegion[it.id] }.orEmpty()
+                        .sortedWith(compareByDescending<Market> { it.available && it.size != MarketSize.EMPTY }
+                            .thenBy { it.name })
+                    items(shown, key = { "market-${it.id}" }) { market ->
+                        MarketRow(
+                            market, countryByCode[market.country],
+                            selected = userLocation?.place?.name == market.cityName &&
+                                userLocation.country.code == market.country,
+                            onClick = { onMarketSelected(market) },
+                        )
+                    }
+                    item { HorizontalDivider() }
+                }
                 if (nearbyPlaces.isNotEmpty() && userLocation != null) {
                     item {
                         Text(stringResource(R.string.feed_popular_in, userLocation.country.name),
@@ -858,6 +977,28 @@ private fun LocationSheet(
             }
         }
     }
+}
+
+/** One market in the browser: flag, name, and how much it has listed —
+ *  "Coming soon" for a market whose feed has nothing yet, so a small island
+ *  is visible (and tappable) before its sources fill in. */
+@Composable
+private fun MarketRow(market: Market, country: Country?, selected: Boolean, onClick: () -> Unit) {
+    val live = market.available && market.size != MarketSize.EMPTY
+    ListItem(
+        headlineContent = { Text(market.name) },
+        supportingContent = {
+            Text(if (live) pluralStringResource(R.plurals.feed_event_count, market.eventCount, market.eventCount)
+            else stringResource(R.string.feed_coming_soon))
+        },
+        leadingContent = { Text(country?.flagEmoji ?: "", fontSize = 20.sp) },
+        trailingContent = {
+            if (selected) Icon(Icons.Default.LocationOn, contentDescription = stringResource(R.string.feed_cd_selected),
+                tint = MaterialTheme.colorScheme.primary)
+        },
+        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+        modifier = Modifier.clickable(onClick = onClick),
+    )
 }
 
 /** Launch market plus the first-wave rollout (docs/ROADMAP.md Phase 4). */

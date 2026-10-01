@@ -225,41 +225,79 @@ class Searcher:
         self.dry_run = dry_run
         self.calls = 0
 
-    def search(self, query: str) -> list[tuple[str, str]]:
+    def search(self, query: str, must_mention: list[str] | None = None) -> list[tuple[str, str]]:
+        """Results whose title or URL mentions one of `must_mention` (the city /
+        country words). Bing's RSS endpoint answers off-topic for small places
+        (hurricane shutters for 'Bridgetown Barbados events', typing tutors for
+        Havana) and DuckDuckGo lite rate-limits with HTTP 202, so results are
+        relevance-filtered and the engines are tried in order with a back-off."""
         key = query.strip().lower()
         hit = self.cache.get(key)
         if hit and days_since(hit.get("at")) < SEARCH_TTL_DAYS:
-            return [tuple(r) for r in hit.get("results") or []]
-        results: list[tuple[str, str]] = []
-        for eng in self.order:
-            try:
-                results = self._ddg(query) if eng == "ddg" else self._bing(query)
-            except Exception as exc:  # noqa: BLE001
-                log.debug("search %s failed: %s", eng, exc)
-                results = []
-            if results:
-                break
-        self.calls += 1
-        time.sleep(2.0 + random.random() * 2.0)
-        self.cache[key] = {"at": utcnow(), "results": results[:MAX_SEARCH_RESULTS]}
-        save_json(SEARCH_CACHE, self.cache, self.dry_run)
+            results = [tuple(r) for r in hit.get("results") or []]
+        else:
+            results = []
+            for eng in self.order:
+                try:
+                    results = {"ddg": self._ddg, "ddg-html": self._ddg_html, "bing": self._bing}[eng](query)
+                except Exception as exc:  # noqa: BLE001
+                    log.debug("search %s failed: %s", eng, exc)
+                    results = []
+                if results:
+                    break
+            self.calls += 1
+            time.sleep(3.0 + random.random() * 3.0)
+            self.cache[key] = {"at": utcnow(), "results": results[:MAX_SEARCH_RESULTS * 2]}
+            save_json(SEARCH_CACHE, self.cache, self.dry_run)
+        words = [w.lower() for w in (must_mention or []) if len(w) > 2]
+        if words:
+            results = [(u, t) for u, t in results
+                       if any(w in (t or "").lower() or w.replace(" ", "") in u.lower().replace("-", "")
+                              for w in words)]
         return results[:MAX_SEARCH_RESULTS]
 
+    def _ddg_fetch(self, url: str) -> Optional[str]:
+        """DDG answers 202 (challenge) when hurried; one pause and retry."""
+        for attempt in range(2):
+            resp = self.engine.get(url, quiet=True)
+            if resp is None:
+                return None
+            if resp.status_code == 202 or "anomaly" in resp.text[:3000].lower():
+                if attempt == 0:
+                    time.sleep(25 + random.random() * 10)
+                    continue
+                return None
+            return resp.text
+        return None
+
     def _ddg(self, query: str) -> list[tuple[str, str]]:
-        resp = self.engine.get("https://lite.duckduckgo.com/lite/?q=" + quote_plus(query), quiet=True)
-        if resp is None:
+        text = self._ddg_fetch("https://lite.duckduckgo.com/lite/?q=" + quote_plus(query))
+        if not text:
             return []
         out = []
         for href, title in re.findall(r'<a rel="nofollow" href="([^"]+)" class=\'result-link\'>(.*?)</a>',
-                                      resp.text, re.S):
-            href = unescape(href)
-            if "uddg=" in href:
-                href = unquote(parse_qs(urlparse(href).query).get("uddg", [""])[0])
-            if href.startswith("//"):
-                href = "https:" + href
-            if href.startswith("http"):
-                out.append((href, re.sub(r"<[^>]+>", "", unescape(title)).strip()))
-        return out
+                                      text, re.S):
+            out.append((self._ddg_href(href), re.sub(r"<[^>]+>", "", unescape(title)).strip()))
+        return [(h, t) for h, t in out if h.startswith("http")]
+
+    def _ddg_html(self, query: str) -> list[tuple[str, str]]:
+        text = self._ddg_fetch("https://html.duckduckgo.com/html/?q=" + quote_plus(query))
+        if not text:
+            return []
+        out = []
+        for href, title in re.findall(r'<a rel="nofollow" class="result__a" href="([^"]+)"[^>]*>(.*?)</a>',
+                                      text, re.S):
+            out.append((self._ddg_href(href), re.sub(r"<[^>]+>", "", unescape(title)).strip()))
+        return [(h, t) for h, t in out if h.startswith("http")]
+
+    @staticmethod
+    def _ddg_href(href: str) -> str:
+        href = unescape(href)
+        if "uddg=" in href:
+            href = unquote(parse_qs(urlparse(href).query).get("uddg", [""])[0])
+        if href.startswith("//"):
+            href = "https:" + href
+        return href
 
     def _bing(self, query: str) -> list[tuple[str, str]]:
         resp = self.engine.get("https://www.bing.com/search?format=rss&q=" + quote_plus(query), quiet=True)
@@ -284,11 +322,13 @@ class Prober:
     """Turns a URL into reader configs, then runs the readers to count events."""
 
     def __init__(self, engine: S.RequestEngine, market: S.Market,
-                 aliases: list[str], postal: Optional[re.Pattern]) -> None:
+                 aliases: list[str], postal: Optional[re.Pattern],
+                 other_countries: list[tuple[str, str]]) -> None:
         self.engine = engine
         self.market = market
         self.aliases = aliases
         self.postal = postal
+        self.other_countries = other_countries     # (cc, lower-case name) of every other country
         self.fetched = 0
         self.rejected_country: list[str] = []
 
@@ -297,20 +337,41 @@ class Prober:
         return self.engine.soup(url)
 
     def in_country(self, url: str, page_text: str) -> bool:
-        """The site must show it belongs to the market's country: a ccTLD, a
-        country word, or (US/CA/GB/AU, where city names repeat) a postal code
-        pattern plus the city name. 'hamiltonevents.ca' for Bermuda fails here."""
+        """The site must show it belongs to the market's country: a ccTLD, or
+        the country named at least as often as any other country (a Bahamas
+        lodge site that mentions its Turks & Caicos branch once is not a
+        Turks & Caicos source), or (US/CA/GB/AU, where city names repeat) a
+        postal code pattern plus the city name. 'hamiltonevents.ca' for
+        Bermuda fails here."""
         host = netloc_short(url)
         cc = self.market.country.lower()
         if host.endswith("." + cc):
             return True
         text = page_text.lower()
-        if any(a in text for a in self.aliases):
-            return True
+        ours = sum(text.count(a) for a in self.aliases)
+        if ours:
+            rival = max((text.count(n) for c, n in self.other_countries if c != self.market.country.upper()),
+                        default=0)
+            if ours >= rival:
+                return True
         if self.postal is not None and self.postal.search(page_text) \
                 and self.market.name.split(",")[0].strip().lower() in text:
             return True
         return False
+
+    def foreign_share(self, events) -> float:
+        """Fraction of events whose venue / stated country names another
+        country and not ours — the per-event twin of the site gate."""
+        if not events:
+            return 0.0
+        foreign = 0
+        for ev in events:
+            blob = f"{ev.venue} {ev.country_text}".lower()
+            if any(a in blob for a in self.aliases):
+                continue
+            if any(n in blob for c, n in self.other_countries if c != self.market.country.upper()):
+                foreign += 1
+        return foreign / len(events)
 
     def site_candidates(self, entry_url: str) -> list[tuple[str, dict, str]]:
         """(reader_key, params, note) for one site. At most ~6 requests."""
@@ -419,7 +480,8 @@ class Prober:
         return marker if n >= 5 else ""
 
     def evaluate(self, key: str, params: dict) -> tuple[int, int, str]:
-        """Run the reader. Returns (kept_upcoming, raw_found, note)."""
+        """Run the reader. Returns (kept_upcoming, raw_found, note). A result
+        whose events mostly name another country counts as zero."""
         clean = {k: v for k, v in params.items() if not k.startswith("_")}
         try:
             scraper = S.build_scraper(key, self.engine, self.market, max_pages=2,
@@ -430,6 +492,9 @@ class Prober:
         self.fetched += scraper.status.pages_fetched
         horizon = (datetime.now() + timedelta(days=PROBE_WINDOW_DAYS)).strftime("%Y-%m-%d")
         kept = [e for e in events if e.date and today_iso() <= e.date <= horizon]
+        share = self.foreign_share(kept)
+        if kept and share > 0.5:
+            return 0, len(events), f"{len(kept)} upcoming but {share:.0%} name another country"
         return len(kept), len(events), scraper.status.note
 
 
@@ -504,6 +569,9 @@ class Discovery:
         self.reddit_map = load_json(REDDIT_MAP, {})
         self.telegram_map = load_json(TELEGRAM_MAP, {})
         self.changes: list[str] = []      # human lines for the summary / ntfy
+        self.other_countries = [(cc, str(row.get("name") or "").lower())
+                                for cc, row in self.geo.countries.items()
+                                if len(str(row.get("name") or "")) > 3]
 
     # ---- market selection ------------------------------------------------
 
@@ -554,16 +622,20 @@ class Discovery:
         """Mutates md['sources'] (the market file dict). Returns a summary."""
         city = market.name.split(",")[0].strip()
         existing = md.setdefault("sources", {})
-        aliases = self.t.country_aliases(market.country, self.geo.country_name(market.country))
-        prober = Prober(self.engine, market, aliases, self.t.postal_pattern(market.country))
+        country = self.geo.country_name(market.country)
+        aliases = self.t.country_aliases(market.country, country)
+        prober = Prober(self.engine, market, aliases, self.t.postal_pattern(market.country),
+                        self.other_countries)
         summary = {"market": market.id, "adopted": [], "watch": [], "probed": 0, "searches": 0}
         log.info("=== %s (%s) ===", market.id, market.name)
 
-        # 1. search the web in the market's language(s)
+        # 1. search the web in the market's language(s); a result must at
+        #    least mention the city or the country to be looked at.
+        mention = [city] + aliases
         results: list[tuple[str, str, str]] = []   # (url, title, query)
         for q in self.t.queries(market.country):
             query = self.fill(q, market, city)
-            for url, title in self.searcher.search(query):
+            for url, title in self.searcher.search(query, must_mention=mention):
                 results.append((url, title, query))
             summary["searches"] += 1
 
@@ -632,7 +704,17 @@ class Discovery:
 
         self.state["markets"][market.id] = {"last": utcnow(), "adopted": summary["adopted"],
                                             "watch": summary["watch"], "probed": summary["probed"]}
+        self.save_side_files()
         return summary
+
+    def save_side_files(self) -> None:
+        """Watchlist + bridge maps after every market, so a crash or a kill
+        later in the run never loses what was already found."""
+        save_json(WATCHLIST, self.watch, self.args.dry_run)
+        if self.reddit_map:
+            save_json(REDDIT_MAP, dict(sorted(self.reddit_map.items())), self.args.dry_run)
+        if self.telegram_map:
+            save_json(TELEGRAM_MAP, dict(sorted(self.telegram_map.items())), self.args.dry_run)
 
     def decide(self, md: dict, market: S.Market, key: str, params: dict, kept: int,
                via: str, summary: dict, url: str) -> None:
@@ -676,7 +758,7 @@ class Discovery:
                 subs.append(name)
         telegram: list[str] = []
         for q in self.t.social_queries():
-            for url, _ in self.searcher.search(self.fill(q, market, city)):
+            for url, _ in self.searcher.search(self.fill(q, market, city)):   # no mention filter: t.me titles are channel names
                 m = re.search(r"reddit\.com/r/([A-Za-z0-9_]+)", url)
                 if m and m.group(1).lower() not in [s.lower() for s in subs]:
                     subs.append(m.group(1))
@@ -806,10 +888,7 @@ class Discovery:
             save_json(STATE_PATH, self.state, self.args.dry_run)
         if self.args.expand:
             self.expand()
-        save_json(WATCHLIST, self.watch, self.args.dry_run)
-        if self.reddit_map or self.telegram_map:
-            save_json(REDDIT_MAP, dict(sorted(self.reddit_map.items())), self.args.dry_run)
-            save_json(TELEGRAM_MAP, dict(sorted(self.telegram_map.items())), self.args.dry_run)
+        self.save_side_files()
         save_json(STATE_PATH, self.state, self.args.dry_run)
         print("\n".join(self.changes) if self.changes else "discovery: no changes")
         if self.args.notify and self.changes:

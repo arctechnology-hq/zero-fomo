@@ -21,6 +21,21 @@
         "turks and caicos"
       ]
     },
-    "community": {}
+    "community": {},
+    "allevents.in": {
+      "city": "providenciales",
+      "countries": [
+        "turks and caicos islands",
+        "turks",
+        "caicos islands",
+        "caicos"
+      ],
+      "_auto": {
+        "adopted": "2026-10-01",
+        "via": "guess",
+        "probe_events": 17,
+        "from": ""
+      }
+    }
   }
 }

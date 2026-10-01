@@ -30,6 +30,21 @@
         "st lucia"
       ]
     },
-    "community": {}
+    "community": {},
+    "allevents.in": {
+      "city": "castries",
+      "countries": [
+        "saint lucia",
+        "st. lucia",
+        "st lucia",
+        "sainte-lucie"
+      ],
+      "_auto": {
+        "adopted": "2026-10-01",
+        "via": "guess",
+        "probe_events": 9,
+        "from": ""
+      }
+    }
   }
 }

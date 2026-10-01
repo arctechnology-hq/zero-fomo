@@ -1,7 +1,7 @@
 {
   "_doc": "discover_sources.py input: how to find candidate sources for a market. {city} {country} {city_slug} {cc} {cc_lower} {City} {country_nospace} are filled per market. Search engines are tried in order; a query's results are cached 30 days in feeds/health/search_cache.json.",
   "search": {
-    "engines": ["ddg", "bing"],
+    "engines": ["ddg", "ddg-html", "bing"],
     "_queries_doc": "Every city query carries the country: 'Hamilton events' is Ontario, 'Hamilton Bermuda events' is the market (2026-10-01 lesson).",
     "queries": {
       "en": [

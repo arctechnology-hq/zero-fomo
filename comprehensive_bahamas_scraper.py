@@ -186,9 +186,21 @@ def load_market(market_id: str) -> Market:
 
 
 def list_markets() -> list[str]:
+    """Market ids = markets/<id>.json files that carry an "id" (regions.json
+    and any other lookup table in the folder are not markets)."""
     if not os.path.isdir(MARKETS_DIR):
         return []
-    return sorted(f[:-5] for f in os.listdir(MARKETS_DIR) if f.endswith(".json"))
+    ids = []
+    for f in sorted(os.listdir(MARKETS_DIR)):
+        if not f.endswith(".json") or f == "regions.json":
+            continue
+        try:
+            with open(os.path.join(MARKETS_DIR, f), encoding="utf-8") as fh:
+                if "id" in json.load(fh):
+                    ids.append(f[:-5])
+        except (OSError, ValueError):
+            continue
+    return ids
 
 # Keywords that positively identify New Providence
 NEW_PROVIDENCE_KEYWORDS = [

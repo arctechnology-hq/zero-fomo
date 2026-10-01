@@ -16,6 +16,20 @@
         "bermuda"
       ]
     },
-    "community": {}
+    "community": {},
+    "html-cards#gpass": {
+      "urls": [
+        "https://www.gpass.bm/"
+      ],
+      "href_marker": "/events/",
+      "venue_default": "Hamilton, Bermuda",
+      "detail_cap": 20,
+      "_auto": {
+        "adopted": "2026-10-01",
+        "via": "search:Bermuda events tickets",
+        "probe_events": 9,
+        "from": "https://www.gpass.bm/"
+      }
+    }
   }
 }

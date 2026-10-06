@@ -2097,7 +2097,8 @@ def keep_for_market(ev: Event, market: Market, params: dict,
     """Multi-country sources: keep a record for this market when its
     coordinates fall inside the market radius (x1.5 slack), or — without
     coordinates — when the market file's `countries` / `cities` substrings
-    match the record's country / city / venue text. No filters = keep."""
+    match the record's country / city / venue text; `exclude_title` is a
+    regex that drops records by name. No filters = keep."""
     if ev.lat is not None and ev.lng is not None and market is not None:
         try:
             return _haversine_km(float(ev.lat), float(ev.lng),
@@ -2117,6 +2118,9 @@ def keep_for_market(ev: Event, market: Market, params: dict,
         return False
     if exclude and any(c in blob for c in exclude):
         return False        # "Trinidad and Tobago" must not drag Tobago into Port of Spain
+    title_rx = params.get("exclude_title")
+    if title_rx and re.search(str(title_rx), ev.name or "", re.I):
+        return False        # an organisation's internal calendar (Rotary committee meetings) is not a listing
     return True
 
 
@@ -2211,6 +2215,13 @@ class TribeEventsScraper(BaseScraper):
 # -----------------------------------------------------------------------------
 
 class WpPostsScraper(BaseScraper):
+    """`wp-posts`: any WordPress event post type over the core REST API.
+    Dates come from exposed meta (`date_keys`), else the title / body. Modern
+    Events Calendar (`mec-events`, bahtcianglican.org) keeps its dates in
+    hidden meta and renders them only on the single page, so those posts get
+    a detail visit (own cap `mec_detail_cap`, default 30, newest posts first,
+    posts older than `mec_max_post_age_days` = 400 skipped) that reads
+    `.mec-start-date-label` / `.mec-single-event-time` / `-location`."""
     name = "wp-posts"
     DATE_KEYS = ("_piecal_start_date", "_EventStartDate", "event_start_date",
                  "start_date", "event_date", "date", "_event_start")
@@ -2247,8 +2258,48 @@ class WpPostsScraper(BaseScraper):
                     events.append(self._event(r, date_keys, venue_keys))
             if len(records) < 100:
                 break
+        self._enrich_mec(events)
         return [e for e in _dedupe_name_date(events)
                 if keep_for_market(e, self.market, self.params, ev_country(e, self.params))]
+
+    def _enrich_mec(self, events: list[Event]) -> None:
+        undated = [e for e in events if e.source_url and not e.date and getattr(e, "_mec", False)]
+        if not undated:
+            return
+        cap = int(self.params.get("mec_detail_cap", 30))
+        max_age = int(self.params.get("mec_max_post_age_days", 400))
+        cutoff = (datetime.now() - timedelta(days=max_age)).strftime("%Y-%m-%d")
+        visited = 0
+        for ev in undated:
+            if visited >= cap:
+                break
+            if getattr(ev, "_posted", "") and ev._posted < cutoff:
+                continue
+            soup = self.engine.soup(ev.source_url)
+            visited += 1
+            if soup is None:
+                continue
+            self.status.pages_fetched += 1
+            label = soup.select_one(".mec-single-event-date .mec-start-date-label, .mec-start-date-label")
+            if label:
+                ev.date, ev.raw_date = parse_date_iso(clean_text(label.get_text(" ")))
+            if not ev.date:
+                ld = extract_json_ld_events(soup)
+                if ld:
+                    ev.date, ev.raw_date = parse_date_iso(str(ld[0].get("startDate") or ""))
+            tnode = soup.select_one(".mec-single-event-time .mec-events-abbr, .mec-single-event-time")
+            if tnode and not ev.time:
+                ev.time = parse_time(clean_text(tnode.get_text(" ")))
+            lnode = soup.select_one(".mec-single-event-location dd, .mec-single-event-location")
+            if lnode:
+                loc = clean_text(lnode.get_text(" "))
+                loc = re.sub(r"^(location|venue)\s*", "", loc, flags=re.I).strip()
+                if loc and (not ev.venue or ev.venue == clean_text(self.params.get("venue_default") or "")):
+                    ev.venue = loc[:160]
+            if not ev.description:
+                meta = soup.find("meta", attrs={"name": "description"})
+                if meta and meta.get("content"):
+                    ev.description = clean_text(meta["content"])[:600]
 
     def _event(self, r: dict, date_keys: list[str], venue_keys: list[str]) -> Event:
         title = r.get("title")
@@ -2285,6 +2336,9 @@ class WpPostsScraper(BaseScraper):
         ev.source_url = clean_text(r.get("link") or "")
         ev.description = body[:600]
         ev.category = infer_category(ev.name, ev.description)
+        if "mec_category" in r or str(r.get("type") or "").startswith("mec-"):
+            ev._mec = True                                   # noqa: SLF001 (reader-private marker)
+            ev._posted = str(r.get("date") or "")[:10]
         return ev
 
 
@@ -3890,6 +3944,7 @@ def run_pipeline(args: argparse.Namespace) -> int:
     # Market mode: markets/<id>.json chooses sources, geo centre and feed dir.
     # No --market = the legacy Nassau run with its workbook outputs at the root.
     market: Optional[Market] = None
+    root_run = not args.market          # workbook outputs at the repo root
     if args.market:
         try:
             market = load_market(args.market)
@@ -3905,6 +3960,16 @@ def run_pipeline(args: argparse.Namespace) -> int:
         out_dir = here
         output_basename = args.output
         min_events = args.min_events if args.min_events is not None else 15
+        # The legacy root run (workbook + New_Providence_Events.json, what the
+        # daily task runs first) takes its source list and params from
+        # markets/bs-nassau.json when that file exists, so hand-written and
+        # discovered Nassau sources (jsonld#stayhappening, tribe#rotarybahamas,
+        # ...) reach the workbook too; DEFAULT_MARKET is only the fallback.
+        try:
+            market = load_market(DEFAULT_MARKET.id)
+            log.info("Root run: sources from markets/%s.json", market.id)
+        except (OSError, KeyError, ValueError):
+            market = None
 
     if args.sources:
         wanted = [s.strip().lower() for s in args.sources.split(",")]
@@ -3970,7 +4035,7 @@ def run_pipeline(args: argparse.Namespace) -> int:
         {"Metric": "Market", "Value": FEED_MARKET},
     ])
 
-    Exporter(out_dir, output_basename, workbook=market is None).export(
+    Exporter(out_dir, output_basename, workbook=root_run).export(
         master, review, per_source, summary)
     write_run_status(out_dir, market, wanted, statuses, len(all_events),
                      len(clusters), len(master), len(review))

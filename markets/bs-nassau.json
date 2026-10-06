@@ -28,7 +28,58 @@
     "atlantis": {},
     "bahamar": {},
     "tikkets": {},
+    "jsonld#stayhappening": {
+      "urls": [
+        "https://stayhappening.com/nassau",
+        "https://happeningnext.com/nassau"
+      ],
+      "venue_default": "Nassau, New Providence",
+      "countries": [
+        "bahamas",
+        "nassau",
+        "new providence",
+        "paradise island"
+      ],
+      "_note": "Facebook-event mirrors (same backend): church fairs, college fairs, community runs, promoter parties. One page of 40 each; ?page= is ignored. Added 2026-10-06."
+    },
+    "tribe#rotarybahamas": {
+      "base": "https://rotarybahamas.org",
+      "exclude_title": "\\b(meeting|committee|board|submission|due|newsletter|assembly|fellowship friday|district governor|induction|installation|anniversary|birthday|rotary day|rotary\\) year)\\b|^dg\\b",
+      "_note": "Rotary Clubs of The Bahamas district calendar (The Events Calendar REST): galas, fun runs, health expos, pub crawls. The title filter drops the clubs' internal meetings (90 of 100 records). Added 2026-10-06."
+    },
+    "tribe#cancersociety": {
+      "base": "https://cancersocietybahamas.org",
+      "_note": "Cancer Society of The Bahamas fundraisers (Events Calendar REST, 3 upcoming at adoption). Added 2026-10-06."
+    },
     "manual": {},
     "community": {}
+  },
+  "discovery": {
+    "_doc": "Seeds: sites discovery probes every run alongside its search hits (churches, schools, charities, museums, radio). A seed is adopted only when its reader yields >= adopt_min_events upcoming; the rest stay here so a site that starts publishing is picked up automatically.",
+    "seeds": [
+      "https://bahtcianglican.org/events/",
+      "https://archdioceseofnassau.org/events",
+      "https://stjosephbahamas.com/events",
+      "https://stfrancisxaviercathedral.org/",
+      "https://www.bfmionline.com/",
+      "https://evangelistictemple.org/",
+      "https://bahamasmethodist.org/",
+      "https://southbahamasconference.org/calendarofevents.php",
+      "https://www.ub.edu.bs/",
+      "https://bnt.bs/",
+      "https://nagb.org.bs/",
+      "https://bahamashistoricalsociety.com/",
+      "https://www.thebahamaschamber.com/",
+      "https://www.bahamashumane.org/",
+      "https://handsforhunger.org/",
+      "https://lyfordcayfoundations.org/",
+      "https://www.jabahamas.org/",
+      "https://rcsen.org/event/",
+      "https://islandfmonline.com/",
+      "https://www.guardiantalkradio.com/",
+      "https://ewnews.com/",
+      "https://www.thenassauguardian.com/religion/",
+      "https://thingstodoinnassau.com/events/"
+    ]
   }
 }

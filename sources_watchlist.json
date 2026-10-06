@@ -200,6 +200,21 @@
         "pruned": "2026-10-01",
         "probe_events": 0
       }
+    },
+    {
+      "name": "Anglican Diocese of The Bahamas (Modern Events Calendar) - 2026 church fairs",
+      "kind": "json",
+      "url": "https://bahtcianglican.org/wp-json/wp/v2/mec-events?per_page=5&after=2026-06-01T00:00:00",
+      "path": "",
+      "adopt": "bs-nassau: wp-posts#bahtcianglican base=https://bahtcianglican.org type=mec-events (MEC dates read from the single pages; 2025 had Epiphany / Holy Spirit / St. Margaret's fairs + Festival of Lights, nothing dated 2026 as of 2026-10-06)"
+    },
+    {
+      "name": "Archdiocese of Nassau (eCatholic iCal)",
+      "kind": "html",
+      "url": "https://archdioceseofnassau.org/icalendar.ics",
+      "marker": "BEGIN:VEVENT",
+      "min": 1,
+      "adopt": "bs-nassau: ics urls=[https://archdioceseofnassau.org/icalendar.ics] (feed exists, empty on 2026-10-06)"
     }
   ]
 }

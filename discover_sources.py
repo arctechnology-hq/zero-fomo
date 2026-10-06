@@ -65,6 +65,7 @@ REDISCOVER_DAYS = 21          # a market is "due" again after this
 COUNTRY_RETRY_DAYS = 45       # a country that yielded nothing is retried after this
 PROBE_WINDOW_DAYS = 365
 MAX_SITES_PER_MARKET = 14
+MAX_SEEDS_PER_MARKET = 40     # hand-listed candidate sites (markets/<id>.json -> discovery.seeds)
 MAX_SEARCH_RESULTS = 12
 REDDIT_GAP = 20.0             # 8-12 s still drew 429s (2026-09-16, 2026-10-01)
 GENERIC_READERS = ("tribe", "wp-posts", "jsonld", "ics", "rss", "html-cards")
@@ -150,11 +151,20 @@ class Templates:
         self.watch_min = int(self.d.get("watch_min_events") or 1)
 
     def queries(self, cc: str) -> list[str]:
-        q = list((self.d.get("search") or {}).get("queries", {}).get("en") or [])
+        """General + community query banks for the market's language(s). The
+        community bank (church festivals, school fairs, fundraisers, gospel
+        concerts) exists because those organisers never list on ticketing
+        platforms: their pages only surface when asked for by name."""
+        search = self.d.get("search") or {}
+        langs = ["en"]
         lang = self.langs.get(cc.upper())
-        if lang:
-            q += (self.d.get("search") or {}).get("queries", {}).get(lang) or []
-        return q
+        if lang and lang != "en":
+            langs.append(lang)
+        q: list[str] = []
+        for bank in ("queries", "queries_community"):
+            for lg in langs:
+                q += (search.get(bank) or {}).get(lg) or []
+        return list(dict.fromkeys(q))
 
     def social_queries(self) -> list[str]:
         return list((self.d.get("search") or {}).get("social") or [])
@@ -318,6 +328,18 @@ class Searcher:
 
 # ----------------------------------------------------------------- probing
 
+def _word_count(text: str, phrase: str) -> int:
+    return len(re.findall(r"(?<![a-z])" + re.escape(phrase) + r"(?![a-z])", text))
+
+
+def visible_text(soup) -> str:
+    """Page text without script / style bodies (font names and JS strings are
+    not evidence of anything)."""
+    for t in soup(["script", "style", "noscript", "template"]):
+        t.decompose()
+    return soup.get_text(" ")
+
+
 class Prober:
     """Turns a URL into reader configs, then runs the readers to count events."""
 
@@ -347,11 +369,19 @@ class Prober:
         cc = self.market.country.lower()
         if host.endswith("." + cc):
             return True
+        # The country in the hostname (stjosephbahamas.com, visitjamaica.com)
+        # settles it: a parish page that names Greece twice for a pilgrimage
+        # and its own country once is still a Bahamas source.
+        if any(a.replace(" ", "").replace(".", "") in host for a in self.aliases if len(a) >= 5):
+            return True
         text = page_text.lower()
-        ours = sum(text.count(a) for a in self.aliases)
+        # Whole-word counts only: "Montserrat" is a web font and "Oman" sits
+        # inside "woman", which made thebahamaschamber.com (11 x "bahamas")
+        # lose to its stylesheet (80 x "montserrat") on 2026-10-06.
+        ours = sum(_word_count(text, a) for a in self.aliases)
         if ours:
-            rival = max((text.count(n) for c, n in self.other_countries if c != self.market.country.upper()),
-                        default=0)
+            rival = max((_word_count(text, n) for c, n in self.other_countries
+                         if c != self.market.country.upper()), default=0)
             if ours >= rival:
                 return True
         if self.postal is not None and self.postal.search(page_text) \
@@ -383,7 +413,7 @@ class Prober:
         if soup is None:
             return cands
         html_text = str(soup)[:400000]
-        if not self.in_country(entry_url, re.sub(r"<[^>]+>", " ", html_text)):
+        if not self.in_country(entry_url, visible_text(S.make_soup(html_text))[:400000]):
             self.rejected_country.append(netloc_short(entry_url))
             return cands
 
@@ -663,15 +693,27 @@ class Discovery:
         #    least mention the city or the country to be looked at.
         mention = [city] + aliases
         results: list[tuple[str, str, str]] = []   # (url, title, query)
-        for q in self.t.queries(market.country):
-            query = self.fill(q, market, city)
-            for url, title in self.searcher.search(query, must_mention=mention):
-                results.append((url, title, query))
-            summary["searches"] += 1
+        if not self.args.no_search:
+            for q in self.t.queries(market.country):
+                query = self.fill(q, market, city)
+                for url, title in self.searcher.search(query, must_mention=mention):
+                    results.append((url, title, query))
+                summary["searches"] += 1
+
+        # 1b. seeds: sites somebody already knows about (churches, schools,
+        #     charities, museums, radio stations) listed under
+        #     markets/<id>.json -> "discovery": {"seeds": [...]} or passed with
+        #     --seed. They are probed exactly like a search hit, so the reader
+        #     is still the judge, but they never depend on a search engine
+        #     ranking a parish fun-fair page above a resort calendar.
+        seeds = [str(u) for u in ((md.get("discovery") or {}).get("seeds") or []) if u]
+        seeds += [u for u in (self.args.seed or []) if u]
+        seeds = list(dict.fromkeys(seeds))[:MAX_SEEDS_PER_MARKET]
 
         # 2. platform candidates: harvested slugs + guesses (one per platform)
         platform_cands: dict[str, tuple[dict, str]] = {}
-        for key, spec in (self.t.d.get("platforms") or {}).items():
+        platforms = {} if self.args.no_platforms else (self.t.d.get("platforms") or {})
+        for key, spec in platforms.items():
             if key in existing and not (existing[key] or {}).get("_auto"):
                 continue    # hand-written entry wins
             rx = spec.get("url_rx")
@@ -696,18 +738,28 @@ class Discovery:
             log.info("  %-12s %-40s kept=%d raw=%d %s", key, json.dumps(params)[:40], kept, raw, note)
             self.decide(md, market, key, params, kept, via, summary, url="")
 
-        # 3. generic sites from the search results
+        # 3. generic sites: seeds first (own cap), then the search results
         seen_hosts: set[str] = set()
         site_entries: list[tuple[str, str]] = []
-        for url, title, query in results:
+        # Hosts already read by a dedicated adapter: the key names the site
+        # ("bahamar", "ticket-flare", "nassauparadiseisland", "bahamas.com") and
+        # its params are empty, so the URL match below never fires for them —
+        # the 2026-10-06 Nassau run spent ~40 requests re-probing its own sources.
+        own_keys = [re.sub(r"[^a-z0-9]", "", S.registry_key(k)) for k in existing
+                    if S.registry_key(k) not in GENERIC_READERS + PLATFORM_READERS + ("community", "manual")]
+        own_keys = [k for k in own_keys if len(k) >= 6]
+        for url, query in [(u, "seed") for u in seeds] + [(u, q) for u, _, q in results]:
             host = netloc_short(url)
             if not host or host in seen_hosts or self.t.blocked(url):
                 continue
             if any(host in str(v) for v in existing.values()):
                 continue    # already a source for this market
+            if any(k in re.sub(r"[^a-z0-9]", "", host.lower()) for k in own_keys):
+                continue    # already read by a dedicated adapter
             seen_hosts.add(host)
             site_entries.append((url, query))
-        for url, query in site_entries[:MAX_SITES_PER_MARKET]:
+        n_seeds = sum(1 for _, q in site_entries if q == "seed")
+        for url, query in site_entries[: n_seeds + MAX_SITES_PER_MARKET]:
             try:
                 cands = prober.site_candidates(url)
             except Exception as exc:  # noqa: BLE001
@@ -952,6 +1004,10 @@ def main() -> int:
     ap.add_argument("--countries", default="", help="comma list of ISO codes to expand (default: all without a market)")
     ap.add_argument("--retire", action="store_true", help="retire _auto sources that source_health reports dead")
     ap.add_argument("--no-social", action="store_true", help="skip subreddit / Telegram channel discovery")
+    ap.add_argument("--no-search", action="store_true", help="skip web search (probe seeds / platforms only)")
+    ap.add_argument("--no-platforms", action="store_true", help="skip Eventbrite / allevents / Meetup / Luma guesses")
+    ap.add_argument("--seed", action="append", help="candidate site URL to probe for --market (repeatable; "
+                    "markets/<id>.json -> discovery.seeds is the persistent form)")
     ap.add_argument("--delay", type=float, default=1.5, help="per-domain request delay (s)")
     ap.add_argument("--dry-run", action="store_true", help="print decisions, write nothing")
     ap.add_argument("--notify", action="store_true", help="push the change list via ntfy (FIE_NTFY_TOPIC)")

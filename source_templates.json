@@ -38,6 +38,33 @@
         "{city} {country} eventi questa settimana biglietti"
       ]
     },
+    "_queries_community_doc": "Second bank, appended to `queries` for every market: organisers that never use ticketing platforms (parishes, schools, charities, choirs, museums). Their fun fairs, bazaars, harvest festivals, teas, galas and gospel concerts only surface when searched for by name (bs-nassau, 2026-10-06). Seeds (markets/<id>.json -> discovery.seeds) cover the sites a search engine will not rank.",
+    "queries_community": {
+      "en": [
+        "{city} {country} church festival fun fair",
+        "{city} {country} church bazaar tea party fundraiser",
+        "{city} {country} gospel concert",
+        "{city} {country} charity gala fundraiser dinner",
+        "{city} {country} school fair fun day",
+        "{country} homecoming festival",
+        "{city} {country} community calendar of events church school",
+        "{city} {country} museum exhibition opening lecture"
+      ],
+      "es": [
+        "{city} {country} fiesta patronal kermés parroquia",
+        "{city} {country} concierto gospel cristiano",
+        "{city} {country} cena benéfica gala"
+      ],
+      "fr": [
+        "{city} {country} kermesse fête paroissiale",
+        "{city} {country} concert gospel",
+        "{city} {country} gala de charité"
+      ],
+      "nl": ["{city} {country} kerk bazaar fancy fair", "{city} {country} gospel concert"],
+      "pt": ["{city} {country} festa paroquial quermesse", "{city} {country} concerto gospel"],
+      "de": ["{city} {country} gemeindefest pfarrfest", "{city} {country} gospelkonzert"],
+      "it": ["{city} {country} festa patronale parrocchia", "{city} {country} concerto gospel"]
+    },
     "social": [
       "site:t.me {city} {country} events",
       "site:t.me {country} events",

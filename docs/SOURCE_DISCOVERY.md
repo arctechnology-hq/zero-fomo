@@ -65,6 +65,44 @@ nobody). Countries that yield nothing are retried after 45 days. Regions
 (`markets/regions.json`, mirrored to the app assets) order the work: Caribbean
 first, then the Americas, Europe, Africa, Asia, Oceania.
 
+## Seeds and the community query bank (2026-10-06)
+
+The first Nassau pass showed where the general queries stop: parish fun
+fairs, church bazaars and teas, school fairs, charity galas and gospel
+concerts never reach a ticketing platform, and a search for "{city} events
+calendar" ranks the resorts above them. Two additions close that gap for
+every market:
+
+* **`search.queries_community`** in `source_templates.json` — a second query
+  bank (`{city} {country} church festival fun fair`, `… church bazaar tea
+  party fundraiser`, `… gospel concert`, `… charity gala fundraiser dinner`,
+  `… school fair fun day`, `{country} homecoming festival`, …) in the same
+  languages as the general bank. `Templates.queries()` appends it, so every
+  discovery run asks for the community layer by name.
+* **Seeds** — `markets/<id>.json` → `"discovery": {"seeds": [...]}` lists the
+  sites someone already knows about (dioceses, parishes, the university, the
+  National Trust, the Cancer Society, Rotary, the museums, the radio
+  stations). Seeds are probed before the search hits with their own cap
+  (`MAX_SEEDS_PER_MARKET`, 40) and judged by the same readers: a seed is
+  adopted only when its reader yields `adopt_min_events` upcoming, otherwise
+  it simply stays in the list and is re-probed on the next run, so a church
+  that starts publishing its 2026 fair is picked up without anyone editing
+  anything. `--seed <url>` (repeatable) is the ad-hoc form; `--no-search`
+  and `--no-platforms` make a seeds-only pass take a minute instead of ten.
+
+What the Nassau pass found is in `docs/SOURCES_BS.md` → *Community layer*.
+Two reader fixes came out of it: the `wp-posts` reader now dates Modern
+Events Calendar posts (`mec-events`) from their single pages, and the
+country gate counts whole words in the page's visible text only — the
+Bahamas Chamber of Commerce had been rejected because its stylesheet names
+the Montserrat font eighty times and "Oman" sits inside "woman"; a country
+named in the hostname (`stjosephbahamas.com`) now passes outright. Hosts a
+dedicated adapter already reads (`bahamar`, `ticket-flare`, `bahamas.com`,
+…) are skipped by key name, so a run no longer re-probes its own sources.
+The daily root run (workbook + `New_Providence_Events.json`) now takes its
+source list from `markets/bs-nassau.json` too, so adopted and hand-written
+Nassau sources reach the workbook and `feeds/bs-nassau` on the same day.
+
 ## Schedule and what gets committed
 
 `scrape_and_publish.ps1` runs discovery on Sundays (or any day with
@@ -82,6 +120,8 @@ python discover_sources.py --market lc-castries --dry-run -v   # see what it wou
 python discover_sources.py --needy --limit 10                   # weakest markets
 python discover_sources.py --expand --expand-limit 0            # every country (hours)
 python discover_sources.py --retire --notify
+python discover_sources.py --market bs-nassau --no-search --no-platforms --no-social \
+    --seed https://bahtcianglican.org/events/ --dry-run -v          # probe one site
 ```
 
 First dry run (2026-10-01, Castries — 3 events, flagged *drop*): adopted
@@ -96,7 +136,8 @@ JSON-LD (30); r/SaintLucia too quiet; Reddit rate-limits after one probe
 | `ics` | public iCalendar feeds (Google Calendar, WP `?ical=1`, MEC) | `urls[]`, `venue_default` |
 | `rss` | RSS / Atom items with a date in title or body (forums, Discourse, WP categories); strict event-word prefilter | `urls[]`, `venue_default`, `keywords[]` |
 | `html-cards` | server-rendered listings whose links share a marker; detail pages visited (own cap) | `urls[]`, `href_marker`, `venue_default`, `detail_cap` |
-| `jsonld` / `tribe` / `wp-posts` | as before (2026-09-25) | |
+| `jsonld` / `tribe` | as before (2026-09-25) | `tribe` / `jsonld` / every reader: `exclude_title` regex drops records by name (Rotary's committee meetings) |
+| `wp-posts` | WP REST event post types; Modern Events Calendar posts (`mec-events`) are dated from their single pages (own cap `mec_detail_cap` 30, posts older than 400 days skipped) | `base`, `type`, `date_keys`, `venue_keys`, `mec_detail_cap` |
 | `allevents.in` | any city slug (was Nassau-only) | `city`, `venue_default` |
 | `meetup` | public find-events page, in-person events, venue country gate | `location` (`us--fl--Miami`, `bb--Bridgetown`) |
 | `luma` | luma.com city pages with coordinates | `slug` |

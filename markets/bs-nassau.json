@@ -40,7 +40,8 @@
         "new providence",
         "paradise island"
       ],
-      "_note": "Facebook-event mirrors (same backend): church fairs, college fairs, community runs, promoter parties. One page of 40 each; ?page= is ignored. Added 2026-10-06."
+      "_note": "Facebook-event mirrors (same backend): church fairs, college fairs, community runs, promoter parties. One page of 40 each; ?page= is ignored. Added 2026-10-06.",
+      "exclude_title": "\\b(wedding|baby shower|funeral|memorial service)\\b"
     },
     "tribe#rotarybahamas": {
       "base": "https://rotarybahamas.org",

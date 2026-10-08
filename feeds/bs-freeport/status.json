@@ -1,0 +1,44 @@
+{
+ "market": "bs-freeport",
+ "generated_at": "2026-10-08T13:51:25Z",
+ "sources_run": [
+  "eventbrite",
+  "bahamas.com",
+  "tikkets",
+  "community"
+ ],
+ "raw": 8,
+ "unique": 8,
+ "exported": 7,
+ "review": 1,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 0,
+   "pages": 2,
+   "note": "rendered via Playwright"
+  },
+  {
+   "name": "bahamas.com",
+   "ok": true,
+   "events": 8,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "tikkets",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

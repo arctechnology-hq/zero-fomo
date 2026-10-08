@@ -1,0 +1,84 @@
+{
+ "market": "jm-kingston",
+ "generated_at": "2026-10-08T13:56:00Z",
+ "sources_run": [
+  "ticketmaster",
+  "seatgeek",
+  "eventbrite",
+  "caribtix",
+  "beatstorapon",
+  "ticketpal",
+  "tikkets",
+  "trinijunglejuice",
+  "community"
+ ],
+ "raw": 87,
+ "unique": 84,
+ "exported": 56,
+ "review": 28,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "seatgeek",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 20,
+   "pages": 3,
+   "note": ""
+  },
+  {
+   "name": "caribtix",
+   "ok": true,
+   "events": 59,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "beatstorapon",
+   "ok": true,
+   "events": 6,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "ticketpal",
+   "ok": true,
+   "events": 1,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "tikkets",
+   "ok": true,
+   "events": 1,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

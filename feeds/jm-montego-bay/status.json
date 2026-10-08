@@ -1,0 +1,76 @@
+{
+ "market": "jm-montego-bay",
+ "generated_at": "2026-10-08T13:56:18Z",
+ "sources_run": [
+  "ticketmaster",
+  "seatgeek",
+  "eventbrite",
+  "caribtix",
+  "beatstorapon",
+  "tikkets",
+  "trinijunglejuice",
+  "community"
+ ],
+ "raw": 34,
+ "unique": 32,
+ "exported": 26,
+ "review": 6,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "seatgeek",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 19,
+   "pages": 3,
+   "note": ""
+  },
+  {
+   "name": "caribtix",
+   "ok": true,
+   "events": 3,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "beatstorapon",
+   "ok": true,
+   "events": 12,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "tikkets",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

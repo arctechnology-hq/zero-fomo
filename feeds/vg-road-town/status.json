@@ -1,0 +1,28 @@
+{
+ "market": "vg-road-town",
+ "generated_at": "2026-10-08T14:07:33Z",
+ "sources_run": [
+  "allevents.in",
+  "community"
+ ],
+ "raw": 8,
+ "unique": 8,
+ "exported": 8,
+ "review": 0,
+ "sources": [
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 8,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

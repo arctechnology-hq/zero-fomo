@@ -1,0 +1,44 @@
+{
+ "market": "vc-kingstown",
+ "generated_at": "2026-10-08T14:07:20Z",
+ "sources_run": [
+  "eventbrite",
+  "ticketpal",
+  "trinijunglejuice",
+  "community"
+ ],
+ "raw": 13,
+ "unique": 13,
+ "exported": 10,
+ "review": 3,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 13,
+   "pages": 4,
+   "note": ""
+  },
+  {
+   "name": "ticketpal",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

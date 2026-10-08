@@ -1,0 +1,52 @@
+{
+ "market": "ky-george-town",
+ "generated_at": "2026-10-08T13:57:07Z",
+ "sources_run": [
+  "eventbrite",
+  "jsonld",
+  "ticketsplus",
+  "trinijunglejuice",
+  "community"
+ ],
+ "raw": 13,
+ "unique": 13,
+ "exported": 10,
+ "review": 3,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 0,
+   "pages": 2,
+   "note": "rendered via Playwright"
+  },
+  {
+   "name": "jsonld",
+   "ok": true,
+   "events": 10,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "ticketsplus",
+   "ok": true,
+   "events": 3,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

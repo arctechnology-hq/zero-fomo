@@ -1,0 +1,44 @@
+{
+ "market": "do-punta-cana",
+ "generated_at": "2026-10-08T13:54:51Z",
+ "sources_run": [
+  "ticketmaster",
+  "eventbrite",
+  "trinijunglejuice",
+  "community"
+ ],
+ "raw": 23,
+ "unique": 23,
+ "exported": 20,
+ "review": 3,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 23,
+   "pages": 4,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

@@ -1,0 +1,28 @@
+{
+ "market": "mq-fort-de-france",
+ "generated_at": "2026-10-08T13:57:44Z",
+ "sources_run": [
+  "allevents.in",
+  "community"
+ ],
+ "raw": 72,
+ "unique": 71,
+ "exported": 9,
+ "review": 62,
+ "sources": [
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 72,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

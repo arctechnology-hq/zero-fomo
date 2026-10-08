@@ -1,0 +1,36 @@
+{
+ "market": "ai-the-valley",
+ "generated_at": "2026-10-08T13:47:04Z",
+ "sources_run": [
+  "html-cards#anguillaferrytimes",
+  "html-cards#goanguilla",
+  "community"
+ ],
+ "raw": 20,
+ "unique": 19,
+ "exported": 19,
+ "review": 0,
+ "sources": [
+  {
+   "name": "html-cards#anguillaferrytimes",
+   "ok": true,
+   "events": 14,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "html-cards#goanguilla",
+   "ok": true,
+   "events": 6,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

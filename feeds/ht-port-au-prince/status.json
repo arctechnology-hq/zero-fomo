@@ -1,0 +1,36 @@
+{
+ "market": "ht-port-au-prince",
+ "generated_at": "2026-10-08T13:55:42Z",
+ "sources_run": [
+  "eventbrite",
+  "trinijunglejuice",
+  "community"
+ ],
+ "raw": 15,
+ "unique": 15,
+ "exported": 11,
+ "review": 4,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 15,
+   "pages": 4,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

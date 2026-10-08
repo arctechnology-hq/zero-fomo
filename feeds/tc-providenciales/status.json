@@ -1,0 +1,52 @@
+{
+ "market": "tc-providenciales",
+ "generated_at": "2026-10-08T13:58:41Z",
+ "sources_run": [
+  "eventbrite",
+  "caribtix",
+  "trinijunglejuice",
+  "community",
+  "allevents.in"
+ ],
+ "raw": 165,
+ "unique": 154,
+ "exported": 9,
+ "review": 145,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 9,
+   "pages": 4,
+   "note": ""
+  },
+  {
+   "name": "caribtix",
+   "ok": true,
+   "events": 1,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 155,
+   "pages": 6,
+   "note": ""
+  }
+ ]
+}

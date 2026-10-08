@@ -1,0 +1,44 @@
+{
+ "market": "gy-georgetown",
+ "generated_at": "2026-10-08T13:55:31Z",
+ "sources_run": [
+  "eventbrite",
+  "tikkets",
+  "trinijunglejuice",
+  "community"
+ ],
+ "raw": 18,
+ "unique": 18,
+ "exported": 15,
+ "review": 3,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 16,
+   "pages": 3,
+   "note": ""
+  },
+  {
+   "name": "tikkets",
+   "ok": true,
+   "events": 2,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

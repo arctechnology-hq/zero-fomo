@@ -1,0 +1,44 @@
+{
+ "market": "us-orlando",
+ "generated_at": "2026-10-08T14:07:08Z",
+ "sources_run": [
+  "ticketmaster",
+  "seatgeek",
+  "eventbrite",
+  "community"
+ ],
+ "raw": 2247,
+ "unique": 1329,
+ "exported": 1321,
+ "review": 8,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 1200,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "seatgeek",
+   "ok": true,
+   "events": 1000,
+   "pages": 10,
+   "note": ""
+  },
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 40,
+   "pages": 4,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 7,
+   "pages": 0,
+   "note": ""
+  }
+ ]
+}

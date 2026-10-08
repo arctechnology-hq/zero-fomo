@@ -1,0 +1,60 @@
+{
+ "market": "us-miami",
+ "generated_at": "2026-10-08T14:06:19Z",
+ "sources_run": [
+  "ticketmaster",
+  "seatgeek",
+  "eventbrite",
+  "trinijunglejuice",
+  "caribtix",
+  "community"
+ ],
+ "raw": 2330,
+ "unique": 1911,
+ "exported": 1872,
+ "review": 39,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 1200,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "seatgeek",
+   "ok": true,
+   "events": 1000,
+   "pages": 10,
+   "note": ""
+  },
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 36,
+   "pages": 4,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 39,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "caribtix",
+   "ok": true,
+   "events": 34,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 21,
+   "pages": 0,
+   "note": ""
+  }
+ ]
+}

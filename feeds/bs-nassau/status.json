@@ -1,0 +1,180 @@
+{
+ "market": "bs-nassau",
+ "generated_at": "2026-10-06T18:12:50Z",
+ "sources_run": [
+  "ticket-flare",
+  "eticketslive",
+  "bahaevents",
+  "bid-bahamas",
+  "eventbrite",
+  "allevents.in",
+  "bahamaslocal",
+  "bandsintown",
+  "songkick",
+  "reggaeville",
+  "bahamas.com",
+  "tourismtoday",
+  "nassauparadiseisland",
+  "atlantis",
+  "bahamar",
+  "tikkets",
+  "jsonld#stayhappening",
+  "tribe#rotarybahamas",
+  "tribe#cancersociety",
+  "manual",
+  "community"
+ ],
+ "raw": 249,
+ "unique": 196,
+ "exported": 135,
+ "review": 61,
+ "sources": [
+  {
+   "name": "ticket-flare",
+   "ok": true,
+   "events": 12,
+   "pages": 3,
+   "note": ""
+  },
+  {
+   "name": "eticketslive",
+   "ok": true,
+   "events": 6,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "bahaevents",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "No events found (JSON probes, sitemap, and JS render all empty)."
+  },
+  {
+   "name": "bid-bahamas",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "JS-rendered marketplace: no JSON endpoint or sitemap events found. Re-run with --js after installing Playwright."
+  },
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 35,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 20,
+   "pages": 13,
+   "note": ""
+  },
+  {
+   "name": "bahamaslocal",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": ""
+  },
+  {
+   "name": "bandsintown",
+   "ok": true,
+   "events": 5,
+   "pages": 9,
+   "note": ""
+  },
+  {
+   "name": "songkick",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": ""
+  },
+  {
+   "name": "reggaeville",
+   "ok": true,
+   "events": 2,
+   "pages": 2,
+   "note": ""
+  },
+  {
+   "name": "bahamas.com",
+   "ok": true,
+   "events": 54,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "tourismtoday",
+   "ok": true,
+   "events": 2,
+   "pages": 2,
+   "note": ""
+  },
+  {
+   "name": "nassauparadiseisland",
+   "ok": true,
+   "events": 18,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "atlantis",
+   "ok": true,
+   "events": 5,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "bahamar",
+   "ok": true,
+   "events": 6,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "tikkets",
+   "ok": true,
+   "events": 2,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "jsonld#stayhappening",
+   "ok": true,
+   "events": 60,
+   "pages": 2,
+   "note": ""
+  },
+  {
+   "name": "tribe#rotarybahamas",
+   "ok": true,
+   "events": 18,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "tribe#cancersociety",
+   "ok": true,
+   "events": 3,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "manual",
+   "ok": true,
+   "events": 1,
+   "pages": 0,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

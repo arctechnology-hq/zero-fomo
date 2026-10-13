@@ -1,0 +1,96 @@
+{
+  "markets": {
+    "bm-hamilton": {
+      "last": "2026-10-01T18:37:35Z",
+      "adopted": [
+        "r/Bermuda",
+        "r/Hamilton"
+      ],
+      "watch": [],
+      "probed": 6
+    },
+    "cu-havana": {
+      "last": "2026-10-01T15:16:51Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "tc-providenciales": {
+      "last": "2026-10-01T15:19:38Z",
+      "adopted": [
+        "allevents.in (17)",
+        "tribe#freemasonrybahamas (41)"
+      ],
+      "watch": [],
+      "probed": 8
+    },
+    "lc-castries": {
+      "last": "2026-10-01T17:18:15Z",
+      "adopted": [
+        "allevents.in (6)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "ai-the-valley": {
+      "last": "2026-10-01T17:28:56Z",
+      "adopted": [
+        "html-cards#anguillaferrytimes (15)",
+        "html-cards#goanguilla (8)"
+      ],
+      "watch": [
+        "tribe#whatwedoinanguilla (2)"
+      ],
+      "probed": 13
+    },
+    "vg-road-town": {
+      "last": "2026-10-01T17:38:35Z",
+      "adopted": [
+        "allevents.in (8)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "mq-fort-de-france": {
+      "last": "2026-10-01T18:35:10Z",
+      "adopted": [
+        "allevents.in (9)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "bs-nassau": {
+      "last": "2026-10-06T17:54:51Z",
+      "adopted": [
+        "r/Bahamas"
+      ],
+      "watch": [],
+      "probed": 20
+    }
+  },
+  "countries": {
+    "AI": {
+      "last": "2026-10-01T17:28:56Z",
+      "result": "market ai-the-valley",
+      "sources": [
+        "html-cards#anguillaferrytimes",
+        "html-cards#goanguilla",
+        "community"
+      ]
+    },
+    "VG": {
+      "last": "2026-10-01T17:38:35Z",
+      "result": "market vg-road-town",
+      "sources": [
+        "allevents.in"
+      ]
+    },
+    "MQ": {
+      "last": "2026-10-01T18:35:10Z",
+      "result": "market mq-fort-de-france",
+      "sources": [
+        "allevents.in"
+      ]
+    }
+  }
+}

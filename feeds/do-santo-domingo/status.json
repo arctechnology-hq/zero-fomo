@@ -1,0 +1,44 @@
+{
+ "market": "do-santo-domingo",
+ "generated_at": "2026-10-13T13:51:56Z",
+ "sources_run": [
+  "ticketmaster",
+  "eventbrite",
+  "trinijunglejuice",
+  "community"
+ ],
+ "raw": 24,
+ "unique": 23,
+ "exported": 20,
+ "review": 3,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 1,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 23,
+   "pages": 4,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

@@ -1,0 +1,60 @@
+{
+ "market": "tt-port-of-spain",
+ "generated_at": "2026-10-13T13:58:12Z",
+ "sources_run": [
+  "eventbrite",
+  "trinijunglejuice",
+  "islandetickets",
+  "beatstorapon",
+  "tikkets",
+  "community"
+ ],
+ "raw": 98,
+ "unique": 91,
+ "exported": 88,
+ "review": 3,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 17,
+   "pages": 3,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 14,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "islandetickets",
+   "ok": true,
+   "events": 56,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "beatstorapon",
+   "ok": true,
+   "events": 10,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "tikkets",
+   "ok": true,
+   "events": 1,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

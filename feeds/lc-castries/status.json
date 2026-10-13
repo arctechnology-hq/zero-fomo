@@ -1,0 +1,60 @@
+{
+ "market": "lc-castries",
+ "generated_at": "2026-10-13T13:54:34Z",
+ "sources_run": [
+  "eventbrite",
+  "ticketpal",
+  "ticketsplus",
+  "trinijunglejuice",
+  "community",
+  "allevents.in"
+ ],
+ "raw": 83,
+ "unique": 81,
+ "exported": 7,
+ "review": 74,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 11,
+   "pages": 4,
+   "note": ""
+  },
+  {
+   "name": "ticketpal",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "ticketsplus",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 72,
+   "pages": 6,
+   "note": ""
+  }
+ ]
+}

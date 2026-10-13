@@ -67,6 +67,7 @@ PROBE_WINDOW_DAYS = 365
 MAX_SITES_PER_MARKET = 14
 MAX_SEEDS_PER_MARKET = 40     # hand-listed candidate sites (markets/<id>.json -> discovery.seeds)
 MAX_SEARCH_RESULTS = 12
+DDG_MAX_TRANSPORT_FAILS = 3   # consecutive connection failures before DDG is retired for the run
 REDDIT_GAP = 20.0             # 8-12 s still drew 429s (2026-09-16, 2026-10-01)
 GENERIC_READERS = ("tribe", "wp-posts", "jsonld", "ics", "rss", "html-cards")
 PLATFORM_READERS = ("eventbrite", "allevents.in", "luma", "meetup")
@@ -234,6 +235,13 @@ class Searcher:
         self.cache = load_json(SEARCH_CACHE, {})
         self.dry_run = dry_run
         self.calls = 0
+        # DDG transport breaker (2026-10-13): after Costa Rica's ~20 queries
+        # DuckDuckGo started resetting connections / timing out; every later
+        # query then burned 3 x 25 s retries on lite AND html before Bing got
+        # a turn (El Salvador: 25 minutes, zero search results). Three
+        # consecutive transport failures retire DDG for the rest of the run.
+        self.ddg_fails = 0
+        self.ddg_dead = False
 
     def search(self, query: str, must_mention: list[str] | None = None) -> list[tuple[str, str]]:
         """Results whose title or URL mentions one of `must_mention` (the city /
@@ -248,6 +256,8 @@ class Searcher:
         else:
             results = []
             for eng in self.order:
+                if self.ddg_dead and eng.startswith("ddg"):
+                    continue
                 try:
                     results = {"ddg": self._ddg, "ddg-html": self._ddg_html, "bing": self._bing}[eng](query)
                 except Exception as exc:  # noqa: BLE001
@@ -271,7 +281,13 @@ class Searcher:
         for attempt in range(2):
             resp = self.engine.get(url, quiet=True)
             if resp is None:
+                self.ddg_fails += 1
+                if self.ddg_fails >= DDG_MAX_TRANSPORT_FAILS and not self.ddg_dead:
+                    self.ddg_dead = True
+                    log.warning("DuckDuckGo unreachable %d times in a row - Bing only for the rest of this run",
+                                self.ddg_fails)
                 return None
+            self.ddg_fails = 0
             if resp.status_code == 202 or "anomaly" in resp.text[:3000].lower():
                 if attempt == 0:
                     time.sleep(25 + random.random() * 10)

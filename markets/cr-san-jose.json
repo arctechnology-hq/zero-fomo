@@ -1,0 +1,156 @@
+{
+  "id": "cr-san-jose",
+  "name": "San José, Costa Rica",
+  "country": "CR",
+  "tz": "America/Costa_Rica",
+  "lat": 9.9339,
+  "lng": -84.0849,
+  "radius_km": 40,
+  "currency": "CRC",
+  "auto": true,
+  "created": "2026-10-13",
+  "sources": {
+    "eventbrite": {
+      "slug": "costa-rica--san-jose--85670391",
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "search:San José Costa Rica events calendar",
+        "probe_events": 31,
+        "from": ""
+      }
+    },
+    "allevents.in": {
+      "city": "san-jose-cr",
+      "countries": [
+        "costa rica"
+      ],
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "search:San José Costa Rica events calendar",
+        "probe_events": 32,
+        "from": ""
+      }
+    },
+    "jsonld#whereincostarica": {
+      "urls": [
+        "https://www.whereincostarica.com/"
+      ],
+      "venue_default": "San José, Costa Rica",
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "search:San José Costa Rica events calendar",
+        "probe_events": 4,
+        "from": "https://www.whereincostarica.com/"
+      }
+    },
+    "html-cards#meticket": {
+      "urls": [
+        "https://me-ticket.com/catalog/costa-rica/san-jose"
+      ],
+      "href_marker": "/event/",
+      "venue_default": "San José, Costa Rica",
+      "detail_cap": 20,
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "search:San José Costa Rica events calendar",
+        "probe_events": 15,
+        "from": "https://me-ticket.com/catalog/costa-rica/san-jose"
+      }
+    },
+    "html-cards#mcj": {
+      "urls": [
+        "https://agenda.mcj.go.cr/listado-eventos?provincia=san-jose"
+      ],
+      "href_marker": "/evento/",
+      "venue_default": "San José, Costa Rica",
+      "detail_cap": 20,
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "search:San José Costa Rica events calendar",
+        "probe_events": 9,
+        "from": "https://agenda.mcj.go.cr/listado-eventos?provincia=san-jose"
+      }
+    },
+    "html-cards#vamoseventos": {
+      "urls": [
+        "https://www.vamoseventos.com/san-jose/esta-semana"
+      ],
+      "href_marker": "/event/",
+      "venue_default": "San José, Costa Rica",
+      "detail_cap": 20,
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "search:San José Costa Rica events calendar",
+        "probe_events": 20,
+        "from": "https://www.vamoseventos.com/san-jose/esta-semana"
+      }
+    },
+    "jsonld#starticket": {
+      "urls": [
+        "https://starticket.cr/en"
+      ],
+      "venue_default": "San José, Costa Rica",
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "search:Costa Rica events tickets",
+        "probe_events": 205,
+        "from": "https://starticket.cr/en"
+      }
+    },
+    "html-cards#omticket": {
+      "urls": [
+        "https://www.omticket.com/"
+      ],
+      "href_marker": "/events/",
+      "venue_default": "San José, Costa Rica",
+      "detail_cap": 20,
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "search:Costa Rica events tickets",
+        "probe_events": 10,
+        "from": "https://www.omticket.com/"
+      }
+    },
+    "html-cards#cr": {
+      "urls": [
+        "https://cr.myticketplus.com/"
+      ],
+      "href_marker": "/events/",
+      "venue_default": "San José, Costa Rica",
+      "detail_cap": 20,
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "search:Costa Rica events tickets",
+        "probe_events": 8,
+        "from": "https://cr.myticketplus.com/"
+      }
+    },
+    "jsonld#jambase": {
+      "urls": [
+        "https://www.jambase.com/venue/estadio-nacional-san-jose"
+      ],
+      "venue_default": "San José, Costa Rica",
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "search:San José Costa Rica concerts parties tickets",
+        "probe_events": 4,
+        "from": "https://www.jambase.com/venue/estadio-nacional-san-jose"
+      }
+    },
+    "html-cards#goallconcerts": {
+      "urls": [
+        "https://goallconcerts.com/en/cr"
+      ],
+      "href_marker": "/evento/",
+      "venue_default": "San José, Costa Rica",
+      "detail_cap": 20,
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "search:San José Costa Rica concerts parties tickets",
+        "probe_events": 15,
+        "from": "https://goallconcerts.com/en/cr"
+      }
+    },
+    "community": {}
+  }
+}

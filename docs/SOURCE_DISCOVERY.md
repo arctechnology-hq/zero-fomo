@@ -35,7 +35,7 @@ need no login, community forwarding and bots communities add themselves
    guess, probe count, URL); a site may appear several times under
    `reader#site` keys (`jsonld#festscanner`, `tribe#puregrenada`).
    `1–2` events → `sources_watchlist.json` with an `adopt` hint, re-probed
-   every Sunday by `source_health.py --probe`. Nothing → forgotten.
+   weekly by `source_health.py --probe`. Nothing → forgotten.
 6. **Social**: subreddit guesses (`r/<Country>`, `r/<City>`) and `site:t.me`
    / `site:reddit.com` searches are probed for life (≥ 3 posts in 90 days;
    ≥ 5 channel posts, the last within 60 days) and written to
@@ -49,7 +49,7 @@ need no login, community forwarding and bots communities add themselves
 after a productive baseline) or **failed** (two consecutive exceptions).
 `discover_sources.py --retire` removes such sources *when they carry `_auto`*
 and parks them on the watchlist with `retired`; a hand-written source is never
-touched by the machine. If the site comes back the Sunday probe says so and the
+touched by the machine. If the site comes back the weekly probe says so and the
 next discovery run re-adopts it.
 
 ## Expansion (`--expand`)
@@ -105,8 +105,10 @@ Nassau sources reach the workbook and `feeds/bs-nassau` on the same day.
 
 ## Schedule and what gets committed
 
-`scrape_and_publish.ps1` runs discovery on Sundays (or any day with
-`-Discover`): weakest markets first (`--needy`, markets with a health drop or
+`scrape_and_publish.ps1` runs discovery weekly — on the first daily run at
+least 6 days after the last one (`.last-discovery` stamp, machine-local; a
+Sunday gate never fired because the work desktop is off at weekends) — or any
+day with `-Discover`: weakest markets first (`--needy`, markets with a health drop or
 under their floor, then the fewest events, then the stalest), ten per run,
 then ten new countries, then retirements, then an ntfy summary. Market files,
 the watchlist and the bridge maps are committed to `main` by the task

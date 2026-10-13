@@ -16,7 +16,7 @@ param(
     [switch]$MarketsOnly,   # skip the Nassau workbook run; bs-nassau runs as a market
     [switch]$NoPublish,     # build feeds/ but do not push the feed-data branch
     [switch]$PublishOnly,   # skip every scrape step; push the feeds/ already on disk
-    [switch]$Discover,      # run source discovery now (otherwise Sundays only)
+    [switch]$Discover,      # run source discovery now (otherwise when the last run is >= 6 days old)
     [switch]$NoDiscover,    # never run discovery in this invocation
     [int]$DiscoverLimit = 10,       # weakest markets re-discovered per run
     [int]$ExpandLimit = 10,         # new countries tried per run
@@ -105,28 +105,39 @@ try {
     python "$here\build_markets_manifest.py" 2>&1 | Add-Content $log
     if ($failed.Count) { "Markets below floor / failed: $($failed -join ', ')" | Add-Content $log }
 
+    # Weekly work (watchlist re-probe, discovery) is age-based, not
+    # Sunday-based (2026-10-13): the task only fires while the machine is on,
+    # and the work desktop is off at weekends, so a Sunday gate never ran
+    # between 2026-10-01 and 10-13. The stamp is machine-local (gitignored).
+    $discoverStamp = Join-Path $here ".last-discovery"
+    $discoverAgeDays = if (Test-Path $discoverStamp) {
+        ((Get-Date) - (Get-Item $discoverStamp).LastWriteTime).TotalDays
+    } else { [double]::PositiveInfinity }
+    $weeklyDue = $Discover -or ($discoverAgeDays -ge 6)
+
     # 2b. Source health (2026-09-25): roll every market's status.json into
     #     feeds/health/history.jsonl, flag dead / failed / revived sources and
-    #     market collapses, and push a phone alert (status text only). Sundays
+    #     market collapses, and push a phone alert (status text only). Weekly
     #     also re-probe sources_watchlist.json so a parked site that comes
     #     alive gets noticed. Best effort: bookkeeping never blocks publishing.
     try {
         $healthArgs = @("--record", "--report", "--notify")
-        if ((Get-Date).DayOfWeek -eq "Sunday") { $healthArgs += "--probe" }
+        if ($weeklyDue) { $healthArgs += "--probe" }
         python "$here\source_health.py" @healthArgs 2>&1 | Add-Content $log
     } catch {
         "source health step skipped: $_" | Add-Content $log
     }
 
-    # 2c. Source discovery (G5, 2026-10-01): Sundays (or -Discover) the pipeline
+    # 2c. Source discovery (G5, 2026-10-01): weekly (or -Discover) the pipeline
     #     looks for new sources for its weakest markets, opens markets in
     #     countries that have none, retires _auto sources the health watch
     #     reported dead, and refreshes the bridges' subreddit / Telegram maps.
     #     Market-file changes are committed to main so CI runs them too; the
     #     commit only ever stages discovery's own files. Best effort.
-    if (($Discover -or (Get-Date).DayOfWeek -eq "Sunday") -and -not $NoDiscover) {
+    if ($weeklyDue -and -not $NoDiscover) {
         try {
-            "--- discovery ---" | Add-Content $log
+            "--- discovery (last run $([math]::Round($discoverAgeDays,1)) days ago) ---" | Add-Content $log
+            Set-Content -Path $discoverStamp -Value (Get-Date -Format o)
             python "$here\discover_sources.py" --needy --limit $DiscoverLimit --expand --expand-limit $ExpandLimit `
                 --retire --notify 2>&1 | Add-Content $log
             $discoveryPaths = @("markets", "sources_watchlist.json", "inbox/bridges")

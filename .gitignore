@@ -48,3 +48,6 @@ inbox/*.state.json
 
 # translate_strings.py scratch replies
 zero_fomo/tools/.translate_*.raw.txt
+
+# machine-local stamp: when scrape_and_publish.ps1 last ran source discovery
+/.last-discovery

@@ -40,7 +40,7 @@ pages / note). `source_health.py` rolls those into `feeds/health/history.jsonl`,
 flags a source as **dead** (median > 0 over the last 14 runs, now zero for 3
 runs), **failed** (2 consecutive exceptions) or **revived**, flags a market
 **drop** (exported < 50 % of its 7-run median), writes `feeds/health/report.json`
-and pushes the status lines to the phone via ntfy (`FIE_NTFY_TOPIC`). Sundays it
+and pushes the status lines to the phone via ntfy (`FIE_NTFY_TOPIC`). Weekly it
 also re-probes `sources_watchlist.json` (parked, seasonal and unverified
 candidates such as Bahamas Carnival, Tikkets country deployments, Eventbrite
 slugs, Beats To Rap On country pages) so a site that comes alive is named in
@@ -59,8 +59,8 @@ in-process to count upcoming events for the market, and adopts what yields
 watchlist; `_auto` sources the health watch reports dead are retired). It
 also finds subreddits and public Telegram channels for the bridges
 (`inbox/bridges/*.json`) and, with `--expand`, opens markets in countries that
-have none, keeping a country only when a real source was found. Sundays the
-daily task runs the weakest ten markets, ten new countries and retirements,
+have none, keeping a country only when a real source was found. Weekly (first daily
+run ≥ 6 days after the last discovery) the task runs the weakest ten markets, ten new countries and retirements,
 then commits the market changes to `main`. Readers it can adopt: `ics`,
 `rss`, `html-cards`, `jsonld`, `tribe`, `wp-posts`, `allevents.in` (any
 city), `meetup`, `luma`. Full story: `docs/SOURCE_DISCOVERY.md`.

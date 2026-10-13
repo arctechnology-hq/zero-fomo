@@ -108,3 +108,15 @@ descriptions of the next two weeks, and the detail page (`#content .cblock
 h4`) for the rest (detail cap applies). No structured venue; `location_verdict`
 reads the island from the text. First run: 32 found, 31 exported, 1 parked.
 
+## Dead on 2026-10-13: bahaevents.com, bid-bahamas.com
+
+Both Nassau adapters have read zero since at least 2026-10-06. Probed
+2026-10-13: both hostnames resolve to Cloudflare, plain HTTP answers 409,
+HTTPS fails the TLS handshake (curl/schannel) and Chrome shows an error page
+— the sites are gone, not bot-blocked. The adapters stay registered (the
+health watch keeps them at zero at no cost) so a relaunch is noticed; nothing
+to fix. Also checked: `events.gbpa.com` (watchlist, Freeport) is a WordPress
+site whose newest content is 2019 — no event post type, no Tribe REST, posts
+endpoint empty; `100jamz.com/events/` answers 429; `fusionsuperplex.com`
+does not connect.
+

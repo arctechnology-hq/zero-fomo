@@ -94,3 +94,17 @@ another island (Smith's Point Fish Fry, Freeport was landing in Nassau because
 3. **Family Islands**: bahamas.com + tourismtoday now give enough inventory to
    open Exuma / Eleuthera / Abaco markets when the app wants them; the
    `areas` parameter on `bahamas.com` does the split without new code.
+
+## BahamasLocal re-platformed (2026-10-13)
+
+`bahamaslocal.com` had read **zero** since at least 2026-10-06: the adapter's
+`/events.html` and `/eventsbrowse/…` URLs are now 404. The site's "Monthly
+Calendar" widget loads `/json-events.php` — a FullCalendar feed of every
+upcoming event (32 on 2026-10-13, through 2027-01-02) with `start`/`end`
+datetimes and the detail URL (titles truncated, `end` often junk). The adapter
+now reads the feed for *which/when*, the `/events/` cards (`div.media h6 a`
++ `<strong><i>date</i></strong> <i>time</i>` + text) for titles and
+descriptions of the next two weeks, and the detail page (`#content .cblock
+h4`) for the rest (detail cap applies). No structured venue; `location_verdict`
+reads the island from the text. First run: 32 found, 31 exported, 1 parked.
+

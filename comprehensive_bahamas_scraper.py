@@ -1403,30 +1403,147 @@ class AllEventsInScraper(BaseScraper):
 # -----------------------------------------------------------------------------
 
 class BahamasLocalScraper(BaseScraper):
+    """bahamaslocal.com community events (nationwide directory, Nassau-heavy).
+
+    Site re-platformed before 2026-10 (the old /events.html and
+    /eventsbrowse/ URLs are 404, which is why this source read zero for
+    weeks). What the site serves now:
+
+    * ``/json-events.php`` — the FullCalendar feed behind the "Monthly
+      Calendar" widget: every upcoming event (~3 months out) with ``start``
+      / ``end`` datetimes and the detail URL. Titles are truncated to ~27
+      chars and ``end`` is often junk (``0000-00-00``, ``1969-12-31``).
+    * ``/events/`` — "this week's events" cards (``div.media`` → ``h6 a``,
+      ``<strong><i>Saturday 17th October 2026</i></strong>``, ``<i>7:00 PM</i>``,
+      then the description) for the next ~2 weeks.
+    * ``/event/<id>/<slug>.html`` — detail page with the same block under
+      ``.cblock h4``.
+
+    The feed is the record of truth for *which* events exist and *when*; the
+    listing and (capped) detail pages supply the full title and description.
+    No structured venue: ``location_verdict`` reads the island from the text,
+    so a Freeport fish fry still lands in the right bucket.
+    """
     name = "bahamaslocal"
     BASE = "https://www.bahamaslocal.com"
-    LISTINGS = [
-        "https://www.bahamaslocal.com/events.html",
-        "https://www.bahamaslocal.com/eventsbrowse/all/upcoming/1.html",
-    ]
+    LISTING = "https://www.bahamaslocal.com/events/"
+    FEED = "https://www.bahamaslocal.com/json-events.php"
+    VENUE_DEFAULT = "Nassau, Bahamas"
+
+    @staticmethod
+    def _split_block(block) -> tuple[str, str, str]:
+        """(raw_date, time, description) from a card / detail text block."""
+        raw_date, time_txt, time_raw = "", "", ""
+        strong_i = block.find("strong")
+        if strong_i and strong_i.find("i"):
+            raw_date = clean_text(strong_i.get_text(" "))
+        for i_tag in block.find_all("i"):
+            t = clean_text(i_tag.get_text(" "))
+            if TIME_RX.search(t) and len(t) <= 24:
+                time_txt, time_raw = parse_time(t), t
+                break
+        text = clean_text(block.get_text(" "))
+        for frag in (raw_date, time_raw):
+            if frag:
+                text = text.replace(frag, "", 1)
+        return raw_date, time_txt, clean_text(text)[:600]
+
+    def _parse_cards(self, soup) -> dict[str, Event]:
+        found: dict[str, Event] = {}
+        for h6 in soup.select("div.media h6"):
+            a = h6.find("a", href=True)
+            if not a or "/event/" not in a["href"]:
+                continue
+            url = urljoin(self.BASE, a["href"].split("#")[0])
+            body = h6.find_next_sibling("p") or h6.parent
+            raw_date, time_txt, desc = self._split_block(body) if body else ("", "", "")
+            date_iso, _ = parse_date_iso(raw_date) if raw_date else ("", "")
+            ev = Event(name=clean_text(a.get_text(" "))[:200], date=date_iso, raw_date=raw_date,
+                       time=time_txt, description=desc, source_url=url, source_name=self.name)
+            ev.price = parse_price(desc)
+            found[url] = ev
+        return found
+
+    def _parse_detail(self, soup) -> Optional[Event]:
+        block = soup.select_one("#content .cblock")
+        if block is None:
+            return None
+        h4 = block.find("h4")
+        body = block.select_one(".media-content") or block
+        raw_date, time_txt, desc = self._split_block(body)
+        date_iso, _ = parse_date_iso(raw_date) if raw_date else ("", "")
+        return Event(name=clean_text(h4.get_text(" "))[:200] if h4 else "", date=date_iso,
+                     raw_date=raw_date, time=time_txt, description=desc,
+                     price=parse_price(desc), source_name=self.name)
 
     def scrape(self) -> list[Event]:
-        events: list[Event] = []
-        for url in self.LISTINGS:
-            soup = self.engine.soup(url, referer=self.BASE)
-            if soup is None:
-                continue
+        # 1. Listing cards: full title + description for the next two weeks.
+        cards: dict[str, Event] = {}
+        soup = self.engine.soup(self.LISTING, referer=self.BASE)
+        if soup is not None:
             self.status.pages_fetched += 1
-            found = [event_from_json_ld(n, self.name, url)
-                     for n in extract_json_ld_events(soup)]
-            if not found:
-                found = self.parse_listing_cards(soup, self.BASE, "/event")
-            events.extend(found)
-            if found:
-                break
-        events = dedupe_by_url(events)
-        self.enrich_from_detail_pages(events)
-        return events
+            cards = self._parse_cards(soup)
+
+        # 2. Calendar feed: every upcoming event with its datetime.
+        feed = self.engine.get(self.FEED, referer=self.LISTING, as_json=True) or []
+        if feed:
+            self.status.pages_fetched += 1
+        events: list[Event] = []
+        seen: set[str] = set()
+        for rec in feed if isinstance(feed, list) else []:
+            url = urljoin(self.BASE, str(rec.get("url") or "").split("#")[0])
+            if not url or "/event/" not in url or url in seen:
+                continue
+            seen.add(url)
+            start = str(rec.get("start") or "")
+            date_iso, _ = parse_date_iso(start[:10]) if start[:4].isdigit() else ("", "")
+            time_txt = ""
+            if len(start) >= 16 and start[11:16] not in ("", "00:00"):
+                try:
+                    time_txt = datetime.strptime(start[11:16], "%H:%M").strftime("%I:%M %p").lstrip("0")
+                    end = str(rec.get("end") or "")
+                    if end[:10] == start[:10] and end[11:16] > start[11:16]:
+                        time_txt += " - " + datetime.strptime(end[11:16], "%H:%M").strftime("%I:%M %p").lstrip("0")
+                except ValueError:
+                    time_txt = ""
+            title = clean_text(str(rec.get("title") or "")).split(":")[0]
+            ev = cards.get(url) or Event(name=title.rstrip(". ")[:200], source_url=url, source_name=self.name)
+            ev.date = ev.date or date_iso
+            ev.raw_date = ev.raw_date or start[:10]
+            # The feed carries the end time; a card only shows the start.
+            ev.time = time_txt if " - " in time_txt else (ev.time or time_txt)
+            if url not in cards or title.endswith("...") and len(ev.name) < 8:
+                ev._needs_detail = True  # type: ignore[attr-defined]
+            events.append(ev)
+        # Listing cards the feed does not carry (should not happen, but cheap).
+        for url, ev in cards.items():
+            if url not in seen:
+                events.append(ev)
+
+        # 3. Detail pages for feed-only records (truncated title, no text).
+        if self.fetch_details:
+            visited = 0
+            for ev in events:
+                if not getattr(ev, "_needs_detail", False) or visited >= self.detail_cap:
+                    continue
+                dsoup = self.engine.soup(ev.source_url, referer=self.LISTING)
+                visited += 1
+                if dsoup is None:
+                    continue
+                self.status.pages_fetched += 1
+                rich = self._parse_detail(dsoup)
+                if rich is None:
+                    continue
+                ev.name = rich.name or ev.name
+                ev.date = ev.date or rich.date
+                ev.raw_date = rich.raw_date or ev.raw_date
+                ev.time = ev.time or rich.time
+                ev.description = ev.description or rich.description
+                ev.price = ev.price or rich.price
+        for ev in events:
+            ev.venue = ev.venue or self.VENUE_DEFAULT
+            ev.category = ev.category or infer_category(ev.name, ev.description)
+        return dedupe_by_url(events)
 
 
 # -----------------------------------------------------------------------------

@@ -147,14 +147,6 @@
       "marker": "_piecal_start_date|event_date|start_date"
     },
     {
-      "name": "Bahamas Local events page",
-      "kind": "html",
-      "url": "https://www.bahamaslocal.com/events.html",
-      "marker": "event",
-      "min": 5,
-      "alert_when_alive": false
-    },
-    {
       "name": "Fusion Superplex",
       "kind": "status",
       "url": "https://www.fusionsuperplex.com/",

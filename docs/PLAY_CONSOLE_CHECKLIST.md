@@ -44,6 +44,13 @@ days; D&B may phone +1 242 804 9467 to validate.
 plan promises 2 business days if the Play submission can't wait. Check at
 https://www.dunsguide.com/my-account (CIAL login as rhan.richardson@arctechnologyhq.com).
 
+**Status 2026-10-13:** not received yet (13 days before the 26 Oct ETA). The
+only CIAL mail in the Workspace inbox is a Sep 11 account-invite (Trash) and a
+Sep 17 sales follow-up from Kavin Hewitt, CIAL business consultant (landed in
+**Spam** — it is a consultation pitch, not the number, but the delivery email
+could be filtered the same way: watch Spam for `cialdnb.com` / dunsguide until
+the number lands). Dunsguide My Account needs the owner's login to re-check.
+
 ## 2. Play Console account (you, ~20 min + verification)
 
 1. Sign in at https://play.google.com/console/signup with

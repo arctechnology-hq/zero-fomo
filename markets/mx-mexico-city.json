@@ -1,0 +1,55 @@
+{
+  "id": "mx-mexico-city",
+  "name": "Mexico City, Mexico",
+  "country": "MX",
+  "tz": "America/Mexico_City",
+  "lat": 19.4285,
+  "lng": -99.1277,
+  "radius_km": 50,
+  "currency": "MXN",
+  "auto": true,
+  "created": "2026-10-13",
+  "sources": {
+    "ticketmaster": {},
+    "allevents.in": {
+      "city": "mexico-city",
+      "countries": [
+        "mexico",
+        "méxico"
+      ],
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "guess",
+        "probe_events": 16,
+        "from": ""
+      }
+    },
+    "luma": {
+      "slug": "mexico-city",
+      "countries": [
+        "mexico",
+        "méxico"
+      ],
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "guess",
+        "probe_events": 20,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "mx--Mexico%20City",
+      "countries": [
+        "mexico",
+        "méxico"
+      ],
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "guess",
+        "probe_events": 11,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

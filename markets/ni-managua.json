@@ -1,0 +1,27 @@
+{
+  "id": "ni-managua",
+  "name": "Managua, Nicaragua",
+  "country": "NI",
+  "tz": "America/Managua",
+  "lat": 12.1328,
+  "lng": -86.2504,
+  "radius_km": 40,
+  "currency": "NIO",
+  "auto": true,
+  "created": "2026-10-13",
+  "sources": {
+    "allevents.in": {
+      "city": "managua",
+      "countries": [
+        "nicaragua"
+      ],
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "guess",
+        "probe_events": 5,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

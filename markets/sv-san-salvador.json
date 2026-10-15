@@ -1,0 +1,27 @@
+{
+  "id": "sv-san-salvador",
+  "name": "San Salvador, El Salvador",
+  "country": "SV",
+  "tz": "America/El_Salvador",
+  "lat": 13.6893,
+  "lng": -89.1872,
+  "radius_km": 40,
+  "currency": "USD",
+  "auto": true,
+  "created": "2026-10-13",
+  "sources": {
+    "allevents.in": {
+      "city": "san-salvador",
+      "countries": [
+        "el salvador"
+      ],
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "guess",
+        "probe_events": 14,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

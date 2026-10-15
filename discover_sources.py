@@ -103,7 +103,18 @@ def save_json(path: str, value, dry_run: bool = False) -> None:
     with open(tmp, "w", encoding="utf-8", newline="\n") as fh:
         json.dump(value, fh, ensure_ascii=False, indent=2)
         fh.write("\n")
-    os.replace(tmp, path)
+    # Windows: os.replace fails with WinError 32 while another process (a
+    # concurrent --dry-run, the daily scrape, a sync client) holds the target
+    # open for reading. A whole expansion run died on the search cache that
+    # way on 2026-10-13; a few short retries ride out the read.
+    for attempt in range(6):
+        try:
+            os.replace(tmp, path)
+            return
+        except PermissionError:
+            if attempt == 5:
+                raise
+            time.sleep(0.3 * (attempt + 1))
 
 
 def slugify(text: str) -> str:

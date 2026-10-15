@@ -1,5 +1,7 @@
 {
   "Bahamas": "bs-nassau",
   "Bermuda": "bm-hamilton",
-  "CostaRica": "cr-san-jose"
+  "CostaRica": "cr-san-jose",
+  "Honduras": "hn-tegucigalpa",
+  "Tegucigalpa": "hn-tegucigalpa"
 }

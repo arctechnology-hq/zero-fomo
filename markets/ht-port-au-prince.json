@@ -16,6 +16,20 @@
         "haiti"
       ]
     },
-    "community": {}
+    "community": {},
+    "allevents.in": {
+      "city": "port-au-prince",
+      "countries": [
+        "haiti",
+        "haïti",
+        "ayiti"
+      ],
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "guess",
+        "probe_events": 4,
+        "from": ""
+      }
+    }
   }
 }

@@ -27,6 +27,24 @@
         "nevis"
       ]
     },
-    "community": {}
+    "community": {},
+    "allevents.in": {
+      "city": "basseterre",
+      "countries": [
+        "saint kitts and nevis",
+        "st. kitts and nevis",
+        "st kitts and nevis",
+        "saint kitts",
+        "nevis",
+        "st. kitts",
+        "st kitts"
+      ],
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "guess",
+        "probe_events": 3,
+        "from": ""
+      }
+    }
   }
 }

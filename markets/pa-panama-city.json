@@ -1,0 +1,27 @@
+{
+  "id": "pa-panama-city",
+  "name": "Panama City, Panama",
+  "country": "PA",
+  "tz": "America/Panama",
+  "lat": 8.9936,
+  "lng": -79.5197,
+  "radius_km": 40,
+  "currency": "PAB",
+  "auto": true,
+  "created": "2026-10-13",
+  "sources": {
+    "allevents.in": {
+      "city": "panama-city",
+      "countries": [
+        "panama"
+      ],
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "guess",
+        "probe_events": 20,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

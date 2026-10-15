@@ -151,6 +151,32 @@
         "from": "https://goallconcerts.com/en/cr"
       }
     },
-    "community": {}
+    "community": {},
+    "html-cards#agendaticacr": {
+      "urls": [
+        "https://agendaticacr.com/events/weekend"
+      ],
+      "href_marker": "/events/",
+      "venue_default": "San José, Costa Rica",
+      "detail_cap": 20,
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "search:San José Costa Rica things to do this weekend",
+        "probe_events": 20,
+        "from": "https://agendaticacr.com/events/weekend"
+      }
+    },
+    "jsonld#gamcultural": {
+      "urls": [
+        "https://www.gamcultural.com/cr"
+      ],
+      "venue_default": "San José, Costa Rica",
+      "_auto": {
+        "adopted": "2026-10-13",
+        "via": "search:San José Costa Rica agenda de eventos",
+        "probe_events": 20,
+        "from": "https://www.gamcultural.com/cr"
+      }
+    }
   }
 }

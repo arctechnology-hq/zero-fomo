@@ -207,6 +207,17 @@
       "marker": "BEGIN:VEVENT",
       "min": 1,
       "adopt": "bs-nassau: ics urls=[https://archdioceseofnassau.org/icalendar.ics] (feed exists, empty on 2026-10-06)"
+    },
+    {
+      "name": "cr-san-jose ics#culturacr (2 upcoming)",
+      "kind": "status",
+      "url": "https://agenda.culturacr.net/",
+      "alert_when_alive": false,
+      "adopt": "cr-san-jose: ics#culturacr {\"urls\": [\"https://agenda.culturacr.net/?post_type=tribe_events&ical=1\"], \"venue_default\": \"San Jos\\u00e9, Costa Rica\"}",
+      "_auto": {
+        "seen": "2026-10-13",
+        "probe_events": 2
+      }
     }
   ]
 }

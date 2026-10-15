@@ -1,0 +1,91 @@
+{
+  "id": "bs-governors-harbour",
+  "name": "Governor's Harbour, Eleuthera",
+  "country": "BS",
+  "tz": "America/Nassau",
+  "lat": 25.195,
+  "lng": -76.2436,
+  "radius_km": 70,
+  "currency": "BSD",
+  "sources": {
+    "bahamas.com": {
+      "areas": [
+        "eleuthera",
+        "harbour island",
+        "spanish wells",
+        "governor's harbour",
+        "governors harbour",
+        "gregory town",
+        "rock sound",
+        "tarpum bay",
+        "hatchet bay",
+        "james cistern",
+        "savannah sound",
+        "cupid's cay",
+        "lower bogue",
+        "upper bogue",
+        "the bluff",
+        "deep creek",
+        "bannerman town",
+        "palmetto point",
+        "wemyss bight",
+        "green castle",
+        "dunmore town",
+        "cape eleuthera",
+        "gene's bay"
+      ]
+    },
+    "tourismtoday": {
+      "island": "28",
+      "_note": "Ministry of Tourism industry calendar, island id 28 = Eleuthera & Harbour Island (17 records on 2026-10-15)."
+    },
+    "dated-list#waterwayguide": {
+      "urls": [
+        "https://www.waterwayguide.com/knowledge-center/news-post/12675/2026-eleuthera-events-calendar"
+      ],
+      "container": ".news-item .content",
+      "venue_default": "Governor's Harbour, Eleuthera",
+      "cities": [
+        "eleuthera",
+        "harbour island",
+        "spanish wells",
+        "governor's harbour",
+        "governors harbour",
+        "gregory town",
+        "rock sound",
+        "tarpum bay",
+        "hatchet bay",
+        "james cistern",
+        "savannah sound",
+        "cupid's cay",
+        "lower bogue",
+        "upper bogue",
+        "the bluff",
+        "deep creek",
+        "bannerman town",
+        "palmetto point",
+        "wemyss bight",
+        "green castle",
+        "dunmore town",
+        "cape eleuthera",
+        "gene's bay"
+      ],
+      "exclude_title": "^\\s*(?:bahamas\\s+)?(?:sir randol fawkes\\s+)?(?:new year'?s?(?: day)?|majority rule(?: day)?|christmas(?: day)?|boxing day|labou?r day|whit monday|easter monday|good friday|emancipation day|national heroes day|independence day)\\s*(?:holiday|\\(observed\\)|\\(public holiday\\))?\\s*$",
+      "_note": "Waterway Guide's Eleuthera year calendar (prose, 'Month d-d, yyyy -- Title, Place.'): homecomings, Pineapple Festival, Friday fish fry, Spanish Wells markets. Added 2026-10-15."
+    },
+    "community": {}
+  },
+  "discovery": {
+    "_doc": "Eleuthera & Harbour Island: tourismtoday island id 28 is the Ministry's own Eleuthera calendar; bahamas.com carries the homecomings and festivals; Waterway Guide the cruisers' year list. Eventbrite (the-bahamas--harbour-island) and allevents.in/eleuthera hold no local inventory on 2026-10-15 - watchlist, not sources. Seeds are probed every discovery run.",
+    "seeds": [
+      "https://www.eleutheranews.com/events",
+      "https://www.oneeleuthera.org/",
+      "https://www.discover-eleuthera-bahamas.com/festivals-and-annual-events",
+      "https://www.harbourislandguide.com/",
+      "https://www.leonlevypreserve.org/",
+      "https://www.islandschool.org/",
+      "https://www.capeeleuthera.com/",
+      "https://www.bahamashopechallenge.com/"
+    ]
+  }
+}

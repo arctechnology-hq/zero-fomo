@@ -23,7 +23,8 @@ need no login, community forwarding and bots communities add themselves
    schema.org Event nodes on the page → `jsonld`; `<link>` to a calendar or
    feed → `ics` / `rss`; WordPress → The Events Calendar REST (`tribe`), an
    event post type (`wp-posts`), or the plugin's iCal export; ≥ 5 links that
-   share an event path → `html-cards`. A home page gets one look at
+   share an event path → `html-cards`; ≥ 5 text lines that start with a date →
+   `dated-list` (prose calendars). A home page gets one look at
    `/events/`, `/whats-on/`, `/calendar/`.
 4. **Ground-truth** every candidate by running the reader class in-process
    for this market (`build_scraper`) and counting events dated within the
@@ -138,6 +139,7 @@ JSON-LD (30); r/SaintLucia too quiet; Reddit rate-limits after one probe
 | `ics` | public iCalendar feeds (Google Calendar, WP `?ical=1`, MEC) | `urls[]`, `venue_default` |
 | `rss` | RSS / Atom items with a date in title or body (forums, Discourse, WP categories); strict event-word prefilter | `urls[]`, `venue_default`, `keywords[]` |
 | `html-cards` | server-rendered listings whose links share a marker; detail pages visited (own cap) | `urls[]`, `href_marker`, `venue_default`, `detail_cap` |
+| `dated-list` | prose calendars: paragraphs, list items or table rows that *start with a date* (`January 8-12, 2026 -- Title, Place.`; a date-only line then `Title -- Place`; `Jan 1st — Title`; `NOVEMBER 2026` headings with day rows). Exact dates only ("Mid-February" / "October TBD" skipped), "Every Friday" / "Every 2nd & 4th Saturday" → next occurrence. Added 2026-10-15 for the Bahamas Family Islands (Waterway Guide island calendars, the Abaco Sun) | `urls[]`, `venue_default`, `container` (CSS), `year`, `cities`, `exclude_title` |
 | `jsonld` / `tribe` | as before (2026-09-25) | `tribe` / `jsonld` / every reader: `exclude_title` regex drops records by name (Rotary's committee meetings) |
 | `wp-posts` | WP REST event post types; Modern Events Calendar posts (`mec-events`) are dated from their single pages (own cap `mec_detail_cap` 30, posts older than 400 days skipped) | `base`, `type`, `date_keys`, `venue_keys`, `mec_detail_cap` |
 | `allevents.in` | any city slug (was Nassau-only) | `city`, `venue_default` |

@@ -9,7 +9,25 @@
   "currency": "BSD",
   "sources": {
     "eventbrite": {
-      "slug": "bahamas--freeport"
+      "slug": "the-bahamas--freeport",
+      "cities": [
+        "freeport",
+        "grand bahama",
+        "lucaya",
+        "west end",
+        "east end",
+        "eight mile rock",
+        "high rock",
+        "mcclean",
+        "mclean",
+        "freetown",
+        "pelican point",
+        "sweeting",
+        "smith's point",
+        "taino beach",
+        "port lucaya"
+      ],
+      "_note": "Slug corrected 2026-10-15 (bahamas--freeport was a 404). The page holds no Freeport inventory yet and falls back to worldwide online events; `cities` keeps only venues on Grand Bahama."
     },
     "bahamas.com": {
       "areas": [
@@ -29,6 +47,39 @@
     "tikkets": {
       "city": "freeport"
     },
-    "community": {}
+    "community": {},
+    "allevents.in": {
+      "city": "freeport",
+      "venue_default": "Freeport, Grand Bahama",
+      "cities": [
+        "freeport",
+        "grand bahama",
+        "lucaya",
+        "west end",
+        "east end",
+        "eight mile rock",
+        "high rock",
+        "mcclean",
+        "mclean",
+        "freetown",
+        "pelican point",
+        "sweeting",
+        "smith's point",
+        "taino beach",
+        "port lucaya"
+      ],
+      "_note": "allevents.in/freeport: no JSON-LD on 2026-10-15 (no local inventory; the page pads with worldwide picks, which the reader ignores in city mode). Kept so the day it lists Freeport events they flow."
+    }
+  },
+  "discovery": {
+    "_doc": "Grand Bahama: bahamas.com areas is the only live source. Probed 2026-10-15: gbchamber.org (The Events Calendar REST, 0 upcoming - watchlist), grandbahamavacations.com festivals page (month grid, no dated listings), events.gbpa.com (stale since 2019), portlucaya.com (no events page). visitfreeport.com is Freeport, Maine. Seeds are probed every discovery run.",
+    "seeds": [
+      "https://gbchamber.org/events/",
+      "https://www.grandbahamavacations.com/things-to-do/festivals-and-events",
+      "https://www.grandlucayan.com/events",
+      "https://www.pelicanbayhotel.com/",
+      "https://events.gbpa.com/",
+      "https://portlucaya.com/index.php/entertainment"
+    ]
   }
 }

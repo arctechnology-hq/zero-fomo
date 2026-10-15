@@ -247,7 +247,7 @@ CATEGORY_RULES: list[tuple[str, list[str]]] = [
                               "jouvert", "crop over", "soca"]),
     ("Concert / Live Music", ["concert", "live music", "album", "in concert",
                               "performing live", "band", "orchestra", "gospel",
-                              "jazz", "reggae", "artist", "tour"]),
+                              "jazz", "reggae", "artist", r"re:\btours?\b"]),
     ("Club Promotion",       ["ladies night", "ladies' night", "guest dj",
                               "bottle service", "happy hour", "drink special",
                               "drinks special", "club night", "vip section",
@@ -265,7 +265,9 @@ CATEGORY_RULES: list[tuple[str, list[str]]] = [
                               "culinary", "cook", "chef", "seafood", "rum"]),
     ("Sports & Fitness",     ["marathon", "5k", "10k", "run", "race", "fitness",
                               "yoga", "basketball", "softball", "soccer",
-                              "football", "boxing", "golf", "tennis", "swim"]),
+                              "football", "boxing", "golf", "tennis", "swim",
+                              "tournament", "fishing", "wahoo", "billfish",
+                              "marlin", "bonefish", "shootout"]),
     ("Arts & Theatre",       ["theatre", "theater", "art ", "exhibit", "gallery",
                               "play", "musical", "dance", "ballet", "poetry",
                               "spoken word"]),
@@ -1272,7 +1274,13 @@ class EventbriteScraper(BaseScraper):
             events.extend(self._parse_listing_response(html, extra))
             self.status.pages_fetched += 1
 
-        return dedupe_by_url(events)
+        events = dedupe_by_url(events)
+        if self.params.get("cities") or self.params.get("countries"):
+            # A city slug with no local inventory (the-bahamas--exuma) falls
+            # back to worldwide online events with no venue; a market that
+            # names its places keeps only records whose venue text matches.
+            events = [e for e in events if keep_for_market(e, self.market, self.params, e.venue)]
+        return events
 
     def _fetch_listing_html(self, url: str, referer: Optional[str] = None) -> Optional[str]:
         """Plain GET first; Eventbrite answers datacenter IPs (GitHub runners)
@@ -1387,7 +1395,11 @@ class AllEventsInScraper(BaseScraper):
             self.status.pages_fetched += 1
             for node in extract_json_ld_events(soup):
                 events.append(event_from_json_ld(node, self.name, url))
-            if not events:
+            # A city page without JSON-LD has no local inventory: allevents
+            # pads it with worldwide picks (Bangalore jewel shows on /exuma,
+            # 2026-10-15) whose cards carry no venue, so the card fallback
+            # would stamp them with venue_default and pass the market gate.
+            if not events and not city:
                 events.extend(self.parse_listing_cards(soup, self.BASE, "allevents.in/"))
         for ev in events:
             if not ev.venue:
@@ -3766,6 +3778,269 @@ class HtmlCardsScraper(BaseScraper):
         return _dedupe_name_date(kept)
 
 
+# -----------------------------------------------------------------------------
+# DATED LIST  (`dated-list`): prose calendars. Tourism boards, cruising guides
+# and island newspapers publish a year's events as paragraphs that *start with
+# a date* rather than as cards or feeds — Waterway Guide's Abaco / Eleuthera /
+# Bimini calendars, the Abaco Sun month table, parish newsletters. Three
+# shapes are read:
+#   "January 8-12, 2026 -- Back to Da' Cay Regatta, Cupid's Cay. Native sloop…"
+#   "January 21st-27th, 2027" (a line of its own) then "Golf Classic -- Winding Bay"
+#   "Jan 1st — New Years Day"  (the next paragraphs describe it)
+# plus a month heading ("September 2026") followed by day-led rows ("18, 11am-7pm,
+# Merrymakers Art Show, Community Center"). Exact dates only: "Mid-February",
+# "October TBD" and "Easter Weekend" are skipped rather than guessed; "Every
+# Friday" / "Every 2nd & 4th Saturday" resolve to the next occurrence.
+# params: urls[], venue_default, container (CSS selector, optional), year (int
+# hint when the page carries none; default: a 20xx in the title / URL, else this
+# year), countries / cities / exclude / exclude_title (keep_for_market).
+# -----------------------------------------------------------------------------
+
+_DL_MONTH = r"(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?"
+_DL_DAY = r"\d{1,2}(?:st|nd|rd|th)?"
+_DL_SEP = r"(?:\s*(?:--|—|–|:|\|)\s*|\s+-\s+|\s*$)"
+_DL_DATE_RX = re.compile(
+    rf"^\s*(?P<m1>{_DL_MONTH})\s+(?P<d1>{_DL_DAY})"
+    rf"(?:\s*[-–—]\s*(?:(?P<m2>{_DL_MONTH})\s+)?(?P<d2>{_DL_DAY}))?"
+    rf"(?:,?\s*(?P<year>20\d{{2}}))?\.?{_DL_SEP}", re.IGNORECASE)
+_DL_DAYONLY_RX = re.compile(
+    rf"^\s*(?P<d1>{_DL_DAY})(?:\s*[-–—/]\s*(?P<d2>{_DL_DAY}))?(?:,|{_DL_SEP})", re.IGNORECASE)
+_DL_TIMEONLY_RX = re.compile(
+    r"^\s*\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)?\s*(?:-|–|to)?\s*(?:\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?))?\s*$",
+    re.IGNORECASE)
+_DL_MONTH_HEAD_RX = re.compile(rf"^\s*(?P<m1>{_DL_MONTH})\s*(?P<year>20\d{{2}})?\s*$", re.IGNORECASE)
+_DL_EVERY_RX = re.compile(
+    r"^\s*every\s+(?P<ord>(?:(?:1st|2nd|3rd|4th|5th|first|second|third|fourth|last)\s*(?:&|and|,)?\s*)*)"
+    r"(?P<day>monday|tuesday|wednesday|thursday|friday|saturday|sunday)s?"
+    rf"(?:\s+(?:of\s+the\s+month|night|evening|morning))?{_DL_SEP}", re.IGNORECASE)
+_DL_TITLE_SEP_RX = re.compile(r"\s*(?:--|—|–)\s*")
+_DL_ORDINALS = {"1st": 1, "first": 1, "2nd": 2, "second": 2, "3rd": 3, "third": 3,
+                "4th": 4, "fourth": 4, "5th": 5, "last": -1}
+
+
+def _dl_month_number(token) -> int:
+    """'January' / 'Sept.' / 11 / '11' -> month number (0 when unknown)."""
+    if isinstance(token, int) or str(token).strip().isdigit():
+        n = int(token)
+        return n if 1 <= n <= 12 else 0
+    try:
+        return dateparser.parse(f"{re.sub(r'[^a-z]', '', str(token).lower())[:3]} 1 2000").month
+    except (ValueError, OverflowError):
+        return 0
+
+
+def _dl_resolve(m1, d1: str, m2: str, d2: str, year: str, hint: int) -> str:
+    """ISO start date for a leading date expression. The span_dates policy
+    applies when the page states no year: a range whose end has passed rolls a
+    year, one already underway resolves to today, a single date more than 45
+    days gone rolls forward (the calendar is annual)."""
+    mon1 = _dl_month_number(m1)
+    if not mon1:
+        return ""
+    y = int(year) if year else hint
+    try:
+        start = datetime(y, mon1, int(re.sub(r"\D", "", d1)))
+    except ValueError:
+        return ""
+    end = start
+    if d2:
+        mon2 = _dl_month_number(m2) if m2 else mon1
+        try:
+            end = datetime(y, mon2 or mon1, int(re.sub(r"\D", "", d2)))
+        except ValueError:
+            end = start
+        if end < start:
+            if (mon2 or mon1) == mon1:
+                return ""           # "Oct 31-27": a calendar grid, not a range
+            end = end.replace(year=end.year + 1)
+    today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    if not year:
+        if d2 and (today - end).days > 0:
+            start, end = start.replace(year=start.year + 1), end.replace(year=end.year + 1)
+        elif not d2 and (today - start).days > 45:
+            start = start.replace(year=start.year + 1)
+    if start < today <= end:
+        return today.strftime("%Y-%m-%d")
+    return start.strftime("%Y-%m-%d")
+
+
+def _dl_next_weekday(day: str, ordinals: str) -> str:
+    """'saturday', '2nd & 4th' -> ISO date of the next matching occurrence
+    (today counts); plain 'every friday' is the next Friday."""
+    wanted = _WEEKDAYS.get(day.lower())
+    if wanted is None:
+        return ""
+    ords = {_DL_ORDINALS[o] for o in re.findall(r"1st|2nd|3rd|4th|5th|first|second|third|fourth|last",
+                                                 ordinals or "", re.I) if o.lower() in _DL_ORDINALS}
+    today = datetime.now().date()
+    for delta in range(70):
+        d = today + timedelta(days=delta)
+        if d.weekday() != wanted:
+            continue
+        if not ords:
+            return d.isoformat()
+        nth = (d.day - 1) // 7 + 1
+        is_last = (d + timedelta(days=7)).month != d.month
+        if nth in ords or (-1 in ords and is_last):
+            return d.isoformat()
+    return ""
+
+
+def dated_list_lines(soup: BeautifulSoup, container: Optional[str] = None) -> list[str]:
+    """Visible text lines of the page's content blocks in document order
+    (<br> and block boundaries split lines). Shared by the reader and the
+    discovery probe, which counts how many start with a date."""
+    root = soup.select_one(container) if container else None
+    root = root or soup.body or soup
+    for tag in root.find_all(["script", "style", "nav", "header", "footer", "form", "noscript"]):
+        tag.decompose()
+    lines: list[str] = []
+    blocks = root.find_all(["p", "li", "h1", "h2", "h3", "h4", "h5", "h6", "tr", "dt", "dd", "div"])
+    for el in blocks:
+        if el.find(["p", "li", "h1", "h2", "h3", "h4", "h5", "h6", "tr", "dt", "dd", "div"]):
+            continue    # a wrapper; its leaves are visited on their own
+        text = el.get_text("\n") if el.name != "tr" else "\n".join(
+            td.get_text(" ") for td in el.find_all(["td", "th"]))
+        for raw in text.split("\n"):
+            line = clean_text(raw)
+            if line:
+                lines.append(line)
+    return lines
+
+
+def dated_line_count(lines: list[str]) -> int:
+    return sum(1 for ln in lines if _DL_DATE_RX.match(ln) or _DL_EVERY_RX.match(ln))
+
+
+class DatedListScraper(BaseScraper):
+    name = "dated-list"
+
+    def scrape(self) -> list[Event]:
+        urls = [str(u) for u in (self.params.get("urls") or []) if u]
+        if not urls:
+            self.status.note = "params.urls required"
+            return []
+        venue_default = clean_text(self.params.get("venue_default") or "") or self.market.name
+        island = venue_default.split(",")[-1].strip()
+        container = str(self.params.get("container") or "") or None
+        events: list[Event] = []
+        for url in urls[: max(self.max_pages, 4)]:
+            soup = self.engine.soup(url)
+            if soup is None:
+                continue
+            self.status.pages_fetched += 1
+            title_el = soup.find("title")
+            page_title = clean_text(title_el.get_text(" ")) if title_el else ""
+            hint = int(self.params.get("year") or 0)
+            if not hint:
+                m = re.search(r"\b(20\d{2})\b", f"{page_title} {url}")
+                hint = int(m.group(1)) if m else datetime.now().year
+            events.extend(self._read(dated_list_lines(soup, container), url, hint, venue_default, island))
+        today = _today_iso()
+        kept: list[Event] = []
+        for ev in events:
+            if not ev.name or not ev.date or ev.date < today:
+                continue
+            if keep_for_market(ev, self.market, self.params, ev.venue):
+                kept.append(ev)
+        return _dedupe_name_date(kept)
+
+    def _read(self, lines: list[str], url: str, hint: int, venue_default: str,
+              island: str) -> list[Event]:
+        out: list[Event] = []
+        pending: tuple[str, str] = ("", "")       # (iso, raw) from a date-only line
+        pending_time = ""
+        month_ctx = 0
+        current: Optional[Event] = None
+
+        def flush() -> None:
+            nonlocal current
+            if current is not None:
+                current.time = current.time or parse_time(current.description)
+                current.price = current.price or parse_price(current.description)
+                current.category = current.category or infer_category(current.name, current.description)
+                current.description = current.description[:600]
+                out.append(current)
+            current = None
+
+        for line in lines:
+            head = _DL_MONTH_HEAD_RX.match(line)
+            if head:
+                month_ctx = _dl_month_number(head.group("m1"))
+                if head.group("year"):
+                    hint = int(head.group("year"))
+                continue
+            iso, raw, rest = "", "", ""
+            m = _DL_DATE_RX.match(line)
+            if m:
+                iso = _dl_resolve(m.group("m1"), m.group("d1"), m.group("m2") or "",
+                                  m.group("d2") or "", m.group("year") or "", hint)
+                raw, rest = line[:m.end()].strip(" -–—:|."), line[m.end():]
+            else:
+                m = _DL_EVERY_RX.match(line)
+                if m:
+                    iso = _dl_next_weekday(m.group("day"), m.group("ord"))
+                    raw, rest = line[:m.end()].strip(" -–—:|."), line[m.end():]
+                elif month_ctx:
+                    m = _DL_DAYONLY_RX.match(line)
+                    if m:
+                        iso = _dl_resolve(month_ctx, m.group("d1"), "", m.group("d2") or "", str(hint), hint)
+                        raw, rest = line[:m.end()].strip(" -–—:|,."), line[m.end():]
+            if m and iso:
+                rest = rest.strip(" -–—:|,")
+                if rest:
+                    flush()
+                    current = self._event(rest, iso, raw, url, venue_default, island)
+                else:
+                    flush()
+                    pending = (iso, raw)
+                continue
+            if m and not iso:
+                flush()                 # a dated line the reader cannot place ("Mid-February")
+                pending = ("", "")
+                continue
+            if pending[0]:
+                if _DL_TIMEONLY_RX.match(line) and parse_time(line):
+                    pending_time = parse_time(line)      # "11am-4pm" on its own row
+                    continue
+                current = self._event(line, pending[0], pending[1], url, venue_default, island)
+                current.time = current.time or pending_time
+                pending, pending_time = ("", ""), ""
+                continue
+            if current is not None:
+                # The first line under a title is the place when it reads like
+                # one ("Marsh Harbour Community Center", "New Plymouth, Green
+                # Turtle Cay"): short, no sentence punctuation.
+                if (current.venue == venue_default and not current.description
+                        and len(line) <= 60 and not re.search(r"[.!?]", line)):
+                    current.venue = line if island.lower() in line.lower() else f"{line}, {island}"
+                    continue
+                if len(current.description) < 600:
+                    current.description = clean_text(f"{current.description} {line}")
+        flush()
+        return out
+
+    def _event(self, title_line: str, iso: str, raw: str, url: str,
+               venue_default: str, island: str) -> Event:
+        text = title_line.strip().rstrip(".")
+        parts = _DL_TITLE_SEP_RX.split(text, 1)
+        if len(parts) == 2 and parts[0].strip() and parts[1].strip():
+            title, venue = parts[0].strip(), parts[1].strip()
+        elif ", " in text and len(text.split(", ", 1)[1]) <= 80:
+            title, venue = text.split(", ", 1)
+        else:
+            title, venue = text, ""
+        title, venue = title.strip(" ,.-"), venue.strip(" ,.-")
+        if not clean_card_title(title):
+            title = ""              # "Thursday - Thursday": a calendar grid cell
+        if venue and island and island.lower() not in venue.lower():
+            venue = f"{venue}, {island}"
+        slug = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")[:48]
+        return Event(name=title[:200], date=iso, raw_date=raw, venue=venue or venue_default,
+                     source_url=f"{url}#{slug}-{iso}", source_name=self.name,
+                     time=parse_time(title_line), price=parse_price(title_line))
+
+
 _DATEWORD_RX = re.compile(
     r"\b(mon|tue|wed|thu|fri|sat|sun)[a-z]*\b|\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b"
     r"|\b(today|tomorrow|tonight)\b|\d+|[,.\-–:/@|•]|(st|nd|rd|th)\b", re.I)
@@ -3976,6 +4251,7 @@ SCRAPER_REGISTRY: dict[str, type[BaseScraper]] = {
     "ics": IcsFeedScraper,
     "rss": RssFeedScraper,
     "html-cards": HtmlCardsScraper,
+    "dated-list": DatedListScraper,
     "meetup": MeetupScraper,
     "luma": LumaScraper,
     "ticket-flare": TicketFlareScraper,

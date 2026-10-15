@@ -499,6 +499,14 @@ class Prober:
                             cands.append(("rss", {"urls": [base + path], "venue_default": venue_default}, "wp events feed"))
                             break
 
+        # 3b. prose calendar: paragraphs, list items or table rows that start
+        #     with a date (Waterway Guide island calendars, tourism-board
+        #     "annual events" pages). Five dated lines make a candidate; the
+        #     reader then decides on exact dates only.
+        if S.dated_line_count(S.dated_list_lines(S.make_soup(html_text))) >= 5:
+            cands.append(("dated-list", {"urls": [entry_url], "venue_default": venue_default},
+                          "dated lines"))
+
         # 4. card listing: many links sharing an event-ish path marker
         marker = self.best_marker(soup, base)
         if marker:

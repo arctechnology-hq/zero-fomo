@@ -1,0 +1,114 @@
+{
+  "id": "bs-marsh-harbour",
+  "name": "Marsh Harbour, Abaco",
+  "country": "BS",
+  "tz": "America/Nassau",
+  "lat": 26.5412,
+  "lng": -77.0636,
+  "radius_km": 70,
+  "currency": "BSD",
+  "sources": {
+    "bahamas.com": {
+      "areas": [
+        "abaco",
+        "marsh harbour",
+        "hope town",
+        "elbow cay",
+        "green turtle cay",
+        "treasure cay",
+        "man-o-war",
+        "man o war",
+        "guana cay",
+        "sandy point",
+        "cherokee sound",
+        "little harbour",
+        "walker's cay",
+        "grand cay",
+        "moore's island",
+        "cooper's town",
+        "fox town",
+        "crossing rocks",
+        "winding bay",
+        "fiddle cay",
+        "new plymouth"
+      ]
+    },
+    "dated-list#abacosun": {
+      "urls": [
+        "https://abacosun.com/2023/04/27/events"
+      ],
+      "venue_default": "Marsh Harbour, Abaco",
+      "cities": [
+        "abaco",
+        "marsh harbour",
+        "hope town",
+        "elbow cay",
+        "green turtle cay",
+        "treasure cay",
+        "man-o-war",
+        "man o war",
+        "guana cay",
+        "sandy point",
+        "cherokee sound",
+        "little harbour",
+        "walker's cay",
+        "grand cay",
+        "moore's island",
+        "cooper's town",
+        "fox town",
+        "crossing rocks",
+        "winding bay",
+        "fiddle cay",
+        "new plymouth"
+      ],
+      "exclude_title": "^\\s*(?:bahamas\\s+)?(?:sir randol fawkes\\s+)?(?:new year'?s?(?: day)?|majority rule(?: day)?|christmas(?: day)?|boxing day|labou?r day|whit monday|easter monday|good friday|emancipation day|national heroes day|independence day)\\s*(?:holiday|\\(observed\\)|\\(public holiday\\))?\\s*$|^\\s*(?:spiny |stone )?(?:lobster|crab) season (?:opens|closes)\\s*$",
+      "_note": "The Abaco Sun's running events calendar (one WordPress post, updated monthly): 'NOVEMBER 2026' headings, day rows ('13-15', '27' + '11am-4pm'), title, place. Pickleball tournament, art shows, Christmas markets, Junkanoo, Devour! The Beach. The host answers 429 to bursts - one page, read once. Added 2026-10-15."
+    },
+    "dated-list#waterwayguide": {
+      "urls": [
+        "https://www.waterwayguide.com/knowledge-center/news-post/12686/2026-abaco-events-calendar"
+      ],
+      "container": ".news-item .content",
+      "venue_default": "Marsh Harbour, Abaco",
+      "cities": [
+        "abaco",
+        "marsh harbour",
+        "hope town",
+        "elbow cay",
+        "green turtle cay",
+        "treasure cay",
+        "man-o-war",
+        "man o war",
+        "guana cay",
+        "sandy point",
+        "cherokee sound",
+        "little harbour",
+        "walker's cay",
+        "grand cay",
+        "moore's island",
+        "cooper's town",
+        "fox town",
+        "crossing rocks",
+        "winding bay",
+        "fiddle cay",
+        "new plymouth"
+      ],
+      "exclude_title": "^\\s*(?:bahamas\\s+)?(?:sir randol fawkes\\s+)?(?:new year'?s?(?: day)?|majority rule(?: day)?|christmas(?: day)?|boxing day|labou?r day|whit monday|easter monday|good friday|emancipation day|national heroes day|independence day)\\s*(?:holiday|\\(observed\\)|\\(public holiday\\))?\\s*$",
+      "_note": "Waterway Guide's Abaco year calendar (prose, date-led paragraphs): fishing tournaments, Hope Town festivals, Green Turtle Cay Junkanoo. Exact dates only; the 'Mid-February' / 'October TBD' lines are skipped by design. Added 2026-10-15."
+    },
+    "community": {}
+  },
+  "discovery": {
+    "_doc": "Abaco: the Family Island with the most visitor-facing inventory (fishing tournaments, regattas, Hope Town festivals), announced mostly on Facebook. Eventbrite (the-bahamas--marsh-harbour) and allevents.in/marsh-harbour hold no local inventory on 2026-10-15 (both pad with worldwide online events) - watchlist, not sources. Seeds are probed every discovery run; a seed is adopted only when its reader yields >= adopt_min_events upcoming.",
+    "seeds": [
+      "https://www.abacobeachresort.com/",
+      "https://www.greenturtleclub.com/",
+      "https://www.treasurecay.com/",
+      "https://www.abacoclub.com/",
+      "https://www.hopetownmuseum.org/",
+      "https://www.abacoinn.com/",
+      "https://www.bluffhouse.com/",
+      "https://www.seasprayresort.com/"
+    ]
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "id": "bs-alice-town",
+  "name": "Alice Town, Bimini",
+  "country": "BS",
+  "tz": "America/Nassau",
+  "lat": 25.7276,
+  "lng": -79.2975,
+  "radius_km": 30,
+  "currency": "BSD",
+  "sources": {
+    "bahamas.com": {
+      "areas": [
+        "bimini",
+        "alice town",
+        "bailey town",
+        "south bimini",
+        "north bimini",
+        "cat cay",
+        "gun cay",
+        "resorts world"
+      ]
+    },
+    "dated-list#waterwayguide": {
+      "urls": [
+        "https://www.waterwayguide.com/knowledge-center/news-post/12710/2026-bimini-in-the-bahamas-event-calendar"
+      ],
+      "container": ".news-item .content",
+      "venue_default": "Alice Town, Bimini",
+      "cities": [
+        "bimini",
+        "alice town",
+        "bailey town",
+        "south bimini",
+        "north bimini",
+        "cat cay",
+        "gun cay",
+        "resorts world"
+      ],
+      "exclude_title": "^\\s*(?:bahamas\\s+)?(?:sir randol fawkes\\s+)?(?:new year'?s?(?: day)?|majority rule(?: day)?|christmas(?: day)?|boxing day|labou?r day|whit monday|easter monday|good friday|emancipation day|national heroes day|independence day)\\s*(?:holiday|\\(observed\\)|\\(public holiday\\))?\\s*$",
+      "_note": "Bimini Tourist Office year calendar as published by Waterway Guide ('Jan 1st - Title' lines, descriptions below): Homecoming, Junkanoo, boating flings, fishing tournaments. Public holidays are dropped by title. Added 2026-10-15."
+    },
+    "ics#rwbimini": {
+      "urls": [
+        "https://rwbimini.com/events/?ical=1"
+      ],
+      "venue_default": "Resorts World Bimini, North Bimini",
+      "cities": [
+        "bimini",
+        "alice town",
+        "bailey town",
+        "south bimini",
+        "north bimini",
+        "cat cay",
+        "gun cay",
+        "resorts world"
+      ],
+      "_note": "Resorts World Bimini (WordPress, The Events Calendar iCal export): resort parties, shows, holiday programmes - 7 upcoming when discovery proposed it from the seed list on 2026-10-15 (dry run; adopted by hand the same day). Room offers and packages in the same calendar are dropped by title.",
+      "exclude_title": "offer|getaway|package|room-only|promo"
+    },
+    "community": {}
+  },
+  "discovery": {
+    "_doc": "Bimini: 50 miles off Miami, boating and fishing inventory; the Tourist Office calendar reaches the web through Waterway Guide; Resorts World and the Big Game Club post on their own sites and Facebook. Seeds are probed every discovery run.",
+    "seeds": [
+      "https://www.rwbimini.com/",
+      "https://www.biggameclubbimini.com/",
+      "https://www.waterwayguide.com/destination-travel-guide/106/bimini-bahamas"
+    ]
+  }
+}

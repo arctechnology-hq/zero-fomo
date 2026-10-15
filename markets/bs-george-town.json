@@ -1,0 +1,51 @@
+{
+  "id": "bs-george-town",
+  "name": "George Town, Exuma",
+  "country": "BS",
+  "tz": "America/Nassau",
+  "lat": 23.5063,
+  "lng": -75.764,
+  "radius_km": 90,
+  "currency": "BSD",
+  "sources": {
+    "bahamas.com": {
+      "areas": [
+        "exuma",
+        "george town",
+        "georgetown",
+        "staniel cay",
+        "farmer's cay",
+        "black point",
+        "rolleville",
+        "barraterre",
+        "steventon",
+        "ramsey",
+        "rolle town",
+        "stuart manor",
+        "elizabeth harbour",
+        "elizabeth harbor",
+        "emerald bay",
+        "stocking island",
+        "williams town",
+        "forbes hill",
+        "moss town",
+        "little exuma",
+        "compass cay"
+      ]
+    },
+    "community": {}
+  },
+  "discovery": {
+    "_doc": "Exuma: bahamas.com carries the Ministry calendar (National Family Island Regatta, homecomings, bonefishing championship, Farmer's Cay Festival); the cays announce on Facebook. Eventbrite (the-bahamas--exuma) and allevents.in/exuma hold no local inventory on 2026-10-15 - watchlist, not sources. Seeds are probed every discovery run.",
+    "seeds": [
+      "https://georgetowncruisingregatta.com/",
+      "https://www.stanielcay.com/",
+      "https://www.exumachamber.com/",
+      "https://www.grandisleresort.com/",
+      "https://www.peaceandplenty.com/",
+      "https://www.exumapoint.com/",
+      "https://www.exumabahamas.com/events",
+      "https://www.waterwayguide.com/destination-travel-guide/115/exuma-bahamas"
+    ]
+  }
+}

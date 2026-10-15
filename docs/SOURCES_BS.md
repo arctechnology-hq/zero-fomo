@@ -120,3 +120,84 @@ site whose newest content is 2019 — no event post type, no Tribe REST, posts
 endpoint empty; `100jamz.com/events/` answers 429; `fusionsuperplex.com`
 does not connect.
 
+## Family Islands open (2026-10-15): Abaco, Exuma, Eleuthera, Bimini
+
+Question asked: the feed covered Nassau and Freeport only, while `bahamas.com`
+had been carrying Family Island inventory all along (55 records nationwide on
+2026-10-15: 14 Great Exuma, 15 Eleuthera, 8 Grand Bahama, 2 Bimini, 1 Abaco).
+Which islands have enough *machine-readable* inventory to stand as markets of
+their own, and what else is out there? Every candidate was fetched and, where
+it looked alive, run through the reader in-process with the market filter on.
+
+### Markets opened
+
+| Market | Centre | Sources (hand-written) | On adoption |
+|---|---|---|---|
+| `bs-marsh-harbour` — Marsh Harbour, Abaco | 26.54, -77.06, 70 km (Treasure Cay, Hope Town, Green Turtle Cay) | `bahamas.com` (`areas` = Abaco settlements and cays), `dated-list#abacosun`, `dated-list#waterwayguide` | Abaco Sun 22 exact-dated (Pink Rose Ball, pickleball tournament, Hope Town Music Festival, Christmas Sparkle Market, Merrymakers show, Junkanoo + fireworks, Devour! The Beach, the spring fishing tournaments); Waterway Guide 6; bahamas.com 1 |
+| `bs-george-town` — George Town, Exuma | 23.51, -75.76, 90 km (Staniel Cay to Little Exuma) | `bahamas.com` (`areas` = Exuma settlements and cays) | 14: National Family Island Regatta, Exuma Junkanoo, Farmer's Cay Festival, Barraterre / Rolleville regattas, the homecomings, bonefishing championship |
+| `bs-governors-harbour` — Governor's Harbour, Eleuthera | 25.20, -76.24, 70 km (Spanish Wells to Bannerman Town) | `bahamas.com`, `tourismtoday` (`island: 28`), `dated-list#waterwayguide` | bahamas.com 15, tourismtoday 17 (the Ministry's Eleuthera & Harbour Island calendar), Waterway Guide 5 (Friday fish fry, Spanish Wells markets, Beach Walk, Governor's Harbour Homecoming, Music in the Garden) |
+| `bs-alice-town` — Alice Town, Bimini | 25.73, -79.30, 30 km | `bahamas.com`, `dated-list#waterwayguide`, `ics#rwbimini` (Resorts World's Events Calendar iCal, proposed by a discovery dry run from the seed list: DJ nights, countdown party; room offers dropped by title) | Resorts World 6; Waterway Guide 23 (Homecoming, Junkanoo, Tom Tucker tournament, the Ministry's boating flings, Black Boaters Bash, Slicker Wahoo) minus the public holidays dropped by `exclude_title`; bahamas.com 2 |
+
+First full runs (2026-10-15, `--no-details`): Abaco 25 exported / 0 parked,
+Exuma 14 / 1, Eleuthera 26 / 0, Bimini 24 / 1; Freeport stays at 8 (its
+Eventbrite slug now resolves and keeps one Freeport-venued event).
+
+Family Island markets do **not** set `island_filter` (that is the New
+Providence verdict); they bound their sources with `areas` (bahamas.com),
+`island` (tourismtoday) and `cities` lists of settlement names, so a Nassau
+record never lands in an island feed.
+
+### The `dated-list` reader (new, 2026-10-15)
+
+The Family Islands publish their year as prose, not cards: Waterway Guide's
+per-island calendars (`January 8-12, 2026 -- Back to Da' Cay Regatta, Cupid's
+Cay.`; a date on a line of its own followed by `Title -- Place`; `Jan 1st —
+Title`), the Abaco Sun's month table (`NOVEMBER 2026` / `13-15` / title /
+place). `dated-list` reads all four shapes, resolves year-less dates with the
+same roll-forward policy as `span_dates()`, turns "Every Friday" / "Every 2nd
+& 4th Saturday" into the next occurrence, and takes only exact dates —
+"Mid-February", "October TBD", "Easter Weekend" are skipped rather than
+guessed (the Abaco Waterway page is two-thirds such lines; the Abaco Sun has
+the exact ones). Discovery now proposes it for any page with five or more
+date-led lines (`docs/SOURCE_DISCOVERY.md`).
+
+Two reader bugs surfaced on the way and are fixed for every market:
+
+* `allevents.in` city pages without JSON-LD (`/exuma`, `/eleuthera`,
+  `/marsh-harbour`, `/freeport`) are padded with worldwide picks — Bangalore
+  jewel shows, Gujarat expos — whose cards carry no venue; the card fallback
+  stamped them with `venue_default` and they passed the market gate (144
+  records parked, 10 exported on the first Exuma run). In city mode the reader
+  now trusts JSON-LD only. The pages stay on the watchlist (`html` marker
+  `"@type": "Event"`) so inventory is adopted the day it appears.
+* `eventbrite` city slugs with no local inventory (`the-bahamas--exuma`,
+  `the-bahamas--freeport`) answer with the worldwide *online* events feed
+  (empty venue); the reader now applies `cities` / `countries` when a market
+  names them. `bs-freeport`'s slug is corrected to `the-bahamas--freeport`
+  (`bahamas--freeport` was a 404 since the market opened).
+* `infer_category`: the keyword `tour` matched inside *tournament*, so every
+  fishing tournament was a concert; it is a whole-word regex now, and
+  tournaments / fishing / wahoo / billfish / marlin / bonefish are sport.
+
+### Evaluated and not adopted (2026-10-15)
+
+| Site | Probe result |
+|---|---|
+| visitfreeport.com (The Events Calendar, 467 upcoming) | Freeport, **Maine** — Pineland Farms, Maine GearShare. A trap for any "Freeport events" query. |
+| gbchamber.org (Grand Bahama Chamber, Events Calendar REST + iCal) | Alive, 0 upcoming — watchlist (`tribe`) |
+| grandbahamavacations.com festivals page | Month grid with no dated listings (the reader finds two grid cells); seed only |
+| events.gbpa.com | WordPress, newest content 2019 |
+| portlucaya.com `/entertainment` | Blurbs, no dates |
+| scb.gov.bs/events (Securities Commission) | Events Manager widget: business outlooks + public holidays; not a listings source |
+| eleutheranews.com | Cloudflare challenge (403) to plain fetches; seed kept for the rendered path |
+| exumabahamas.com/events, harbourislandguide.com/events, myoutislands.com/events, bimini.com/events, eleuthera-map.com | 404 / cookie wall / empty |
+| georgetowncruisingregatta.com | One event (Feb 17 - Mar 3); `/events-schedule/` 404 |
+| discover-eleuthera-bahamas.com festivals page | "Usually the first week in June" — no dates |
+| theabaconian.com, nfir.bs, exumaregatta.com, andros.bs, longislandbahamas.com, junkanoo.com (for sale), islandhousenassau.com, nassauyachtclub.com | Dead or no DNS |
+| Waterway Guide: no 2026 calendar for Exuma, Grand Bahama, Andros, the Berry Islands or Nassau (only Abaco 12686, Eleuthera 12675, Bimini 12710) | Re-check in Q1 when the 2027 pages post; the `dated-list` sources take a URL change only |
+
+Still true: the cays and settlements announce on Facebook and WhatsApp. The
+share-to-0 FOMO inbox and the bridges remain the path for those; the markets
+above give the app a dated backbone (regattas, homecomings, tournaments,
+festivals) on each island so a visitor opening it in Hope Town or George Town
+no longer sees an empty screen.

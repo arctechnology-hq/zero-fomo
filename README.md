@@ -21,7 +21,11 @@ since 2026-09-25 the official/venue calendars: bahamas.com (Ministry of
 Tourism JSON endpoint), Tourism Today, Nassau Paradise Island Promotion
 Board, Atlantis, Baha Mar and Tikkets — see `docs/SOURCES_BS.md` for the
 survey and the rejected candidates. Cross-source fuzzy deduplication melts
-cross-listed events into single records.
+cross-listed events into single records. Since 2026-10-15 the Family Islands
+are markets of their own — Abaco (`bs-marsh-harbour`), Exuma (`bs-george-town`),
+Eleuthera & Harbour Island (`bs-governors-harbour`), Bimini (`bs-alice-town`) —
+fed by the Ministry calendars split by island plus the prose year calendars
+(Waterway Guide, the Abaco Sun) through the `dated-list` reader.
 
 Since 2026-09-25 the same pipeline covers the wider Caribbean: 33 market
 files (Jamaica, Trinidad & Tobago, Barbados, Cayman, the OECS islands, Aruba /
@@ -62,8 +66,8 @@ also finds subreddits and public Telegram channels for the bridges
 have none, keeping a country only when a real source was found. Weekly (first daily
 run ≥ 6 days after the last discovery) the task runs the weakest ten markets, ten new countries and retirements,
 then commits the market changes to `main`. Readers it can adopt: `ics`,
-`rss`, `html-cards`, `jsonld`, `tribe`, `wp-posts`, `allevents.in` (any
-city), `meetup`, `luma`. Full story: `docs/SOURCE_DISCOVERY.md`.
+`rss`, `html-cards`, `dated-list`, `jsonld`, `tribe`, `wp-posts`, `allevents.in`
+(any city), `meetup`, `luma`. Full story: `docs/SOURCE_DISCOVERY.md`.
 
 ```
 python discover_sources.py --market lc-castries --dry-run -v

@@ -218,6 +218,48 @@
         "seen": "2026-10-13",
         "probe_events": 2
       }
+    },
+    {
+      "name": "Grand Bahama Chamber of Commerce (tribe)",
+      "kind": "tribe",
+      "url": "https://gbchamber.org/wp-json/tribe/events/v1/events?per_page=20",
+      "adopt": "bs-freeport: tribe#gbchamber base=https://gbchamber.org",
+      "_auto": {
+        "seen": "2026-10-15",
+        "probe_events": 0
+      }
+    },
+    {
+      "name": "allevents.in Exuma (JSON-LD appears when local events exist)",
+      "kind": "html",
+      "url": "https://allevents.in/exuma",
+      "marker": "\"@type\":\\s*\"Event\"",
+      "min": 3,
+      "adopt": "bs-george-town: allevents.in city=exuma cities=[exuma, george town, staniel cay, ...]"
+    },
+    {
+      "name": "allevents.in Eleuthera (JSON-LD appears when local events exist)",
+      "kind": "html",
+      "url": "https://allevents.in/eleuthera",
+      "marker": "\"@type\":\\s*\"Event\"",
+      "min": 3,
+      "adopt": "bs-governors-harbour: allevents.in city=eleuthera cities=[eleuthera, harbour island, ...]"
+    },
+    {
+      "name": "allevents.in Marsh Harbour (JSON-LD appears when local events exist)",
+      "kind": "html",
+      "url": "https://allevents.in/marsh-harbour",
+      "marker": "\"@type\":\\s*\"Event\"",
+      "min": 3,
+      "adopt": "bs-marsh-harbour: allevents.in city=marsh-harbour cities=[abaco, marsh harbour, hope town, ...]"
+    },
+    {
+      "name": "Eventbrite Exuma city page (local events, not the online fallback)",
+      "kind": "html",
+      "url": "https://www.eventbrite.com/d/the-bahamas--exuma/events/",
+      "marker": "Exuma",
+      "min": 12,
+      "adopt": "bs-george-town: eventbrite slug=the-bahamas--exuma cities=[exuma, george town, ...]"
     }
   ]
 }

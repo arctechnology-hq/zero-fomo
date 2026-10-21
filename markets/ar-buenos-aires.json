@@ -1,0 +1,51 @@
+{
+  "id": "ar-buenos-aires",
+  "name": "Buenos Aires, Argentina",
+  "country": "AR",
+  "tz": "America/Argentina/Buenos_Aires",
+  "lat": -34.6131,
+  "lng": -58.3772,
+  "radius_km": 50,
+  "currency": "ARS",
+  "auto": true,
+  "created": "2026-10-21",
+  "sources": {
+    "allevents.in": {
+      "city": "buenos-aires",
+      "countries": [
+        "argentina"
+      ],
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "guess",
+        "probe_events": 63,
+        "from": ""
+      }
+    },
+    "luma": {
+      "slug": "buenos-aires",
+      "countries": [
+        "argentina"
+      ],
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "guess",
+        "probe_events": 11,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "ar--Buenos%20Aires",
+      "countries": [
+        "argentina"
+      ],
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "guess",
+        "probe_events": 12,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

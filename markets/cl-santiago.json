@@ -1,0 +1,51 @@
+{
+  "id": "cl-santiago",
+  "name": "Santiago, Chile",
+  "country": "CL",
+  "tz": "America/Santiago",
+  "lat": -33.4569,
+  "lng": -70.6483,
+  "radius_km": 50,
+  "currency": "CLP",
+  "auto": true,
+  "created": "2026-10-21",
+  "sources": {
+    "allevents.in": {
+      "city": "santiago",
+      "countries": [
+        "chile"
+      ],
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "guess",
+        "probe_events": 48,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "cl--Santiago",
+      "countries": [
+        "chile"
+      ],
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "guess",
+        "probe_events": 10,
+        "from": ""
+      }
+    },
+    "dated-list#chile": {
+      "urls": [
+        "https://www.chile.travel/en/"
+      ],
+      "venue_default": "Santiago, Chile",
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "search:Chile events tickets",
+        "probe_events": 4,
+        "from": "https://www.chile.travel/en/"
+      }
+    },
+    "community": {}
+  }
+}

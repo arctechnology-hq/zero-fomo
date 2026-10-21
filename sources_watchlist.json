@@ -260,6 +260,28 @@
       "marker": "Exuma",
       "min": 12,
       "adopt": "bs-george-town: eventbrite slug=the-bahamas--exuma cities=[exuma, george town, ...]"
+    },
+    {
+      "name": "ni-managua jsonld#managua (2 upcoming)",
+      "kind": "status",
+      "url": "https://www.managua.gob.ni/calendario-de-eventos/",
+      "alert_when_alive": false,
+      "adopt": "ni-managua: jsonld#managua {\"urls\": [\"https://www.managua.gob.ni/calendario-de-eventos/\"], \"venue_default\": \"Managua, Nicaragua\"}",
+      "_auto": {
+        "seen": "2026-10-21",
+        "probe_events": 2
+      }
+    },
+    {
+      "name": "sv-san-salvador meetup (1 upcoming)",
+      "kind": "status",
+      "url": "https://meetup",
+      "alert_when_alive": false,
+      "adopt": "sv-san-salvador: meetup {\"location\": \"sv--San%20Salvador\", \"countries\": [\"el salvador\"]}",
+      "_auto": {
+        "seen": "2026-10-21",
+        "probe_events": 1
+      }
     }
   ]
 }

@@ -10,18 +10,55 @@
   "auto": true,
   "created": "2026-10-13",
   "sources": {
-    "allevents.in": {
-      "city": "managua",
-      "countries": [
-        "nicaragua"
-      ],
+    "community": {},
+    "eventbrite": {
+      "slug": "nicaragua--managua",
       "_auto": {
-        "adopted": "2026-10-13",
-        "via": "guess",
-        "probe_events": 5,
+        "adopted": "2026-10-21",
+        "via": "search:Managua Nicaragua events calendar",
+        "probe_events": 9,
         "from": ""
       }
     },
-    "community": {}
+    "html-cards#vamoseventos": {
+      "urls": [
+        "https://www.vamoseventos.com/managua"
+      ],
+      "href_marker": "/event/",
+      "venue_default": "Managua, Nicaragua",
+      "detail_cap": 20,
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "search:Managua Nicaragua events calendar",
+        "probe_events": 20,
+        "from": "https://www.vamoseventos.com/managua"
+      }
+    },
+    "jsonld#salsavida": {
+      "urls": [
+        "https://www.salsavida.com/guides/nicaragua/managua/"
+      ],
+      "venue_default": "Managua, Nicaragua",
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "search:Managua Nicaragua events calendar",
+        "probe_events": 8,
+        "from": "https://www.salsavida.com/guides/nicaragua/managua/"
+      }
+    },
+    "html-cards#meticket": {
+      "urls": [
+        "https://me-ticket.com/catalog/nicaragua/managua/music"
+      ],
+      "href_marker": "/event/",
+      "venue_default": "Managua, Nicaragua",
+      "detail_cap": 20,
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "search:Managua Nicaragua concerts parties tickets",
+        "probe_events": 3,
+        "from": "https://me-ticket.com/catalog/nicaragua/managua/music"
+      }
+    }
   }
 }

@@ -1,0 +1,51 @@
+{
+  "id": "co-bogota",
+  "name": "Bogotá, Colombia",
+  "country": "CO",
+  "tz": "America/Bogota",
+  "lat": 4.6097,
+  "lng": -74.0817,
+  "radius_km": 50,
+  "currency": "COP",
+  "auto": true,
+  "created": "2026-10-21",
+  "sources": {
+    "allevents.in": {
+      "city": "bogota",
+      "countries": [
+        "colombia"
+      ],
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "guess",
+        "probe_events": 15,
+        "from": ""
+      }
+    },
+    "luma": {
+      "slug": "bogota",
+      "countries": [
+        "colombia"
+      ],
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "guess",
+        "probe_events": 7,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "co--Bogota",
+      "countries": [
+        "colombia"
+      ],
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "guess",
+        "probe_events": 11,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

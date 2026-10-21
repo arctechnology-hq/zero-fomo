@@ -1,0 +1,41 @@
+{
+  "id": "ca-ottawa",
+  "name": "Ottawa, Canada",
+  "country": "CA",
+  "tz": "America/Toronto",
+  "lat": 45.4112,
+  "lng": -75.6981,
+  "radius_km": 50,
+  "currency": "CAD",
+  "auto": true,
+  "created": "2026-10-21",
+  "sources": {
+    "ticketmaster": {},
+    "seatgeek": {},
+    "allevents.in": {
+      "city": "ottawa",
+      "countries": [
+        "canada"
+      ],
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "guess",
+        "probe_events": 85,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "ca--Ottawa",
+      "countries": [
+        "canada"
+      ],
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "guess",
+        "probe_events": 12,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

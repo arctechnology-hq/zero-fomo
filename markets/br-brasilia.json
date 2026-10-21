@@ -1,0 +1,41 @@
+{
+  "id": "br-brasilia",
+  "name": "Brasília, Brazil",
+  "country": "BR",
+  "tz": "America/Sao_Paulo",
+  "lat": -15.7797,
+  "lng": -47.9297,
+  "radius_km": 50,
+  "currency": "BRL",
+  "auto": true,
+  "created": "2026-10-21",
+  "sources": {
+    "allevents.in": {
+      "city": "brasilia",
+      "countries": [
+        "brazil",
+        "brasil"
+      ],
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "guess",
+        "probe_events": 18,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "br--Brasilia",
+      "countries": [
+        "brazil",
+        "brasil"
+      ],
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "guess",
+        "probe_events": 5,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

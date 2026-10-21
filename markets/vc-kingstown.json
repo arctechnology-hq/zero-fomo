@@ -27,6 +27,25 @@
         "st vincent"
       ]
     },
-    "community": {}
+    "community": {},
+    "allevents.in": {
+      "city": "kingstown",
+      "countries": [
+        "saint vincent and the grenadines",
+        "st. vincent and the grenadines",
+        "st vincent and the grenadines",
+        "saint vincent",
+        "the grenadines",
+        "st. vincent",
+        "st vincent",
+        "grenadines"
+      ],
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "guess",
+        "probe_events": 6,
+        "from": ""
+      }
+    }
   }
 }

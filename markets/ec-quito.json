@@ -1,0 +1,39 @@
+{
+  "id": "ec-quito",
+  "name": "Quito, Ecuador",
+  "country": "EC",
+  "tz": "America/Guayaquil",
+  "lat": -0.2298,
+  "lng": -78.525,
+  "radius_km": 50,
+  "currency": "USD",
+  "auto": true,
+  "created": "2026-10-21",
+  "sources": {
+    "allevents.in": {
+      "city": "quito",
+      "countries": [
+        "ecuador"
+      ],
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "guess",
+        "probe_events": 40,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "ec--Quito",
+      "countries": [
+        "ecuador"
+      ],
+      "_auto": {
+        "adopted": "2026-10-21",
+        "via": "guess",
+        "probe_events": 7,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

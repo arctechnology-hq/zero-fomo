@@ -1,0 +1,27 @@
+{
+  "id": "pe-lima",
+  "name": "Lima, Peru",
+  "country": "PE",
+  "tz": "America/Lima",
+  "lat": -12.0432,
+  "lng": -77.0282,
+  "radius_km": 50,
+  "currency": "PEN",
+  "auto": true,
+  "created": "2026-10-27",
+  "sources": {
+    "meetup": {
+      "location": "pe--Lima",
+      "countries": [
+        "peru"
+      ],
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "guess",
+        "probe_events": 11,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

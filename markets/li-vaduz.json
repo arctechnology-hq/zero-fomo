@@ -1,0 +1,27 @@
+{
+  "id": "li-vaduz",
+  "name": "Vaduz, Liechtenstein",
+  "country": "LI",
+  "tz": "Europe/Vaduz",
+  "lat": 47.1415,
+  "lng": 9.5215,
+  "radius_km": 25,
+  "currency": "CHF",
+  "auto": true,
+  "created": "2026-10-27",
+  "sources": {
+    "allevents.in": {
+      "city": "vaduz",
+      "countries": [
+        "liechtenstein"
+      ],
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "guess",
+        "probe_events": 20,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

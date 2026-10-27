@@ -33,7 +33,28 @@
         "compass cay"
       ]
     },
-    "community": {}
+    "community": {},
+    "eventbrite": {
+      "slug": "the-bahamas--nassau",
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "search:Bahamas events tickets",
+        "probe_events": 21,
+        "from": ""
+      }
+    },
+    "allevents.in": {
+      "city": "nassau",
+      "countries": [
+        "bahamas"
+      ],
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "search:Bahamas events tickets",
+        "probe_events": 20,
+        "from": ""
+      }
+    }
   },
   "discovery": {
     "_doc": "Exuma: bahamas.com carries the Ministry calendar (National Family Island Regatta, homecomings, bonefishing championship, Farmer's Cay Festival); the cays announce on Facebook. Eventbrite (the-bahamas--exuma) and allevents.in/exuma hold no local inventory on 2026-10-15 - watchlist, not sources. Seeds are probed every discovery run.",

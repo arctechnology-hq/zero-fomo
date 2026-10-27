@@ -1,0 +1,52 @@
+{
+  "id": "fr-paris",
+  "name": "Paris, France",
+  "country": "FR",
+  "tz": "Europe/Paris",
+  "lat": 48.8534,
+  "lng": 2.3488,
+  "radius_km": 50,
+  "currency": "EUR",
+  "auto": true,
+  "created": "2026-10-27",
+  "sources": {
+    "ticketmaster": {},
+    "allevents.in": {
+      "city": "paris",
+      "countries": [
+        "france"
+      ],
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "guess",
+        "probe_events": 71,
+        "from": ""
+      }
+    },
+    "luma": {
+      "slug": "paris",
+      "countries": [
+        "france"
+      ],
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "guess",
+        "probe_events": 20,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "fr--Paris",
+      "countries": [
+        "france"
+      ],
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "guess",
+        "probe_events": 9,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

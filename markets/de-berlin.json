@@ -1,0 +1,55 @@
+{
+  "id": "de-berlin",
+  "name": "Berlin, Germany",
+  "country": "DE",
+  "tz": "Europe/Berlin",
+  "lat": 52.5244,
+  "lng": 13.4105,
+  "radius_km": 50,
+  "currency": "EUR",
+  "auto": true,
+  "created": "2026-10-27",
+  "sources": {
+    "ticketmaster": {},
+    "allevents.in": {
+      "city": "berlin",
+      "countries": [
+        "germany",
+        "deutschland"
+      ],
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "guess",
+        "probe_events": 79,
+        "from": ""
+      }
+    },
+    "luma": {
+      "slug": "berlin",
+      "countries": [
+        "germany",
+        "deutschland"
+      ],
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "guess",
+        "probe_events": 20,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "de--Berlin",
+      "countries": [
+        "germany",
+        "deutschland"
+      ],
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "guess",
+        "probe_events": 11,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

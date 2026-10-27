@@ -282,6 +282,28 @@
         "seen": "2026-10-21",
         "probe_events": 1
       }
+    },
+    {
+      "name": "vg-road-town jsonld#happeningnext (1 upcoming)",
+      "kind": "status",
+      "url": "https://happeningnext.com/road+town/festivals",
+      "alert_when_alive": false,
+      "adopt": "vg-road-town: jsonld#happeningnext {\"urls\": [\"https://happeningnext.com/road+town/festivals\"], \"venue_default\": \"Road Town, British Virgin Islands\"}",
+      "_auto": {
+        "seen": "2026-10-27",
+        "probe_events": 1
+      }
+    },
+    {
+      "name": "bs-george-town dated-list#bahamas (1 upcoming)",
+      "kind": "status",
+      "url": "https://bahamas.tikkets.com/",
+      "alert_when_alive": false,
+      "adopt": "bs-george-town: dated-list#bahamas {\"urls\": [\"https://bahamas.tikkets.com/\"], \"venue_default\": \"George Town, Exuma\"}",
+      "_auto": {
+        "seen": "2026-10-27",
+        "probe_events": 1
+      }
     }
   ]
 }

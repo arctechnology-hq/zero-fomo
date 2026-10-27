@@ -1,0 +1,52 @@
+{
+  "id": "at-vienna",
+  "name": "Vienna, Austria",
+  "country": "AT",
+  "tz": "Europe/Vienna",
+  "lat": 48.2085,
+  "lng": 16.3721,
+  "radius_km": 50,
+  "currency": "EUR",
+  "auto": true,
+  "created": "2026-10-27",
+  "sources": {
+    "ticketmaster": {},
+    "allevents.in": {
+      "city": "vienna",
+      "countries": [
+        "austria"
+      ],
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "guess",
+        "probe_events": 64,
+        "from": ""
+      }
+    },
+    "luma": {
+      "slug": "vienna",
+      "countries": [
+        "austria"
+      ],
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "guess",
+        "probe_events": 12,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "at--Vienna",
+      "countries": [
+        "austria"
+      ],
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "guess",
+        "probe_events": 11,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

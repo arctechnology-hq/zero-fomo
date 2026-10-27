@@ -1,0 +1,27 @@
+{
+  "id": "uy-montevideo",
+  "name": "Montevideo, Uruguay",
+  "country": "UY",
+  "tz": "America/Montevideo",
+  "lat": -34.9033,
+  "lng": -56.1882,
+  "radius_km": 50,
+  "currency": "UYU",
+  "auto": true,
+  "created": "2026-10-27",
+  "sources": {
+    "meetup": {
+      "location": "uy--Montevideo",
+      "countries": [
+        "uruguay"
+      ],
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "guess",
+        "probe_events": 6,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

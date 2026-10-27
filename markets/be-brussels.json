@@ -1,0 +1,52 @@
+{
+  "id": "be-brussels",
+  "name": "Brussels, Belgium",
+  "country": "BE",
+  "tz": "Europe/Brussels",
+  "lat": 50.8505,
+  "lng": 4.3488,
+  "radius_km": 50,
+  "currency": "EUR",
+  "auto": true,
+  "created": "2026-10-27",
+  "sources": {
+    "ticketmaster": {},
+    "allevents.in": {
+      "city": "brussels",
+      "countries": [
+        "belgium"
+      ],
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "guess",
+        "probe_events": 67,
+        "from": ""
+      }
+    },
+    "luma": {
+      "slug": "brussels",
+      "countries": [
+        "belgium"
+      ],
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "guess",
+        "probe_events": 18,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "be--Brussels",
+      "countries": [
+        "belgium"
+      ],
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "guess",
+        "probe_events": 12,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

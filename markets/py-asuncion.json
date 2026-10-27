@@ -1,0 +1,27 @@
+{
+  "id": "py-asuncion",
+  "name": "Asunción, Paraguay",
+  "country": "PY",
+  "tz": "America/Asuncion",
+  "lat": -25.2865,
+  "lng": -57.647,
+  "radius_km": 50,
+  "currency": "PYG",
+  "auto": true,
+  "created": "2026-10-27",
+  "sources": {
+    "meetup": {
+      "location": "py--Asuncion",
+      "countries": [
+        "paraguay"
+      ],
+      "_auto": {
+        "adopted": "2026-10-27",
+        "via": "guess",
+        "probe_events": 4,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

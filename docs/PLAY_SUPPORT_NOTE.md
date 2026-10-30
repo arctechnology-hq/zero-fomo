@@ -1,4 +1,4 @@
-# Play Console support note (use only if the D-U-N-S request stalls)
+# Play Console support note (NOT NEEDED — D-U-N-S 815233241 issued, confirmed 2026-10-30; kept for reference)
 
 Google's rule: organisations that cannot obtain a D-U-N-S number may ask Play
 Console support for an alternative verification path, and must do so **before**

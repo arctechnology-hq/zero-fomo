@@ -22,7 +22,7 @@ says **CI** or **done** is automated or already in the repo.
 | Category | Events |
 | Privacy policy URL | `https://0fomo.app/privacy.html` |
 
-## 1. D-U-N-S number (SUBMITTED 2026-09-11, free 30-business-day track)
+## 1. D-U-N-S number — ISSUED: **815233241** (confirmed 2026-10-30)
 
 Requested through **Dunsguide** (CIAL Dun & Bradstreet, the D&B partner for
 Central America and the Caribbean) — the D&B US "Google developer" flow is
@@ -51,12 +51,21 @@ Sep 17 sales follow-up from Kavin Hewitt, CIAL business consultant (landed in
 could be filtered the same way: watch Spam for `cialdnb.com` / dunsguide until
 the number lands). Dunsguide My Account needs the owner's login to re-check.
 
+**Status 2026-10-30 — ISSUED.** Dunsguide → company Home (A.R.C Technology)
+shows **D-U-N-S® Number 815233241**, service *Active*, plan "D-U-N-S® Access"
+(free), registered to "Cappucienne McEva Richardson", trade name A.R.C
+Technology, TIN 131446276, 22 Denice Cay. No delivery email was seen (check
+Spam if one is needed for records). Use this number in §2 step 2 and for the
+Apple Developer Program. If Play Console says the number is not found, wait
+and retry: Google's lookup can lag D&B by up to ~30 days for new numbers — do
+not file a second request. `PLAY_SUPPORT_NOTE.md` is no longer needed.
+
 ## 2. Play Console account (you, ~20 min + verification)
 
 1. Sign in at https://play.google.com/console/signup with
    `rhan.richardson@arctechnologyhq.com` (Workspace account, not Gmail).
-2. Choose **Organisation**. Enter the D-U-N-S number when prompted; if it has not
-   arrived, the form lets you save and return.
+2. Choose **Organisation**. Enter the D-U-N-S number **815233241** when prompted; if it is not
+   found yet (lookup lag), the form lets you save and return.
 3. Pay the one-time **USD 25** registration.
 4. Verification: Google may ask for the Business Licence and an ID for the
    licensee; upload the PDFs from Drive → Registrations & Filings.

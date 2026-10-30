@@ -62,6 +62,10 @@ not file a second request. `PLAY_SUPPORT_NOTE.md` is no longer needed.
 
 ## 2. Play Console account (you, ~20 min + verification)
 
+0. **2-step verification first.** Checked 2026-10-30: the signup page stops at
+   "Turn on 2-step verification" for rhan.richardson@arctechnologyhq.com. Enable
+   it at https://myaccount.google.com/signinoptions/two-step-verification (owner
+   only), then continue.
 1. Sign in at https://play.google.com/console/signup with
    `rhan.richardson@arctechnologyhq.com` (Workspace account, not Gmail).
 2. Choose **Organisation**. Enter the D-U-N-S number **815233241** when prompted; if it is not
@@ -165,7 +169,9 @@ Data types to declare (leave every other type unchecked):
 
 ## 8. Release (CI + you)
 
-1. Done for `v0.8.1` (versionCode 10): CI built the signed AAB and attached it
+1. **Use 0.10.0 (versionCode 13)**, tagged 2026-10-30:
+   https://github.com/arctechnology-hq/zero-fomo/releases/tag/v0.10.0 .
+   (History: 0.8.1 / versionCode 10 was the first CI-signed AAB.) CI built the signed AAB and attached it
    to https://github.com/arctechnology-hq/zero-fomo/releases/tag/v0.8.1 .
    Upload that `app-release.aab` in Play Console for the first internal-testing
    release (enrol in Play App Signing when prompted). Later tags upload
@@ -183,7 +189,11 @@ Data types to declare (leave every other type unchecked):
 - [x] Target API 36 (AGP 8.11.2, Gradle 8.13, Kotlin 2.1.21).
 - [x] Privacy policy page served from the Pages site at https://0fomo.app/privacy.html (DNS: 4 apex A records + www CNAME, DNS-only, added 2026-09-11).
 - [x] Store icon + feature graphic rendered from the mark.
-- [x] Listing copy (2026-09-16: location + forwarding lines match v0.9).
+- [x] Listing copy (refreshed 2026-10-30 for v0.10.0: 46 markets across the
+      Bahamas, Caribbean, Florida/Atlanta, Mexico and Central America; six
+      languages; adaptive scope).
+- [x] v0.10.0 (versionCode 13) tagged 2026-10-30 -> CI signed AAB on the GitHub
+      Release (first upload is by hand; see §8).
 - [x] Phone screenshots (4, Galaxy S24+, 1080×2340) retaken 2026-09-16 on
       v0.9.0 with the Bahamas country theme (Nassau feed, detail, weekend
       filter, saved); status bar strip flattened.

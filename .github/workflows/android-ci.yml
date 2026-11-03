@@ -111,6 +111,7 @@ jobs:
           releaseFiles: zero_fomo/app/build/outputs/bundle/release/app-release.aab
           track: internal
           status: completed
+          whatsNewDirectory: store/whatsnew
       - uses: softprops/action-gh-release@v2
         with:
           files: zero_fomo/app/build/outputs/bundle/release/*.aab

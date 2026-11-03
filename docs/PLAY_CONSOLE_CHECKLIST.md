@@ -151,7 +151,7 @@ App, Free. Declarations: no ads; not designed for children; no government app.
 |---|---|
 | App icon 512×512 | `store/graphics/icon-512.png` |
 | Feature graphic 1024×500 | `store/graphics/feature-graphic-1024x500.png` |
-| Phone screenshots (4) | `store/graphics/screenshots/phone/` (Galaxy S24+, 1080×2340) |
+| Phone screenshots (4) | `store/graphics/screenshots/phone/` (Galaxy S24+, 1080×2340; retaken 2026-11-03 on v0.10.1: Nassau feed, regatta detail, weekend filter, Saved) |
 | Title | `store/listing/en-US/title.txt` |
 | Short description | `store/listing/en-US/short_description.txt` |
 | Full description | `store/listing/en-US/full_description.txt` |
@@ -224,11 +224,11 @@ Data types to declare (leave every other type unchecked):
 - [x] Listing copy (refreshed 2026-10-30 for v0.10.0: 46 markets across the
       Bahamas, Caribbean, Florida/Atlanta, Mexico and Central America; six
       languages; adaptive scope).
-- [x] v0.10.0 (versionCode 13) tagged 2026-10-30 -> CI signed AAB on the GitHub
-      Release (first upload is by hand; see §8).
-- [x] Phone screenshots (4, Galaxy S24+, 1080×2340) retaken 2026-09-16 on
-      v0.9.0 with the Bahamas country theme (Nassau feed, detail, weekend
-      filter, saved); status bar strip flattened.
+- [x] v0.10.1 (versionCode 14) tagged 2026-11-03 -> CI signed AAB on the GitHub
+      Release (first upload is by hand; see §8). Supersedes v0.10.0.
+- [x] Phone screenshots (4, Galaxy S24+, 1080×2340) retaken 2026-11-03 on
+      v0.10.1 with the Bahamas country theme (Nassau feed, regatta detail,
+      weekend filter, Saved with three hearted events); status bar strip flattened.
 - [x] Privacy page + Data safety answers cover "Send to 0 FOMO" (2026-09-16).
 - [ ] Crash reporting (Crashlytics) — not required for submission; planned before
       the 50 % rollout step.

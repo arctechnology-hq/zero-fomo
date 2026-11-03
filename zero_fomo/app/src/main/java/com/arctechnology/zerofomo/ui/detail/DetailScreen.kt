@@ -133,12 +133,17 @@ fun DetailScreen(
                 InfoRow(ev, Icons.Default.Schedule, label)
             }
             val locationTba = stringResource(R.string.detail_location_tba)
+            // The venue text must take weight(1f): without it a long venue fills
+            // the Row, the Directions button is measured at zero width, its label
+            // wraps one character per line and the invisible button stretches the
+            // row by ~80 dp above and below the venue (v0.10.0 detail-page gaps).
             Row(verticalAlignment = Alignment.CenterVertically) {
                 InfoRow(ev, Icons.Default.LocationOn,
                     listOfNotNull(
                         ev.venue.ifBlank { null },
                         ev.island?.displayName).joinToString(" · ")
-                        .ifBlank { locationTba })
+                        .ifBlank { locationTba },
+                    modifier = Modifier.weight(1f))
                 if (ev.venue.isNotBlank()) {
                     Spacer(Modifier.width(4.dp))
                     TextButton(onClick = {
@@ -292,8 +297,8 @@ private fun HeroHeader(
 
 @Composable
 private fun InfoRow(event: Event, icon: androidx.compose.ui.graphics.vector.ImageVector,
-                    text: String) {
-    Row(verticalAlignment = Alignment.CenterVertically,
+                    text: String, modifier: Modifier = Modifier) {
+    Row(modifier, verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         Box(
             Modifier

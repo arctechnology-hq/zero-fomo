@@ -1,0 +1,52 @@
+{
+  "id": "fi-helsinki",
+  "name": "Helsinki, Finland",
+  "country": "FI",
+  "tz": "Europe/Helsinki",
+  "lat": 60.1695,
+  "lng": 24.9354,
+  "radius_km": 40,
+  "currency": "EUR",
+  "auto": true,
+  "created": "2026-11-03",
+  "sources": {
+    "ticketmaster": {},
+    "allevents.in": {
+      "city": "helsinki",
+      "countries": [
+        "finland"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 64,
+        "from": ""
+      }
+    },
+    "luma": {
+      "slug": "helsinki",
+      "countries": [
+        "finland"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 20,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "fi--Helsinki",
+      "countries": [
+        "finland"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 10,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

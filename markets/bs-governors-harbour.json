@@ -73,7 +73,28 @@
       "exclude_title": "^\\s*(?:bahamas\\s+)?(?:sir randol fawkes\\s+)?(?:new year'?s?(?: day)?|majority rule(?: day)?|christmas(?: day)?|boxing day|labou?r day|whit monday|easter monday|good friday|emancipation day|national heroes day|independence day)\\s*(?:holiday|\\(observed\\)|\\(public holiday\\))?\\s*$",
       "_note": "Waterway Guide's Eleuthera year calendar (prose, 'Month d-d, yyyy -- Title, Place.'): homecomings, Pineapple Festival, Friday fish fry, Spanish Wells markets. Added 2026-10-15."
     },
-    "community": {}
+    "community": {},
+    "eventbrite": {
+      "slug": "the-bahamas--nassau",
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "search:Bahamas events tickets",
+        "probe_events": 19,
+        "from": ""
+      }
+    },
+    "allevents.in": {
+      "city": "nassau",
+      "countries": [
+        "bahamas"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "search:Bahamas events tickets",
+        "probe_events": 18,
+        "from": ""
+      }
+    }
   },
   "discovery": {
     "_doc": "Eleuthera & Harbour Island: tourismtoday island id 28 is the Ministry's own Eleuthera calendar; bahamas.com carries the homecomings and festivals; Waterway Guide the cruisers' year list. Eventbrite (the-bahamas--harbour-island) and allevents.in/eleuthera hold no local inventory on 2026-10-15 - watchlist, not sources. Seeds are probed every discovery run.",

@@ -1,0 +1,31 @@
+{
+  "id": "ch-bern",
+  "name": "Bern, Switzerland",
+  "country": "CH",
+  "tz": "Europe/Zurich",
+  "lat": 46.9481,
+  "lng": 7.4474,
+  "radius_km": 25,
+  "currency": "CHF",
+  "auto": true,
+  "created": "2026-11-03",
+  "sources": {
+    "ticketmaster": {},
+    "meetup": {
+      "location": "ch--Bern",
+      "countries": [
+        "switzerland",
+        "schweiz",
+        "suisse",
+        "svizzera"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 12,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

@@ -16,9 +16,9 @@
         "panama"
       ],
       "_auto": {
-        "adopted": "2026-10-13",
+        "adopted": "2026-11-03",
         "via": "guess",
-        "probe_events": 20,
+        "probe_events": 21,
         "from": ""
       }
     },

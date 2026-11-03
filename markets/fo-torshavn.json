@@ -1,0 +1,27 @@
+{
+  "id": "fo-torshavn",
+  "name": "Tórshavn, Faroe Islands",
+  "country": "FO",
+  "tz": "Atlantic/Faroe",
+  "lat": 62.0097,
+  "lng": -6.7716,
+  "radius_km": 25,
+  "currency": "DKK",
+  "auto": true,
+  "created": "2026-11-03",
+  "sources": {
+    "allevents.in": {
+      "city": "torshavn",
+      "countries": [
+        "faroe islands"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 16,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

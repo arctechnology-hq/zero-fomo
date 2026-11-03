@@ -1,0 +1,61 @@
+{
+  "id": "nl-amsterdam",
+  "name": "Amsterdam, The Netherlands",
+  "country": "NL",
+  "tz": "Europe/Amsterdam",
+  "lat": 52.374,
+  "lng": 4.8897,
+  "radius_km": 40,
+  "currency": "EUR",
+  "auto": true,
+  "created": "2026-11-03",
+  "sources": {
+    "ticketmaster": {},
+    "allevents.in": {
+      "city": "amsterdam",
+      "countries": [
+        "the netherlands",
+        "netherlands",
+        "nederland",
+        "holland"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 59,
+        "from": ""
+      }
+    },
+    "luma": {
+      "slug": "amsterdam",
+      "countries": [
+        "the netherlands",
+        "netherlands",
+        "nederland",
+        "holland"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 20,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "nl--Amsterdam",
+      "countries": [
+        "the netherlands",
+        "netherlands",
+        "nederland",
+        "holland"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 11,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "id": "dk-copenhagen",
+  "name": "Copenhagen, Denmark",
+  "country": "DK",
+  "tz": "Europe/Copenhagen",
+  "lat": 55.6759,
+  "lng": 12.5655,
+  "radius_km": 50,
+  "currency": "DKK",
+  "auto": true,
+  "created": "2026-11-03",
+  "sources": {
+    "ticketmaster": {},
+    "allevents.in": {
+      "city": "copenhagen",
+      "countries": [
+        "denmark"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 63,
+        "from": ""
+      }
+    },
+    "luma": {
+      "slug": "copenhagen",
+      "countries": [
+        "denmark"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 18,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "dk--Copenhagen",
+      "countries": [
+        "denmark"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 11,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

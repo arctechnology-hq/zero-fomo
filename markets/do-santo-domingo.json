@@ -20,6 +20,36 @@
         "santo domingo"
       ]
     },
-    "community": {}
+    "community": {},
+    "allevents.in": {
+      "city": "santo-domingo",
+      "countries": [
+        "dominican republic",
+        "república dominicana",
+        "republica dominicana",
+        "rep. dom"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 19,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "do--Santo%20Domingo",
+      "countries": [
+        "dominican republic",
+        "república dominicana",
+        "republica dominicana",
+        "rep. dom"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 3,
+        "from": ""
+      }
+    }
   }
 }

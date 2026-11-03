@@ -96,7 +96,42 @@
       "exclude_title": "^\\s*(?:bahamas\\s+)?(?:sir randol fawkes\\s+)?(?:new year'?s?(?: day)?|majority rule(?: day)?|christmas(?: day)?|boxing day|labou?r day|whit monday|easter monday|good friday|emancipation day|national heroes day|independence day)\\s*(?:holiday|\\(observed\\)|\\(public holiday\\))?\\s*$",
       "_note": "Waterway Guide's Abaco year calendar (prose, date-led paragraphs): fishing tournaments, Hope Town festivals, Green Turtle Cay Junkanoo. Exact dates only; the 'Mid-February' / 'October TBD' lines are skipped by design. Added 2026-10-15."
     },
-    "community": {}
+    "community": {},
+    "eventbrite": {
+      "slug": "the-bahamas",
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "search:Marsh Harbour Bahamas what's on this week",
+        "probe_events": 26,
+        "from": ""
+      }
+    },
+    "jsonld#242whatshappening": {
+      "urls": [
+        "https://242whatshappening.com/events"
+      ],
+      "venue_default": "Marsh Harbour, Abaco",
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "search:Marsh Harbour Bahamas what's on this week",
+        "probe_events": 16,
+        "from": "https://242whatshappening.com/events"
+      }
+    },
+    "html-cards#bahamaslocal": {
+      "urls": [
+        "https://www.bahamaslocal.com/events/"
+      ],
+      "href_marker": "/event/",
+      "venue_default": "Marsh Harbour, Abaco",
+      "detail_cap": 20,
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "search:Marsh Harbour Bahamas concerts parties tickets",
+        "probe_events": 6,
+        "from": "https://www.bahamaslocal.com/showlisting/18243/"
+      }
+    }
   },
   "discovery": {
     "_doc": "Abaco: the Family Island with the most visitor-facing inventory (fishing tournaments, regattas, Hope Town festivals), announced mostly on Facebook. Eventbrite (the-bahamas--marsh-harbour) and allevents.in/marsh-harbour hold no local inventory on 2026-10-15 (both pad with worldwide online events) - watchlist, not sources. Seeds are probed every discovery run; a seed is adopted only when its reader yields >= adopt_min_events upcoming.",

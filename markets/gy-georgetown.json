@@ -19,6 +19,18 @@
         "guyana"
       ]
     },
-    "community": {}
+    "community": {},
+    "allevents.in": {
+      "city": "georgetown",
+      "countries": [
+        "guyana"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 13,
+        "from": ""
+      }
+    }
   }
 }

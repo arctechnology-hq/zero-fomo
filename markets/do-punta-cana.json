@@ -22,6 +22,21 @@
         "bávaro"
       ]
     },
-    "community": {}
+    "community": {},
+    "allevents.in": {
+      "city": "punta-cana",
+      "countries": [
+        "dominican republic",
+        "república dominicana",
+        "republica dominicana",
+        "rep. dom"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 16,
+        "from": ""
+      }
+    }
   }
 }

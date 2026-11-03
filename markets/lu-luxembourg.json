@@ -1,0 +1,40 @@
+{
+  "id": "lu-luxembourg",
+  "name": "Luxembourg",
+  "country": "LU",
+  "tz": "Europe/Luxembourg",
+  "lat": 49.6098,
+  "lng": 6.1327,
+  "radius_km": 25,
+  "currency": "EUR",
+  "auto": true,
+  "created": "2026-11-03",
+  "sources": {
+    "ticketmaster": {},
+    "allevents.in": {
+      "city": "luxembourg",
+      "countries": [
+        "luxembourg"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 61,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "lu--Luxembourg",
+      "countries": [
+        "luxembourg"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 11,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

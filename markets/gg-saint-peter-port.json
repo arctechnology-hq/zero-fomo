@@ -1,0 +1,27 @@
+{
+  "id": "gg-saint-peter-port",
+  "name": "Saint Peter Port, Guernsey",
+  "country": "GG",
+  "tz": "Europe/Guernsey",
+  "lat": 49.4598,
+  "lng": -2.5353,
+  "radius_km": 25,
+  "currency": "GBP",
+  "auto": true,
+  "created": "2026-11-03",
+  "sources": {
+    "allevents.in": {
+      "city": "saint-peter-port",
+      "countries": [
+        "guernsey"
+      ],
+      "_auto": {
+        "adopted": "2026-11-03",
+        "via": "guess",
+        "probe_events": 29,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

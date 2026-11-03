@@ -37,7 +37,10 @@ if ($Register) {
         -Argument "--headless `"$pwsh`" -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$PSCommandPath`""
     $trigger = New-ScheduledTaskTrigger -Daily -At 06:00
     $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable `
-        -ExecutionTimeLimit (New-TimeSpan -Hours 2) -MultipleInstances IgnoreNew
+        -ExecutionTimeLimit (New-TimeSpan -Hours 4) -MultipleInstances IgnoreNew
+    # 4 h (2026-11-03): with 69 markets the weekly discovery pass ran past the old
+    # 2 h limit; the scheduler killed the host mid-discovery and the discovery
+    # commit/push was lost (feeds had already published at ~35 min).
     Register-ScheduledTask -TaskName "ZeroFomoFeedScrape" -Action $action `
         -Trigger $trigger -Settings $settings -Force `
         -Description "0 FOMO: daily scrape + per-market feeds -> feed-data branch" | Out-Null

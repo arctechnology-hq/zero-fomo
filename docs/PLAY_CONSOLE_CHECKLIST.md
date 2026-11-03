@@ -107,7 +107,7 @@ USD 25 paid. Steps 0-5 above are done. What it took, for the record:
 2. Authorised representative — Rhan's government ID (Google ID check).
 3. Phone verification — unlocks after 1-2 are approved; the Aliv eSIM does not
    receive forwarded SMS, choose the voice-call option.
-Google quotes "a few days" for document review.
+Google quotes "a few days" for document review. **Submitted 2026-11-03** (Rhan): Business Licence PDF as the organisation document (TIN certificate downloaded alongside as a backup) + representative ID; copies in `%USERPROFILE%\Downloads\PlayConsole_Verification\`.
 ## 3. API access for CI (you, 10 min, once the account is verified)
 
 1. Play Console → Settings → API access → link the GCP project `zerofomo-prod`

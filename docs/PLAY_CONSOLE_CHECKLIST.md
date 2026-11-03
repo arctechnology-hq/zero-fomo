@@ -201,8 +201,8 @@ Data types to declare (leave every other type unchecked):
 
 ## 8. Release (CI + you)
 
-1. **Use 0.10.0 (versionCode 13)**, tagged 2026-10-30:
-   https://github.com/arctechnology-hq/zero-fomo/releases/tag/v0.10.0 .
+1. **Use 0.10.1 (versionCode 14)**, tagged 2026-11-03:
+   https://github.com/arctechnology-hq/zero-fomo/releases/tag/v0.10.1 (0.10.0 / code 13 was the 2026-10-30 candidate; 0.10.1 fixes the detail-page layout gap found while retaking the store screenshots).
    (History: 0.8.1 / versionCode 10 was the first CI-signed AAB.) CI built the signed AAB and attached it
    to https://github.com/arctechnology-hq/zero-fomo/releases/tag/v0.8.1 .
    Upload that `app-release.aab` in Play Console for the first internal-testing

@@ -76,6 +76,38 @@ not file a second request. `PLAY_SUPPORT_NOTE.md` is no longer needed.
 5. Developer page: name `ARC Technology`, email `info@arctechnologyhq.com`,
    website. Contact email must be verified by link.
 
+**Status 2026-11-03 — ACCOUNT CREATED.** Organisation account "ARC Technology",
+developer account ID **5442638523707333487**, owner rhan.richardson@arctechnologyhq.com,
+USD 25 paid. Steps 0-5 above are done. What it took, for the record:
+
+- The existing "ARC Technology" payments profile (Workspace + Cloud billing) could
+  NOT take D-U-N-S 815233241: Google compares the payments-profile legal name with
+  the D&B record ("Cappucienne McEva Richardson") and refused the link on the
+  second try ("entered for a different organization", limited tries). Fix: a
+  **new payments profile** created from the D&B record (legal name Cappucienne
+  McEva Richardson, Denice Cay 22, Venice Bay, Nassau). Workspace/Cloud invoices
+  stay under ARC Technology. Play shows the D&B legal name + address publicly as
+  the organisation details, with "ARC Technology" as the developer name.
+- Public profile: +1 242 804 9467, info@arctechnologyhq.com (verified by code).
+  Contact for Google: Rhan Richardson, info@arctechnologyhq.com, +1 242 804 9467,
+  English (US). Organisation size 1-10, website https://arctechnologyhq.com.
+- Apps: 1 app planned, earns money via paid apps + in-app purchases, no
+  sensitive categories. "Other Google accounts used with Play Console": No.
+- Website ownership verified 2026-11-03 via the existing Search Console domain
+  property (sc-domain:arctechnologyhq.com, same account) — instant.
+- Gotchas: the Google Payments dialog is an iframe that freezes Chrome
+  screenshots for the Claude extension (drive by refs, or let the owner click);
+  the signup page lets the personal Gmail (/u/0) create an account — always use
+  /u/1 (Workspace); consent checkboxes and Terms are owner clicks.
+
+**Open before "Create app" unlocks (Home → "Complete account verifications"):**
+1. Organisation document — upload the Business Licence PDF
+   (Drive: `2026-08-26_Business-Licence-Certificate_Annual-20118619.pdf`,
+   licensee Cappucienne McEva Richardson, must match the D&B name/address).
+2. Authorised representative — Rhan's government ID (Google ID check).
+3. Phone verification — unlocks after 1-2 are approved; the Aliv eSIM does not
+   receive forwarded SMS, choose the voice-call option.
+Google quotes "a few days" for document review.
 ## 3. API access for CI (you, 10 min, once the account is verified)
 
 1. Play Console → Settings → API access → link the GCP project `zerofomo-prod`

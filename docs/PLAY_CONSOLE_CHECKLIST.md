@@ -143,7 +143,18 @@ Google quotes "a few days" for document review. **Submitted 2026-11-03** (Rhan):
 ## 5. Create the app (you, 10 min)
 
 Console → Create app: name `0 FOMO: Local Events`, default language English (US),
-App, Free. Declarations: no ads; not designed for children; no government app.
+App, **Paid** (owner decision 2026-11-03: **US$1.99**; free→paid is irreversible on
+Play, paid→free is allowed any time). Declarations: no ads; not designed for
+children; no government app.
+
+**Paid-app prerequisites (before the price can be set):** the payments profile
+linked to the developer account (Cappucienne McEva Richardson, D-U-N-S 815233241)
+needs merchant setup in Play Console → Setup → Payments profile: bank account for
+payouts + tax info (Bahamas: merchant registration supported, USD) — owner data.
+Then Monetise → Products → App pricing: US$1.99 base price, let Play convert the
+other countries. Service fee 15 % on the first US$1M/yr once enrolled in the
+15 % tier (Settings → Developer account → Service fee tiers). IARC "no purchases"
+stays correct (an up-front price is not an in-app purchase); Data safety unchanged.
 
 ## 6. Store listing (you paste; assets in repo)
 

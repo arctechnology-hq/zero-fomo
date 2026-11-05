@@ -109,4 +109,6 @@
         <item quantity="other">%1$s were removed from Saved.</item>
     </plurals>
     <string name="saved_cd_dismiss_notice">Dismiss notice</string>
+    <string name="menu_privacy_policy">Privacy policy</string>
+    <string name="feed_cd_more_options">More options</string>
 </resources>

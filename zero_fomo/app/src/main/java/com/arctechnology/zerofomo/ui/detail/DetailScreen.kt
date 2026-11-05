@@ -193,6 +193,17 @@ fun DetailScreen(
                     fontWeight = FontWeight.SemiBold)
                 Text(ev.description, style = MaterialTheme.typography.bodyMedium)
             }
+            val reportSubject = stringResource(R.string.detail_report_subject_prefix, ev.name)
+            TextButton(onClick = {
+                val body = "Event: ${ev.name}\nDate: ${ev.date}\nVenue: ${ev.venue}\n" +
+                    "Source: ${ev.sourceUrl}\nID: ${ev.id}\n"
+                context.startSafely(Intent(Intent.ACTION_SENDTO).apply {
+                    data = Uri.parse("mailto:")
+                    putExtra(Intent.EXTRA_EMAIL, arrayOf("info@arctechnologyhq.com"))
+                    putExtra(Intent.EXTRA_SUBJECT, reportSubject)
+                    putExtra(Intent.EXTRA_TEXT, body)
+                })
+            }) { Text(stringResource(R.string.detail_report_listing)) }
             Spacer(Modifier.height(24.dp))
         }
     }

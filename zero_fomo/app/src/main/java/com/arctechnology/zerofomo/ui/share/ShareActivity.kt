@@ -121,6 +121,9 @@ class ShareActivity : ComponentActivity() {
                         Text(stringResource(R.string.share_reviewer_disclaimer),
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.outline)
+                        Text(stringResource(R.string.share_rights_line),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.outline)
                         Spacer(Modifier.height(4.dp))
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                             TextButton(onClick = { finish() }) {

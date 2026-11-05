@@ -1,6 +1,9 @@
 package com.arctechnology.zerofomo.ui.feed
 
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -30,6 +33,7 @@ import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
@@ -279,6 +283,28 @@ private fun FeedHeader(
                 Spacer(Modifier.weight(1f))
                 IconButton(onClick = onSearchClick) {
                     Icon(Icons.Default.Search, contentDescription = stringResource(R.string.feed_cd_search), tint = Sand)
+                }
+                val menuContext = LocalContext.current
+                var showMenu by remember { mutableStateOf(false) }
+                Box {
+                    IconButton(onClick = { showMenu = true }) {
+                        Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.feed_cd_more_options), tint = Sand)
+                    }
+                    DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.menu_privacy_policy)) },
+                            onClick = {
+                                showMenu = false
+                                try {
+                                    menuContext.startActivity(Intent(Intent.ACTION_VIEW,
+                                        Uri.parse("https://0fomo.app/privacy.html")))
+                                } catch (_: android.content.ActivityNotFoundException) {
+                                    Toast.makeText(menuContext, menuContext.getString(R.string.detail_no_app_toast),
+                                        Toast.LENGTH_SHORT).show()
+                                }
+                            },
+                        )
+                    }
                 }
             }
             Spacer(Modifier.height(6.dp))

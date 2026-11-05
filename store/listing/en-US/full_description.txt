@@ -15,7 +15,7 @@ WHAT YOU GET
 • Works offline. The feed is cached on your phone, so the list still opens on the road or in a dead zone.
 • Save it. Keep the events you care about and get a reminder before they start.
 • Add to calendar. Google Calendar, Outlook or any calendar app that reads .ics files.
-• Get tickets. One tap to the official ticket page, never a resale middleman.
+• Get tickets. One tap to the ticket page.
 • Share it. Send an event to a friend with a link that opens straight in the app.
 • Send it in. See a flyer or a post about an event we missed? Share it to 0 FOMO from any app and it goes to our review queue.
 • Your language. English, Spanish, French, Portuguese, Haitian Creole and Dutch.

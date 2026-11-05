@@ -355,4 +355,9 @@
 <string name="error_http_format">HTTP %1$d</string>
 
 
+<string name="menu_privacy_policy">Privacybeleid</string>
+<string name="feed_cd_more_options">Meer opties</string>
+<string name="detail_report_listing">Deze vermelding melden</string>
+<string name="detail_report_subject_prefix">0 FOMO-melding: %1$s</string>
+<string name="share_rights_line">Stuur alleen berichten door die je mag delen. Door te verzenden ga je akkoord met ons privacybeleid.</string>
 </resources>

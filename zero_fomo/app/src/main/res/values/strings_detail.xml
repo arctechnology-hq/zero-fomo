@@ -49,4 +49,7 @@
     <!-- MainActivity.kt -->
     <string name="nav_events_tab">Events</string>
     <string name="nav_saved_tab">Saved</string>
+    <string name="detail_report_listing">Report this listing</string>
+    <string name="detail_report_subject_prefix">0 FOMO report: %1$s</string>
+    <string name="share_rights_line">Only forward posts you have the right to share. By sending you agree to our privacy policy.</string>
 </resources>

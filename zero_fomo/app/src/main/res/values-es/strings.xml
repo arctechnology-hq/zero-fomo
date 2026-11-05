@@ -355,4 +355,9 @@
 <string name="error_http_format">HTTP %1$d</string>
 
 
+<string name="menu_privacy_policy">Política de privacidad</string>
+<string name="feed_cd_more_options">Más opciones</string>
+<string name="detail_report_listing">Reportar este evento</string>
+<string name="detail_report_subject_prefix">0 FOMO: reporte: %1$s</string>
+<string name="share_rights_line">Reenvía solo publicaciones que tengas derecho a compartir. Al enviar aceptas nuestra política de privacidad.</string>
 </resources>

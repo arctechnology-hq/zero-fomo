@@ -355,4 +355,9 @@
 <string name="error_http_format">HTTP %1$d</string>
 
 
+<string name="menu_privacy_policy">Politique de confidentialité</string>
+<string name="feed_cd_more_options">Plus d\'options</string>
+<string name="detail_report_listing">Signaler cette annonce</string>
+<string name="detail_report_subject_prefix">0 FOMO : signalement: %1$s</string>
+<string name="share_rights_line">Ne transférez que des publications que vous avez le droit de partager. En envoyant, vous acceptez notre politique de confidentialité.</string>
 </resources>

@@ -355,4 +355,9 @@
 <string name="error_http_format">HTTP %1$d</string>
 
 
+<string name="menu_privacy_policy">Politik konfidansyalite</string>
+<string name="feed_cd_more_options">Plis opsyon</string>
+<string name="detail_report_listing">Rapòte anons sa a</string>
+<string name="detail_report_subject_prefix">0 FOMO rapò: %1$s</string>
+<string name="share_rights_line">Voye sèlman piblikasyon ou gen dwa pataje. Lè ou voye, ou dakò ak politik konfidansyalite nou an.</string>
 </resources>

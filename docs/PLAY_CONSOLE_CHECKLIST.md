@@ -263,3 +263,29 @@ icon/feature graphic/4 screenshots), App content forms (privacy URL, ads = no, d
 per §7, content rating, target audience 18+, government app = no, financial features = none,
 health = none, news = no), merchant setup + US$1.99 pricing (Rhan), countries/regions, then
 Production → Create release → Add from library 15 (0.10.2) → submit for review.
+
+**Status 2026-11-05 (later) — LISTING + MOST APP CONTENT DONE.** Done from the extension:
+Store settings (category Events; contact info@arctechnologyhq.com, +1 242 804 9467,
+https://0fomo.app — published); default store listing saved (title, short + full description
+from `store/listing/en-US/*`, icon, feature graphic, 4 phone screenshots in order 01-04,
+AI asset declaration = "Don't label assets" — the mark is hand-drawn vector work, not
+generative AI); App content: Privacy policy URL, Ads = no, Sign in details = not restricted,
+Advertising ID = no, Government app = no, Health = none, Target audience = 18 and over,
+Data safety (collects Photos + Other user-generated content + Device or other IDs, each
+collected-not-shared, not ephemeral, user-optional; purposes App functionality / App
+functionality / Fraud prevention; encrypted in transit; no accounts; deletion request link
+https://0fomo.app/privacy.html). Console gotchas: listing asset "Add assets" creates its
+file input on click (find it after clicking, then file_upload; screenshots land in arrival
+order — drag to reorder); Data safety has an onboarding carousel that must be clicked
+through before Next works; dialogs stack, so verify saves by reloading.
+
+**Owner-only (Rhan), left undone:** (1) Content ratings → Start questionnaire (starting it
+accepts IARC's ToS). Answers: email info@arctechnologyhq.com; category Utility /
+Productivity / Communication / Other; no violence, sexual content, profanity, drugs,
+gambling, purchases; users CAN share content but it is moderated before publication
+(review queue), no location sharing, no personal-info sharing; expected Everyone / PEGI 3.
+(2) Financial features → tick "My app doesn't provide any financial features" → Next → Save
+(the extension's classifier blocks that checkbox). (3) App-level trader status → confirm the
+account trader status applies to this app; no separate ToS URL. (4) Internal tester list
+(see above). (5) Merchant setup + US$1.99 price. Then: countries/regions → Production →
+Create release → Add from library 15 (0.10.2) → send for review.

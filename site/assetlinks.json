@@ -1,12 +1,12 @@
-[
-  {
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.arctechnology.zerofomo",
-      "sha256_cert_fingerprints": [
-        "REPLACE_WITH_PLAY_APP_SIGNING_SHA256_FROM_PLAY_CONSOLE"
-      ]
-    }
+{
+  "relation": [
+    "delegate_permission/common.handle_all_urls"
+  ],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.arctechnology.zerofomo",
+    "sha256_cert_fingerprints": [
+      "94:09:07:51:B2:E6:8C:78:5F:31:22:8A:11:16:F9:54:80:2B:2D:71:EF:F0:D6:B8:A2:71:68:34:12:AD:29:3E"
+    ]
   }
-]
+}

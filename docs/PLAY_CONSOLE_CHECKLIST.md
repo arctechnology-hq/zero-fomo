@@ -243,3 +243,23 @@ Data types to declare (leave every other type unchecked):
 - [x] Privacy page + Data safety answers cover "Send to 0 FOMO" (2026-09-16).
 - [ ] Crash reporting (Crashlytics) — not required for submission; planned before
       the 50 % rollout step.
+
+**Status 2026-11-05 — APP CREATED, INTERNAL TRACK LIVE.** Trader status declared and both
+phone numbers verified by Rhan (personal number for now; swap to the ARC line later).
+App created by Rhan: `0 FOMO: Local Events`, Paid, en-US, app id 4972942514018512539.
+Play App Signing enrolled with a Google-generated key; its SHA-256 is in
+`site/assetlinks.json` (commit f967d24). Internal testing releases: 14 (0.10.1) and
+15 (0.10.2, the production candidate), both "Available to internal testers", not reviewed.
+Compliance review: `docs/PLAY_COMPLIANCE_REVIEW_2026-11-05.md` (three fixes shipped in
+v0.10.2). Known gap: the internal **tester email list would not save** from the Chrome
+extension (dialog accepts the two addresses, Save changes never closes) — add it by hand:
+Internal testing → Testers → Create email list → rhan.richardson@arctechnologyhq.com,
+rhanrichardson@gmail.com → Save. Bundle upload from the extension works only from a file
+under the AI_Workspaces working directory (temporary `.scratch_play_upload/`, deleted after).
+Chrome window at 2560×1140 / DPR 0.75 makes Console screenshots time out; drive by refs/JS.
+
+**Still to do before production:** store listing (paste `store/listing/en-US/*`, upload
+icon/feature graphic/4 screenshots), App content forms (privacy URL, ads = no, data safety
+per §7, content rating, target audience 18+, government app = no, financial features = none,
+health = none, news = no), merchant setup + US$1.99 pricing (Rhan), countries/regions, then
+Production → Create release → Add from library 15 (0.10.2) → submit for review.

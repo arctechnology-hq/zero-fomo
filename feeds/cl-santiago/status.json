@@ -1,0 +1,44 @@
+{
+ "market": "cl-santiago",
+ "generated_at": "2026-11-06T11:24:50Z",
+ "sources_run": [
+  "allevents.in",
+  "meetup",
+  "dated-list#chile",
+  "community"
+ ],
+ "raw": 56,
+ "unique": 56,
+ "exported": 54,
+ "review": 2,
+ "sources": [
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 44,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 8,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "dated-list#chile",
+   "ok": true,
+   "events": 4,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

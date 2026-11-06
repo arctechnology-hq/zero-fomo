@@ -1,0 +1,49 @@
+{
+ "schema_version": 2,
+ "market": "py-asuncion",
+ "country": "PY",
+ "tz": "America/Asuncion",
+ "generated_at": "2026-11-06T11:40:31Z",
+ "events": [
+  {
+   "id": "d5a535754304",
+   "name": "Meetup Python Paraguay Noviembre 2026",
+   "date": "2026-11-06",
+   "time_start": "19:30",
+   "time_end": null,
+   "venue": "UCOM, Dr. Juan Eulogio Estigarribia, Asunción 001412, Paraguay, Asunción",
+   "island": null,
+   "lat": -25.2865,
+   "lng": -57.647,
+   "price_min": null,
+   "price_max": null,
+   "is_free": false,
+   "category": "GENERAL",
+   "source_url": "https://www.meetup.com/python-paraguay/events/317097990/",
+   "description": "🐍🎉 ¡Hola, Pythonistas! Te invitamos al Meetup de Python Paraguay de noviembre 2026. 📅 Fecha: Viernes 06/11 🕗 Hora: 19:30 hs 📍 Lugar: UCOM (Monseñor Bogarín 284) Charlas : ★ Alvaro Machuca : \"Data Engineering 101 para pythonistas\" ★ Patricio Díaz : \"CRAP Scores: Midiendo el riesgo en código escrito por humanos y IA\" ★ Franco Girala : \"Arquitectura Zero-Knowledge aplicada a transferencias bancarias\" Después de las charlas tendremos un espacio para compartir. Todos son bienvenidos, desde expertos hasta quienes recién empiezan. ¡Vení a aprender y compartir! Gracias a la UCOM por el apoyo 💙 ¡La ent",
+   "country": "PY",
+   "market": "py-asuncion",
+   "tz": "America/Asuncion"
+  },
+  {
+   "id": "47d9803a9d20",
+   "name": "Acting in English, en el centro de Asunción",
+   "date": "2026-11-07",
+   "time_start": "10:30",
+   "time_end": null,
+   "venue": "Centro Vivo, Calle Alberdi con Palma. Edificio Cristhian Sabe Valiente, Asunción",
+   "island": null,
+   "lat": -25.2865,
+   "lng": -57.647,
+   "price_min": null,
+   "price_max": null,
+   "is_free": false,
+   "category": "ARTS_THEATRE",
+   "source_url": "https://www.meetup.com/centrovivo/events/317246697/",
+   "description": "Have you ever wanted to explore acting, express yourself creatively, or build your confidence through performance? At Centro Vivo, we’re launching an Acting Workshop designed for both locals and internationals who want to discover the art of acting in a creative, welcoming, English-speaking environment. Whether you’re completely new to acting or simply looking for a new creative experience, this is your opportunity to learn, connect, and step outside your comfort zone. 🎬 WORKSHOP DETAILS 📅 Dates: Saturday, November 7, 14 & 21 ⏰ Schedule (each Saturday): • Morning session: 10:30 AM – 12:30 PM •",
+   "country": "PY",
+   "market": "py-asuncion",
+   "tz": "America/Asuncion"
+  }
+ ]
+}

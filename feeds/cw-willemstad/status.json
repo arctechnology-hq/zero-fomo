@@ -1,0 +1,52 @@
+{
+ "market": "cw-willemstad",
+ "generated_at": "2026-11-06T11:31:03Z",
+ "sources_run": [
+  "eventbrite",
+  "islandetickets",
+  "trinijunglejuice",
+  "community",
+  "allevents.in"
+ ],
+ "raw": 30,
+ "unique": 30,
+ "exported": 29,
+ "review": 1,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 17,
+   "pages": 4,
+   "note": ""
+  },
+  {
+   "name": "islandetickets",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 13,
+   "pages": 6,
+   "note": ""
+  }
+ ]
+}

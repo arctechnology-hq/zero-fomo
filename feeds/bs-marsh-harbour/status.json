@@ -1,0 +1,68 @@
+{
+ "market": "bs-marsh-harbour",
+ "generated_at": "2026-11-06T11:23:54Z",
+ "sources_run": [
+  "bahamas.com",
+  "dated-list#abacosun",
+  "dated-list#waterwayguide",
+  "community",
+  "eventbrite",
+  "jsonld#242whatshappening",
+  "html-cards#bahamaslocal"
+ ],
+ "raw": 79,
+ "unique": 76,
+ "exported": 75,
+ "review": 1,
+ "sources": [
+  {
+   "name": "bahamas.com",
+   "ok": true,
+   "events": 1,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "dated-list#abacosun",
+   "ok": true,
+   "events": 17,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "dated-list#waterwayguide",
+   "ok": true,
+   "events": 6,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  },
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 31,
+   "pages": 5,
+   "note": ""
+  },
+  {
+   "name": "jsonld#242whatshappening",
+   "ok": true,
+   "events": 16,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "html-cards#bahamaslocal",
+   "ok": true,
+   "events": 8,
+   "pages": 1,
+   "note": ""
+  }
+ ]
+}

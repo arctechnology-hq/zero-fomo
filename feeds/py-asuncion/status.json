@@ -1,0 +1,28 @@
+{
+ "market": "py-asuncion",
+ "generated_at": "2026-11-06T11:40:31Z",
+ "sources_run": [
+  "meetup",
+  "community"
+ ],
+ "raw": 2,
+ "unique": 2,
+ "exported": 2,
+ "review": 0,
+ "sources": [
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 2,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

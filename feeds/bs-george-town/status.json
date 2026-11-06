@@ -1,0 +1,44 @@
+{
+ "market": "bs-george-town",
+ "generated_at": "2026-11-06T11:22:45Z",
+ "sources_run": [
+  "bahamas.com",
+  "community",
+  "eventbrite",
+  "allevents.in"
+ ],
+ "raw": 52,
+ "unique": 51,
+ "exported": 49,
+ "review": 2,
+ "sources": [
+  {
+   "name": "bahamas.com",
+   "ok": true,
+   "events": 15,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  },
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 17,
+   "pages": 3,
+   "note": ""
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 20,
+   "pages": 6,
+   "note": ""
+  }
+ ]
+}

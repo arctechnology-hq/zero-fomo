@@ -1,0 +1,52 @@
+{
+ "market": "dk-copenhagen",
+ "generated_at": "2026-11-06T11:32:03Z",
+ "sources_run": [
+  "ticketmaster",
+  "allevents.in",
+  "luma",
+  "meetup",
+  "community"
+ ],
+ "raw": 786,
+ "unique": 735,
+ "exported": 734,
+ "review": 1,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 692,
+   "pages": 4,
+   "note": ""
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 64,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "luma",
+   "ok": true,
+   "events": 18,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 12,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

@@ -1,0 +1,68 @@
+{
+ "market": "bb-bridgetown",
+ "generated_at": "2026-11-06T11:20:24Z",
+ "sources_run": [
+  "eventbrite",
+  "ticketpal",
+  "ticketsplus",
+  "islandetickets",
+  "trinijunglejuice",
+  "community",
+  "allevents.in"
+ ],
+ "raw": 33,
+ "unique": 32,
+ "exported": 28,
+ "review": 4,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 19,
+   "pages": 5,
+   "note": ""
+  },
+  {
+   "name": "ticketpal",
+   "ok": true,
+   "events": 6,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "ticketsplus",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "islandetickets",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 1,
+   "pages": 0,
+   "note": ""
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 7,
+   "pages": 6,
+   "note": ""
+  }
+ ]
+}

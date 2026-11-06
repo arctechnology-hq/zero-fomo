@@ -1,0 +1,36 @@
+{
+ "market": "sx-philipsburg",
+ "generated_at": "2026-11-06T11:40:51Z",
+ "sources_run": [
+  "eventbrite",
+  "trinijunglejuice",
+  "community"
+ ],
+ "raw": 19,
+ "unique": 19,
+ "exported": 18,
+ "review": 1,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 19,
+   "pages": 3,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

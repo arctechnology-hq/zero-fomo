@@ -1,0 +1,423 @@
+{
+ "generated_at": "2026-11-03T15:19:03Z",
+ "results": [
+  {
+   "name": "Bahamas Carnival (tribe)",
+   "kind": "tribe",
+   "url": "https://bahamascarnival.com/wp-json/tribe/events/v1/events?per_page=20",
+   "adopt": "bs-nassau: tribe base=https://bahamascarnival.com",
+   "alive": false,
+   "detail": "0 events",
+   "checked_at": "2026-11-03T15:17:10Z"
+  },
+  {
+   "name": "National Art Gallery of The Bahamas (tribe)",
+   "kind": "tribe",
+   "url": "https://nagb.org.bs/wp-json/tribe/events/v1/events?per_page=20",
+   "adopt": "bs-nassau: tribe base=https://nagb.org.bs",
+   "alive": false,
+   "detail": "0 events",
+   "checked_at": "2026-11-03T15:17:12Z"
+  },
+  {
+   "name": "GBPA EventHub upcoming",
+   "kind": "html",
+   "url": "https://events.gbpa.com/",
+   "marker": "Upcoming Event<",
+   "min": 3,
+   "adopt": "bs-freeport: new adapter",
+   "alive": false,
+   "detail": "2 marker hit(s)",
+   "checked_at": "2026-11-03T15:17:16Z"
+  },
+  {
+   "name": "Tikkets Barbados",
+   "kind": "json",
+   "url": "https://barbados.tikkets.com/api/events",
+   "path": "data",
+   "adopt": "bb-bridgetown: tikkets base",
+   "alive": false,
+   "detail": "error ConnectionError",
+   "checked_at": "2026-11-03T15:17:16Z"
+  },
+  {
+   "name": "Tikkets Cayman",
+   "kind": "json",
+   "url": "https://cayman.tikkets.com/api/events",
+   "path": "data",
+   "adopt": "ky-george-town: tikkets base",
+   "alive": false,
+   "detail": "error ConnectionError",
+   "checked_at": "2026-11-03T15:17:16Z"
+  },
+  {
+   "name": "Tikkets Trinidad (>1 event)",
+   "kind": "json",
+   "url": "https://trinidad.tikkets.com/api/events",
+   "path": "data",
+   "alert_when_alive": false,
+   "alive": true,
+   "detail": "1 items",
+   "checked_at": "2026-11-03T15:17:18Z"
+  },
+  {
+   "name": "Beats To Rap On Barbados",
+   "kind": "html",
+   "url": "https://beatstorapon.com/events/bb/",
+   "marker": "class=\"event-card\"",
+   "adopt": "bb-bridgetown: beatstorapon cc=bb",
+   "alive": false,
+   "detail": "0 marker hit(s)",
+   "checked_at": "2026-11-03T15:17:19Z"
+  },
+  {
+   "name": "Beats To Rap On Bahamas",
+   "kind": "html",
+   "url": "https://beatstorapon.com/events/bs/",
+   "marker": "class=\"event-card\"",
+   "adopt": "bs-nassau: beatstorapon cc=bs",
+   "alive": false,
+   "detail": "0 marker hit(s)",
+   "checked_at": "2026-11-03T15:17:20Z"
+  },
+  {
+   "name": "Beats To Rap On Puerto Rico",
+   "kind": "html",
+   "url": "https://beatstorapon.com/events/pr/",
+   "marker": "class=\"event-card\"",
+   "adopt": "pr-san-juan: beatstorapon cc=pr",
+   "alive": true,
+   "detail": "1 marker hit(s)",
+   "checked_at": "2026-11-03T15:17:21Z"
+  },
+  {
+   "name": "Beats To Rap On Dominican Republic",
+   "kind": "html",
+   "url": "https://beatstorapon.com/events/do/",
+   "marker": "class=\"event-card\"",
+   "adopt": "do-*: beatstorapon cc=do",
+   "alive": false,
+   "detail": "0 marker hit(s)",
+   "checked_at": "2026-11-03T15:17:22Z"
+  },
+  {
+   "name": "TicketsPlus events grid (server-rendered?)",
+   "kind": "html",
+   "url": "https://www.ticketsplus.ky/en/events",
+   "marker": "href=\"/en/event/",
+   "min": 3,
+   "adopt": "ticketsplus: add /en/events listing",
+   "alive": false,
+   "detail": "0 marker hit(s)",
+   "checked_at": "2026-11-03T15:17:24Z"
+  },
+  {
+   "name": "Eventbrite Bonaire slug",
+   "kind": "html",
+   "url": "https://www.eventbrite.com/d/bonaire-sint-eustatius-and-saba--kralendijk/events/",
+   "marker": "\"@type\": *\"Event\"",
+   "adopt": "bq-kralendijk: eventbrite slug",
+   "alive": false,
+   "detail": "http 404",
+   "checked_at": "2026-11-03T15:17:25Z"
+  },
+  {
+   "name": "Eventbrite Anguilla slug",
+   "kind": "html",
+   "url": "https://www.eventbrite.com/d/anguilla--the-valley/events/",
+   "marker": "\"@type\": *\"Event\"",
+   "adopt": "new ai-the-valley market",
+   "alive": false,
+   "detail": "http 404",
+   "checked_at": "2026-11-03T15:17:26Z"
+  },
+  {
+   "name": "Eventbrite BVI slug",
+   "kind": "html",
+   "url": "https://www.eventbrite.com/d/british-virgin-islands--road-town/events/",
+   "marker": "\"@type\": *\"Event\"",
+   "adopt": "new vg-road-town market",
+   "alive": false,
+   "detail": "http 404",
+   "checked_at": "2026-11-03T15:17:27Z"
+  },
+  {
+   "name": "Eventbrite Martinique slug",
+   "kind": "html",
+   "url": "https://www.eventbrite.com/d/martinique--fort-de-france/events/",
+   "marker": "\"@type\": *\"Event\"",
+   "adopt": "new mq-fort-de-france market",
+   "alive": false,
+   "detail": "http 404",
+   "checked_at": "2026-11-03T15:17:28Z"
+  },
+  {
+   "name": "Eventbrite Guadeloupe slug",
+   "kind": "html",
+   "url": "https://www.eventbrite.com/d/guadeloupe--pointe-a-pitre/events/",
+   "marker": "\"@type\": *\"Event\"",
+   "adopt": "new gp-pointe-a-pitre market",
+   "alive": false,
+   "detail": "http 404",
+   "checked_at": "2026-11-03T15:17:30Z"
+  },
+  {
+   "name": "Ticket Federation (TT)",
+   "kind": "status",
+   "url": "https://www.ticketfederation.com/",
+   "adopt": "tt-port-of-spain: new adapter",
+   "alive": false,
+   "detail": "http 403",
+   "checked_at": "2026-11-03T15:17:31Z"
+  },
+  {
+   "name": "Wesplash",
+   "kind": "html",
+   "url": "https://www.wesplash.com/",
+   "marker": "event",
+   "min": 5,
+   "adopt": "new adapter once launched",
+   "alive": false,
+   "detail": "error ConnectTimeout",
+   "checked_at": "2026-11-03T15:17:52Z"
+  },
+  {
+   "name": "Cayman Compass events",
+   "kind": "status",
+   "url": "https://www.caymancompass.com/events/",
+   "adopt": "ky-george-town: jsonld/tribe probe",
+   "alive": false,
+   "detail": "http 403",
+   "checked_at": "2026-11-03T15:17:53Z"
+  },
+  {
+   "name": "BVI Tourism tribe",
+   "kind": "tribe",
+   "url": "https://www.bvitourism.com/wp-json/tribe/events/v1/events?per_page=20",
+   "adopt": "new vg-road-town market: tribe base",
+   "alive": false,
+   "detail": "not json",
+   "checked_at": "2026-11-03T15:17:55Z"
+  },
+  {
+   "name": "Discover SVG events with dates",
+   "kind": "html",
+   "url": "https://www.discoversvg.com/wp-json/wp/v2/events?per_page=5",
+   "alert_when_alive": false,
+   "marker": "_piecal_start_date|event_date|start_date",
+   "alive": false,
+   "detail": "0 marker hit(s)",
+   "checked_at": "2026-11-03T15:17:58Z"
+  },
+  {
+   "name": "Fusion Superplex",
+   "kind": "status",
+   "url": "https://www.fusionsuperplex.com/",
+   "adopt": "bs-nassau: cinema/venue adapter",
+   "alive": false,
+   "detail": "error ConnectTimeout",
+   "checked_at": "2026-11-03T15:18:19Z"
+  },
+  {
+   "name": "100 JAMZ events",
+   "kind": "html",
+   "url": "https://www.100jamz.com/events/",
+   "marker": "event",
+   "min": 5,
+   "adopt": "bs-nassau: adapter",
+   "alive": false,
+   "detail": "http 429",
+   "checked_at": "2026-11-03T15:18:20Z"
+  },
+  {
+   "name": "ai-the-valley tribe#whatwedoinanguilla (2 upcoming)",
+   "kind": "status",
+   "url": "https://whatwedoinanguilla.com/calendar/",
+   "alert_when_alive": false,
+   "adopt": "ai-the-valley: tribe#whatwedoinanguilla {\"base\": \"https://whatwedoinanguilla.com\"}",
+   "_auto": {
+    "seen": "2026-10-01",
+    "probe_events": 2
+   },
+   "alive": true,
+   "detail": "http 200",
+   "checked_at": "2026-11-03T15:18:24Z"
+  },
+  {
+   "name": "ai-the-valley html-cards#islandsinfoguide (pruned by hand 2026-10-01: day headers / blog dates)",
+   "kind": "status",
+   "url": "https://islandsinfoguide.com/anguilla/Events",
+   "alert_when_alive": false,
+   "adopt": "ai-the-valley: html-cards#islandsinfoguide {\"urls\": [\"https://islandsinfoguide.com/anguilla/Events\"], \"href_marker\": \"/events/\", \"venue_default\": \"The Valley, Anguilla\", \"detail_cap\": 20}",
+   "_auto": {
+    "pruned": "2026-10-01",
+    "probe_events": 0
+   },
+   "alive": true,
+   "detail": "http 200",
+   "checked_at": "2026-11-03T15:18:26Z"
+  },
+  {
+   "name": "ai-the-valley rss#anguillabeaches (pruned by hand 2026-10-01: day headers / blog dates)",
+   "kind": "status",
+   "url": "https://www.anguilla-beaches.com/anguilla.xml",
+   "alert_when_alive": false,
+   "adopt": "ai-the-valley: rss#anguillabeaches {\"urls\": [\"https://www.anguilla-beaches.com/anguilla.xml\"], \"venue_default\": \"The Valley, Anguilla\"}",
+   "_auto": {
+    "pruned": "2026-10-01",
+    "probe_events": 0
+   },
+   "alive": true,
+   "detail": "http 200",
+   "checked_at": "2026-11-03T15:18:27Z"
+  },
+  {
+   "name": "Anglican Diocese of The Bahamas (Modern Events Calendar) - 2026 church fairs",
+   "kind": "json",
+   "url": "https://bahtcianglican.org/wp-json/wp/v2/mec-events?per_page=5&after=2026-06-01T00:00:00",
+   "path": "",
+   "adopt": "bs-nassau: wp-posts#bahtcianglican base=https://bahtcianglican.org type=mec-events (MEC dates read from the single pages; 2025 had Epiphany / Holy Spirit / St. Margaret's fairs + Festival of Lights, nothing dated 2026 as of 2026-10-06)",
+   "alive": true,
+   "detail": "3 items",
+   "checked_at": "2026-11-03T15:18:30Z"
+  },
+  {
+   "name": "Archdiocese of Nassau (eCatholic iCal)",
+   "kind": "html",
+   "url": "https://archdioceseofnassau.org/icalendar.ics",
+   "marker": "BEGIN:VEVENT",
+   "min": 1,
+   "adopt": "bs-nassau: ics urls=[https://archdioceseofnassau.org/icalendar.ics] (feed exists, empty on 2026-10-06)",
+   "alive": false,
+   "detail": "0 marker hit(s)",
+   "checked_at": "2026-11-03T15:18:31Z"
+  },
+  {
+   "name": "cr-san-jose ics#culturacr (2 upcoming)",
+   "kind": "status",
+   "url": "https://agenda.culturacr.net/",
+   "alert_when_alive": false,
+   "adopt": "cr-san-jose: ics#culturacr {\"urls\": [\"https://agenda.culturacr.net/?post_type=tribe_events&ical=1\"], \"venue_default\": \"San Jos\\u00e9, Costa Rica\"}",
+   "_auto": {
+    "seen": "2026-10-13",
+    "probe_events": 2
+   },
+   "alive": true,
+   "detail": "http 200",
+   "checked_at": "2026-11-03T15:18:35Z"
+  },
+  {
+   "name": "Grand Bahama Chamber of Commerce (tribe)",
+   "kind": "tribe",
+   "url": "https://gbchamber.org/wp-json/tribe/events/v1/events?per_page=20",
+   "adopt": "bs-freeport: tribe#gbchamber base=https://gbchamber.org",
+   "_auto": {
+    "seen": "2026-10-15",
+    "probe_events": 0
+   },
+   "alive": false,
+   "detail": "0 events",
+   "checked_at": "2026-11-03T15:18:36Z"
+  },
+  {
+   "name": "allevents.in Exuma (JSON-LD appears when local events exist)",
+   "kind": "html",
+   "url": "https://allevents.in/exuma",
+   "marker": "\"@type\":\\s*\"Event\"",
+   "min": 3,
+   "adopt": "bs-george-town: allevents.in city=exuma cities=[exuma, george town, staniel cay, ...]",
+   "alive": false,
+   "detail": "0 marker hit(s)",
+   "checked_at": "2026-11-03T15:18:38Z"
+  },
+  {
+   "name": "allevents.in Eleuthera (JSON-LD appears when local events exist)",
+   "kind": "html",
+   "url": "https://allevents.in/eleuthera",
+   "marker": "\"@type\":\\s*\"Event\"",
+   "min": 3,
+   "adopt": "bs-governors-harbour: allevents.in city=eleuthera cities=[eleuthera, harbour island, ...]",
+   "alive": false,
+   "detail": "0 marker hit(s)",
+   "checked_at": "2026-11-03T15:18:40Z"
+  },
+  {
+   "name": "allevents.in Marsh Harbour (JSON-LD appears when local events exist)",
+   "kind": "html",
+   "url": "https://allevents.in/marsh-harbour",
+   "marker": "\"@type\":\\s*\"Event\"",
+   "min": 3,
+   "adopt": "bs-marsh-harbour: allevents.in city=marsh-harbour cities=[abaco, marsh harbour, hope town, ...]",
+   "alive": false,
+   "detail": "0 marker hit(s)",
+   "checked_at": "2026-11-03T15:18:42Z"
+  },
+  {
+   "name": "Eventbrite Exuma city page (local events, not the online fallback)",
+   "kind": "html",
+   "url": "https://www.eventbrite.com/d/the-bahamas--exuma/events/",
+   "marker": "Exuma",
+   "min": 12,
+   "adopt": "bs-george-town: eventbrite slug=the-bahamas--exuma cities=[exuma, george town, ...]",
+   "alive": true,
+   "detail": "44 marker hit(s)",
+   "checked_at": "2026-11-03T15:18:45Z"
+  },
+  {
+   "name": "ni-managua jsonld#managua (2 upcoming)",
+   "kind": "status",
+   "url": "https://www.managua.gob.ni/calendario-de-eventos/",
+   "alert_when_alive": false,
+   "adopt": "ni-managua: jsonld#managua {\"urls\": [\"https://www.managua.gob.ni/calendario-de-eventos/\"], \"venue_default\": \"Managua, Nicaragua\"}",
+   "_auto": {
+    "seen": "2026-10-21",
+    "probe_events": 2
+   },
+   "alive": true,
+   "detail": "http 200",
+   "checked_at": "2026-11-03T15:18:47Z"
+  },
+  {
+   "name": "sv-san-salvador meetup (1 upcoming)",
+   "kind": "status",
+   "url": "https://meetup",
+   "alert_when_alive": false,
+   "adopt": "sv-san-salvador: meetup {\"location\": \"sv--San%20Salvador\", \"countries\": [\"el salvador\"]}",
+   "_auto": {
+    "seen": "2026-10-21",
+    "probe_events": 1
+   },
+   "alive": false,
+   "detail": "error ConnectionError",
+   "checked_at": "2026-11-03T15:19:01Z"
+  },
+  {
+   "name": "vg-road-town jsonld#happeningnext (1 upcoming)",
+   "kind": "status",
+   "url": "https://happeningnext.com/road+town/festivals",
+   "alert_when_alive": false,
+   "adopt": "vg-road-town: jsonld#happeningnext {\"urls\": [\"https://happeningnext.com/road+town/festivals\"], \"venue_default\": \"Road Town, British Virgin Islands\"}",
+   "_auto": {
+    "seen": "2026-10-27",
+    "probe_events": 1
+   },
+   "alive": true,
+   "detail": "http 200",
+   "checked_at": "2026-11-03T15:19:02Z"
+  },
+  {
+   "name": "bs-george-town dated-list#bahamas (1 upcoming)",
+   "kind": "status",
+   "url": "https://bahamas.tikkets.com/",
+   "alert_when_alive": false,
+   "adopt": "bs-george-town: dated-list#bahamas {\"urls\": [\"https://bahamas.tikkets.com/\"], \"venue_default\": \"George Town, Exuma\"}",
+   "_auto": {
+    "seen": "2026-10-27",
+    "probe_events": 1
+   },
+   "alive": true,
+   "detail": "http 200",
+   "checked_at": "2026-11-03T15:19:03Z"
+  }
+ ]
+}

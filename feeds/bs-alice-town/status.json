@@ -1,0 +1,44 @@
+{
+ "market": "bs-alice-town",
+ "generated_at": "2026-11-06T11:21:59Z",
+ "sources_run": [
+  "bahamas.com",
+  "dated-list#waterwayguide",
+  "ics#rwbimini",
+  "community"
+ ],
+ "raw": 28,
+ "unique": 28,
+ "exported": 27,
+ "review": 1,
+ "sources": [
+  {
+   "name": "bahamas.com",
+   "ok": true,
+   "events": 2,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "dated-list#waterwayguide",
+   "ok": true,
+   "events": 17,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "ics#rwbimini",
+   "ok": true,
+   "events": 9,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

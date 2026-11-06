@@ -1,0 +1,60 @@
+{
+ "market": "us-fort-lauderdale",
+ "generated_at": "2026-11-06T11:48:04Z",
+ "sources_run": [
+  "ticketmaster",
+  "seatgeek",
+  "eventbrite",
+  "trinijunglejuice",
+  "caribtix",
+  "community"
+ ],
+ "raw": 2250,
+ "unique": 1782,
+ "exported": 1647,
+ "review": 135,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 1150,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "seatgeek",
+   "ok": true,
+   "events": 873,
+   "pages": 9,
+   "note": ""
+  },
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 72,
+   "pages": 5,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 6,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "caribtix",
+   "ok": true,
+   "events": 23,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 126,
+   "pages": 0,
+   "note": ""
+  }
+ ]
+}

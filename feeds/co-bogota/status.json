@@ -1,0 +1,44 @@
+{
+ "market": "co-bogota",
+ "generated_at": "2026-11-06T11:25:06Z",
+ "sources_run": [
+  "allevents.in",
+  "luma",
+  "meetup",
+  "community"
+ ],
+ "raw": 40,
+ "unique": 40,
+ "exported": 40,
+ "review": 0,
+ "sources": [
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 16,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "luma",
+   "ok": true,
+   "events": 12,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 12,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

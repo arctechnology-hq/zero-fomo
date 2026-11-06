@@ -1,0 +1,52 @@
+{
+ "market": "tt-scarborough",
+ "generated_at": "2026-11-06T11:46:13Z",
+ "sources_run": [
+  "eventbrite",
+  "trinijunglejuice",
+  "islandetickets",
+  "beatstorapon",
+  "community"
+ ],
+ "raw": 13,
+ "unique": 13,
+ "exported": 12,
+ "review": 1,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 13,
+   "pages": 4,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "islandetickets",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "beatstorapon",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

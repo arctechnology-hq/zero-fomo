@@ -1,0 +1,52 @@
+{
+ "market": "ni-managua",
+ "generated_at": "2026-11-06T11:39:34Z",
+ "sources_run": [
+  "community",
+  "eventbrite",
+  "html-cards#vamoseventos",
+  "jsonld#salsavida",
+  "html-cards#meticket"
+ ],
+ "raw": 29,
+ "unique": 27,
+ "exported": 25,
+ "review": 2,
+ "sources": [
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  },
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 8,
+   "pages": 3,
+   "note": ""
+  },
+  {
+   "name": "html-cards#vamoseventos",
+   "ok": true,
+   "events": 10,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "jsonld#salsavida",
+   "ok": true,
+   "events": 8,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "html-cards#meticket",
+   "ok": true,
+   "events": 3,
+   "pages": 1,
+   "note": ""
+  }
+ ]
+}

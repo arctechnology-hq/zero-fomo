@@ -1,0 +1,28 @@
+{
+ "market": "gg-saint-peter-port",
+ "generated_at": "2026-11-06T11:34:54Z",
+ "sources_run": [
+  "allevents.in",
+  "community"
+ ],
+ "raw": 37,
+ "unique": 37,
+ "exported": 37,
+ "review": 0,
+ "sources": [
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 37,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

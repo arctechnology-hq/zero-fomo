@@ -1,0 +1,808 @@
+{
+  "markets": {
+    "bm-hamilton": {
+      "last": "2026-10-27T14:15:21Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 5
+    },
+    "cu-havana": {
+      "last": "2026-10-13T15:57:54Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "tc-providenciales": {
+      "last": "2026-10-27T12:05:11Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 7
+    },
+    "lc-castries": {
+      "last": "2026-10-27T14:00:07Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "ai-the-valley": {
+      "last": "2026-11-03T16:06:48Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 5
+    },
+    "vg-road-town": {
+      "last": "2026-10-27T12:14:39Z",
+      "adopted": [
+        "allevents.in (8)"
+      ],
+      "watch": [
+        "jsonld#happeningnext (1)"
+      ],
+      "probed": 7
+    },
+    "mq-fort-de-france": {
+      "last": "2026-10-27T12:03:51Z",
+      "adopted": [
+        "allevents.in (5)"
+      ],
+      "watch": [],
+      "probed": 4
+    },
+    "bs-nassau": {
+      "last": "2026-10-06T17:54:51Z",
+      "adopted": [
+        "r/Bahamas"
+      ],
+      "watch": [],
+      "probed": 20
+    },
+    "cr-san-jose": {
+      "last": "2026-10-13T15:46:34Z",
+      "adopted": [
+        "eventbrite (31)",
+        "allevents.in (32)",
+        "html-cards#agendaticacr (20)",
+        "jsonld#gamcultural (20)"
+      ],
+      "watch": [
+        "ics#culturacr (2)"
+      ],
+      "probed": 21
+    },
+    "kn-basseterre": {
+      "last": "2026-10-13T15:53:18Z",
+      "adopted": [
+        "allevents.in (3)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "hn-tegucigalpa": {
+      "last": "2026-10-13T16:05:25Z",
+      "adopted": [
+        "allevents.in (8)",
+        "r/Honduras",
+        "r/Tegucigalpa"
+      ],
+      "watch": [],
+      "probed": 4
+    },
+    "ni-managua": {
+      "last": "2026-10-21T11:08:41Z",
+      "adopted": [
+        "eventbrite (9)",
+        "html-cards#vamoseventos (20)",
+        "jsonld#salsavida (8)",
+        "html-cards#meticket (3)",
+        "r/Nicaragua",
+        "r/Managua"
+      ],
+      "watch": [
+        "jsonld#managua (2)"
+      ],
+      "probed": 18
+    },
+    "bz-belize-city": {
+      "last": "2026-10-21T11:09:12Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "gd-st-georges": {
+      "last": "2026-10-21T11:16:30Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "ky-george-town": {
+      "last": "2026-10-21T11:17:52Z",
+      "adopted": [
+        "allevents.in (17)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "vc-kingstown": {
+      "last": "2026-10-21T11:19:17Z",
+      "adopted": [
+        "allevents.in (6)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "ag-st-johns": {
+      "last": "2026-10-21T11:20:41Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "sx-philipsburg": {
+      "last": "2026-10-21T11:22:26Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "aw-oranjestad": {
+      "last": "2026-10-21T11:24:01Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "cw-willemstad": {
+      "last": "2026-10-21T11:25:38Z",
+      "adopted": [
+        "allevents.in (17)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "sv-san-salvador": {
+      "last": "2026-10-21T11:26:36Z",
+      "adopted": [
+        "allevents.in (12)"
+      ],
+      "watch": [
+        "meetup (1)"
+      ],
+      "probed": 4
+    },
+    "gt-guatemala-city": {
+      "last": "2026-10-21T11:28:28Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "ca-ottawa": {
+      "last": "2026-10-21T11:29:55Z",
+      "adopted": [
+        "allevents.in (85)",
+        "meetup (12)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "gl-nuuk": {
+      "last": "2026-10-21T11:31:21Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "pm-saint-pierre": {
+      "last": "2026-10-21T11:33:08Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "ar-buenos-aires": {
+      "last": "2026-10-21T11:35:01Z",
+      "adopted": [
+        "allevents.in (63)",
+        "luma (11)",
+        "meetup (12)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "bo-sucre": {
+      "last": "2026-10-21T11:36:43Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "br-brasilia": {
+      "last": "2026-10-21T11:38:27Z",
+      "adopted": [
+        "allevents.in (18)",
+        "meetup (5)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "cl-santiago": {
+      "last": "2026-10-21T11:41:43Z",
+      "adopted": [
+        "allevents.in (48)",
+        "meetup (10)",
+        "dated-list#chile (4)"
+      ],
+      "watch": [],
+      "probed": 9
+    },
+    "co-bogota": {
+      "last": "2026-10-21T11:43:31Z",
+      "adopted": [
+        "allevents.in (15)",
+        "luma (7)",
+        "meetup (11)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "ec-quito": {
+      "last": "2026-10-21T11:45:19Z",
+      "adopted": [
+        "allevents.in (40)",
+        "meetup (7)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "bs-freeport": {
+      "last": "2026-10-27T13:50:28Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 4
+    },
+    "ht-port-au-prince": {
+      "last": "2026-10-27T13:50:46Z",
+      "adopted": [
+        "allevents.in (5)"
+      ],
+      "watch": [],
+      "probed": 4
+    },
+    "bs-george-town": {
+      "last": "2026-10-27T14:13:11Z",
+      "adopted": [
+        "eventbrite (21)",
+        "allevents.in (20)"
+      ],
+      "watch": [
+        "dated-list#bahamas (1)"
+      ],
+      "probed": 6
+    },
+    "bb-bridgetown": {
+      "last": "2026-10-27T14:17:52Z",
+      "adopted": [
+        "allevents.in (7)"
+      ],
+      "watch": [],
+      "probed": 5
+    },
+    "ms-brades": {
+      "last": "2026-10-27T14:19:16Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "fk-stanley": {
+      "last": "2026-10-27T14:20:40Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "py-asuncion": {
+      "last": "2026-10-27T14:22:32Z",
+      "adopted": [
+        "meetup (4)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "pe-lima": {
+      "last": "2026-10-27T14:24:20Z",
+      "adopted": [
+        "meetup (11)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "uy-montevideo": {
+      "last": "2026-10-27T14:27:21Z",
+      "adopted": [
+        "meetup (6)"
+      ],
+      "watch": [],
+      "probed": 6
+    },
+    "ve-caracas": {
+      "last": "2026-10-27T14:29:14Z",
+      "adopted": [
+        "allevents.in (8)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "at-vienna": {
+      "last": "2026-10-27T14:30:49Z",
+      "adopted": [
+        "allevents.in (64)",
+        "luma (12)",
+        "meetup (11)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "be-brussels": {
+      "last": "2026-10-27T14:33:07Z",
+      "adopted": [
+        "allevents.in (67)",
+        "luma (18)",
+        "meetup (12)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "fr-paris": {
+      "last": "2026-10-27T14:35:04Z",
+      "adopted": [
+        "allevents.in (71)",
+        "luma (20)",
+        "meetup (9)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "de-berlin": {
+      "last": "2026-10-27T14:37:00Z",
+      "adopted": [
+        "allevents.in (79)",
+        "luma (20)",
+        "meetup (11)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "li-vaduz": {
+      "last": "2026-10-27T14:38:41Z",
+      "adopted": [
+        "allevents.in (20)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "bs-marsh-harbour": {
+      "last": "2026-11-03T15:35:06Z",
+      "adopted": [
+        "eventbrite (26)",
+        "jsonld#242whatshappening (16)",
+        "html-cards#bahamaslocal (6)"
+      ],
+      "watch": [
+        "dated-list#bahamas (2)"
+      ],
+      "probed": 13
+    },
+    "tt-scarborough": {
+      "last": "2026-11-03T15:54:23Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "gy-georgetown": {
+      "last": "2026-11-03T15:55:44Z",
+      "adopted": [
+        "allevents.in (13)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "dm-roseau": {
+      "last": "2026-11-03T15:57:05Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "pa-panama-city": {
+      "last": "2026-11-03T15:59:08Z",
+      "adopted": [
+        "allevents.in (21)"
+      ],
+      "watch": [],
+      "probed": 4
+    },
+    "do-punta-cana": {
+      "last": "2026-11-03T16:01:04Z",
+      "adopted": [
+        "allevents.in (16)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "bq-kralendijk": {
+      "last": "2026-11-03T16:02:45Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "do-santo-domingo": {
+      "last": "2026-11-03T16:04:16Z",
+      "adopted": [
+        "allevents.in (19)",
+        "meetup (3)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "bs-governors-harbour": {
+      "last": "2026-11-03T16:10:13Z",
+      "adopted": [
+        "eventbrite (19)",
+        "allevents.in (18)"
+      ],
+      "watch": [
+        "dated-list#bahamas (2)"
+      ],
+      "probed": 5
+    },
+    "lu-luxembourg": {
+      "last": "2026-11-03T16:12:03Z",
+      "adopted": [
+        "allevents.in (61)",
+        "meetup (11)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "mc-monaco": {
+      "last": "2026-11-03T16:13:52Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "ch-bern": {
+      "last": "2026-11-03T16:15:36Z",
+      "adopted": [
+        "meetup (12)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "nl-amsterdam": {
+      "last": "2026-11-03T16:17:09Z",
+      "adopted": [
+        "allevents.in (59)",
+        "luma (20)",
+        "meetup (11)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "ax-mariehamn": {
+      "last": "2026-11-03T16:18:33Z",
+      "adopted": [],
+      "watch": [],
+      "probed": 3
+    },
+    "dk-copenhagen": {
+      "last": "2026-11-03T16:19:51Z",
+      "adopted": [
+        "allevents.in (63)",
+        "luma (18)",
+        "meetup (11)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "ee-tallinn": {
+      "last": "2026-11-03T16:21:11Z",
+      "adopted": [
+        "allevents.in (66)",
+        "meetup (7)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "fo-torshavn": {
+      "last": "2026-11-03T16:22:41Z",
+      "adopted": [
+        "allevents.in (16)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "fi-helsinki": {
+      "last": "2026-11-03T16:24:03Z",
+      "adopted": [
+        "allevents.in (64)",
+        "luma (20)",
+        "meetup (10)"
+      ],
+      "watch": [],
+      "probed": 3
+    },
+    "gg-saint-peter-port": {
+      "last": "2026-11-03T16:25:28Z",
+      "adopted": [
+        "allevents.in (29)"
+      ],
+      "watch": [],
+      "probed": 3
+    }
+  },
+  "countries": {
+    "AI": {
+      "last": "2026-10-01T17:28:56Z",
+      "result": "market ai-the-valley",
+      "sources": [
+        "html-cards#anguillaferrytimes",
+        "html-cards#goanguilla",
+        "community"
+      ]
+    },
+    "VG": {
+      "last": "2026-10-01T17:38:35Z",
+      "result": "market vg-road-town",
+      "sources": [
+        "allevents.in"
+      ]
+    },
+    "MQ": {
+      "last": "2026-10-01T18:35:10Z",
+      "result": "market mq-fort-de-france",
+      "sources": [
+        "allevents.in"
+      ]
+    },
+    "CR": {
+      "last": "2026-10-13T15:12:37Z",
+      "result": "market cr-san-jose",
+      "sources": [
+        "eventbrite",
+        "allevents.in",
+        "jsonld#whereincostarica",
+        "html-cards#meticket",
+        "html-cards#mcj",
+        "html-cards#vamoseventos",
+        "jsonld#starticket",
+        "html-cards#omticket",
+        "html-cards#cr",
+        "jsonld#jambase",
+        "html-cards#goallconcerts"
+      ]
+    },
+    "GT": {
+      "last": "2026-10-21T11:28:28Z",
+      "result": "no sources yet",
+      "probed": 3
+    },
+    "CA": {
+      "last": "2026-10-21T11:29:55Z",
+      "result": "market ca-ottawa",
+      "sources": [
+        "ticketmaster",
+        "seatgeek",
+        "allevents.in",
+        "meetup"
+      ]
+    },
+    "GL": {
+      "last": "2026-10-21T11:31:21Z",
+      "result": "no sources yet",
+      "probed": 3
+    },
+    "PM": {
+      "last": "2026-10-21T11:33:08Z",
+      "result": "no sources yet",
+      "probed": 3
+    },
+    "AR": {
+      "last": "2026-10-21T11:35:01Z",
+      "result": "market ar-buenos-aires",
+      "sources": [
+        "allevents.in",
+        "luma",
+        "meetup"
+      ]
+    },
+    "BO": {
+      "last": "2026-10-21T11:36:43Z",
+      "result": "no sources yet",
+      "probed": 3
+    },
+    "BR": {
+      "last": "2026-10-21T11:38:27Z",
+      "result": "market br-brasilia",
+      "sources": [
+        "allevents.in",
+        "meetup"
+      ]
+    },
+    "CL": {
+      "last": "2026-10-21T11:41:43Z",
+      "result": "market cl-santiago",
+      "sources": [
+        "allevents.in",
+        "meetup",
+        "dated-list#chile"
+      ]
+    },
+    "CO": {
+      "last": "2026-10-21T11:43:31Z",
+      "result": "market co-bogota",
+      "sources": [
+        "allevents.in",
+        "luma",
+        "meetup"
+      ]
+    },
+    "EC": {
+      "last": "2026-10-21T11:45:19Z",
+      "result": "market ec-quito",
+      "sources": [
+        "allevents.in",
+        "meetup"
+      ]
+    },
+    "FK": {
+      "last": "2026-10-27T14:20:40Z",
+      "result": "no sources yet",
+      "probed": 3
+    },
+    "PY": {
+      "last": "2026-10-27T14:22:32Z",
+      "result": "market py-asuncion",
+      "sources": [
+        "meetup"
+      ]
+    },
+    "PE": {
+      "last": "2026-10-27T14:24:20Z",
+      "result": "market pe-lima",
+      "sources": [
+        "meetup"
+      ]
+    },
+    "UY": {
+      "last": "2026-10-27T14:27:21Z",
+      "result": "market uy-montevideo",
+      "sources": [
+        "meetup"
+      ]
+    },
+    "VE": {
+      "last": "2026-10-27T14:29:14Z",
+      "result": "market ve-caracas",
+      "sources": [
+        "allevents.in"
+      ]
+    },
+    "AT": {
+      "last": "2026-10-27T14:30:49Z",
+      "result": "market at-vienna",
+      "sources": [
+        "ticketmaster",
+        "allevents.in",
+        "luma",
+        "meetup"
+      ]
+    },
+    "BE": {
+      "last": "2026-10-27T14:33:07Z",
+      "result": "market be-brussels",
+      "sources": [
+        "ticketmaster",
+        "allevents.in",
+        "luma",
+        "meetup"
+      ]
+    },
+    "FR": {
+      "last": "2026-10-27T14:35:04Z",
+      "result": "market fr-paris",
+      "sources": [
+        "ticketmaster",
+        "allevents.in",
+        "luma",
+        "meetup"
+      ]
+    },
+    "DE": {
+      "last": "2026-10-27T14:37:00Z",
+      "result": "market de-berlin",
+      "sources": [
+        "ticketmaster",
+        "allevents.in",
+        "luma",
+        "meetup"
+      ]
+    },
+    "LI": {
+      "last": "2026-10-27T14:38:41Z",
+      "result": "market li-vaduz",
+      "sources": [
+        "allevents.in"
+      ]
+    },
+    "LU": {
+      "last": "2026-11-03T16:12:03Z",
+      "result": "market lu-luxembourg",
+      "sources": [
+        "ticketmaster",
+        "allevents.in",
+        "meetup"
+      ]
+    },
+    "MC": {
+      "last": "2026-11-03T16:13:52Z",
+      "result": "no sources yet",
+      "probed": 3
+    },
+    "CH": {
+      "last": "2026-11-03T16:15:36Z",
+      "result": "market ch-bern",
+      "sources": [
+        "ticketmaster",
+        "meetup"
+      ]
+    },
+    "NL": {
+      "last": "2026-11-03T16:17:09Z",
+      "result": "market nl-amsterdam",
+      "sources": [
+        "ticketmaster",
+        "allevents.in",
+        "luma",
+        "meetup"
+      ]
+    },
+    "AX": {
+      "last": "2026-11-03T16:18:33Z",
+      "result": "no sources yet",
+      "probed": 3
+    },
+    "DK": {
+      "last": "2026-11-03T16:19:51Z",
+      "result": "market dk-copenhagen",
+      "sources": [
+        "ticketmaster",
+        "allevents.in",
+        "luma",
+        "meetup"
+      ]
+    },
+    "EE": {
+      "last": "2026-11-03T16:21:11Z",
+      "result": "market ee-tallinn",
+      "sources": [
+        "allevents.in",
+        "meetup"
+      ]
+    },
+    "FO": {
+      "last": "2026-11-03T16:22:41Z",
+      "result": "market fo-torshavn",
+      "sources": [
+        "allevents.in"
+      ]
+    },
+    "FI": {
+      "last": "2026-11-03T16:24:03Z",
+      "result": "market fi-helsinki",
+      "sources": [
+        "ticketmaster",
+        "allevents.in",
+        "luma",
+        "meetup"
+      ]
+    },
+    "GG": {
+      "last": "2026-11-03T16:25:28Z",
+      "result": "market gg-saint-peter-port",
+      "sources": [
+        "allevents.in"
+      ]
+    }
+  }
+}

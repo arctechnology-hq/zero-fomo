@@ -1,0 +1,36 @@
+{
+ "market": "ee-tallinn",
+ "generated_at": "2026-11-06T11:33:37Z",
+ "sources_run": [
+  "allevents.in",
+  "meetup",
+  "community"
+ ],
+ "raw": 77,
+ "unique": 77,
+ "exported": 74,
+ "review": 3,
+ "sources": [
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 67,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 10,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

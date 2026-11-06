@@ -1,0 +1,44 @@
+{
+ "market": "lu-luxembourg",
+ "generated_at": "2026-11-06T11:38:30Z",
+ "sources_run": [
+  "ticketmaster",
+  "allevents.in",
+  "meetup",
+  "community"
+ ],
+ "raw": 78,
+ "unique": 75,
+ "exported": 72,
+ "review": 3,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 2,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 65,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 11,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

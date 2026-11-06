@@ -1,0 +1,124 @@
+{
+ "market": "cr-san-jose",
+ "generated_at": "2026-11-06T11:28:04Z",
+ "sources_run": [
+  "eventbrite",
+  "allevents.in",
+  "jsonld#whereincostarica",
+  "html-cards#meticket",
+  "html-cards#mcj",
+  "html-cards#vamoseventos",
+  "jsonld#starticket",
+  "html-cards#omticket",
+  "html-cards#cr",
+  "jsonld#jambase",
+  "html-cards#goallconcerts",
+  "community",
+  "html-cards#agendaticacr",
+  "jsonld#gamcultural"
+ ],
+ "raw": 289,
+ "unique": 269,
+ "exported": 259,
+ "review": 10,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 24,
+   "pages": 4,
+   "note": ""
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 32,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "jsonld#whereincostarica",
+   "ok": true,
+   "events": 3,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "html-cards#meticket",
+   "ok": true,
+   "events": 6,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "html-cards#mcj",
+   "ok": true,
+   "events": 9,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "html-cards#vamoseventos",
+   "ok": true,
+   "events": 10,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "jsonld#starticket",
+   "ok": true,
+   "events": 137,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "html-cards#omticket",
+   "ok": true,
+   "events": 6,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "html-cards#cr",
+   "ok": true,
+   "events": 7,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "jsonld#jambase",
+   "ok": true,
+   "events": 4,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "html-cards#goallconcerts",
+   "ok": true,
+   "events": 11,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  },
+  {
+   "name": "html-cards#agendaticacr",
+   "ok": true,
+   "events": 20,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "jsonld#gamcultural",
+   "ok": true,
+   "events": 20,
+   "pages": 1,
+   "note": ""
+  }
+ ]
+}

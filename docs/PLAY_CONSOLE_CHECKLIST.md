@@ -289,3 +289,20 @@ gambling, purchases; users CAN share content but it is moderated before publicat
 account trader status applies to this app; no separate ToS URL. (4) Internal tester list
 (see above). (5) Merchant setup + US$1.99 price. Then: countries/regions → Production →
 Create release → Add from library 15 (0.10.2) → send for review.
+
+**Status 2026-11-12 — PRODUCTION DRAFT STAGED.** Dashboard still 9 of 14; nothing owner-only
+moved since 5 Nov. Done from the extension: Production → Countries / regions = Bahamas +
+United States (saved; queued in Publishing overview as "Add 2 countries / regions");
+Production release 1 saved as a DRAFT with bundle 15 (0.10.2), release name `15 (0.10.2)`,
+en-US notes from `store/whatsnew/whatsnew-en-US` (draft URL
+`.../tracks/4697545320841507200/releases/1/prepare`). Not sent for review — "Send app for
+review" stays locked until the dashboard tasks are complete. App-level trader status: the
+"Yes, my trader status applies to this app" option is pre-selected and Save is enabled, but
+the declaration is the owner's (the extension's classifier refuses it). No pre-launch report
+exists (internal-track uploads do not generate one).
+
+**Owner-only (Rhan), in order:** (1) Trader status → Save; (2) Financial features → tick
+"My app doesn't provide any financial features" → Next → Save; (3) Content rating → Start
+questionnaire (answers above); (4) Create a merchant account (bank + tax); (5) Set the price
+US$1.99. Then Production → release 1 draft → Next → Save → Publishing overview → Send app
+for review.

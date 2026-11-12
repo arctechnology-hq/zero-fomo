@@ -1,0 +1,40 @@
+{
+  "id": "no-oslo",
+  "name": "Oslo, Norway",
+  "country": "NO",
+  "tz": "Europe/Oslo",
+  "lat": 59.9127,
+  "lng": 10.7461,
+  "radius_km": 50,
+  "currency": "NOK",
+  "auto": true,
+  "created": "2026-11-12",
+  "sources": {
+    "ticketmaster": {},
+    "luma": {
+      "slug": "oslo",
+      "countries": [
+        "norway"
+      ],
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "guess",
+        "probe_events": 14,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "no--Oslo",
+      "countries": [
+        "norway"
+      ],
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "guess",
+        "probe_events": 12,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

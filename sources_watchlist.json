@@ -277,9 +277,9 @@
       "kind": "status",
       "url": "https://meetup",
       "alert_when_alive": false,
-      "adopt": "sv-san-salvador: meetup {\"location\": \"sv--San%20Salvador\", \"countries\": [\"el salvador\"]}",
+      "adopt": "is-reykjavik: meetup {\"location\": \"is--Reykjavik\", \"countries\": [\"iceland\"]}",
       "_auto": {
-        "seen": "2026-10-21",
+        "seen": "2026-11-12",
         "probe_events": 1
       }
     },
@@ -302,6 +302,17 @@
       "adopt": "bs-governors-harbour: dated-list#bahamas {\"urls\": [\"https://bahamas.tikkets.com/\"], \"venue_default\": \"Governor's Harbour, Eleuthera\"}",
       "_auto": {
         "seen": "2026-11-03",
+        "probe_events": 2
+      }
+    },
+    {
+      "name": "hn-tegucigalpa jsonld#gcbtickets (2 upcoming)",
+      "kind": "status",
+      "url": "https://gcbtickets.com/",
+      "alert_when_alive": false,
+      "adopt": "hn-tegucigalpa: jsonld#gcbtickets {\"urls\": [\"https://gcbtickets.com/\"], \"venue_default\": \"Tegucigalpa, Honduras\"}",
+      "_auto": {
+        "seen": "2026-11-12",
         "probe_events": 2
       }
     }

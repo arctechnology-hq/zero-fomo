@@ -14,7 +14,7 @@
     "eventbrite": {
       "slug": "nicaragua--managua",
       "_auto": {
-        "adopted": "2026-10-21",
+        "adopted": "2026-11-12",
         "via": "search:Managua Nicaragua events calendar",
         "probe_events": 9,
         "from": ""
@@ -58,6 +58,30 @@
         "via": "search:Managua Nicaragua concerts parties tickets",
         "probe_events": 3,
         "from": "https://me-ticket.com/catalog/nicaragua/managua/music"
+      }
+    },
+    "allevents.in": {
+      "city": "managua",
+      "countries": [
+        "nicaragua"
+      ],
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "search:Managua Nicaragua events calendar",
+        "probe_events": 8,
+        "from": ""
+      }
+    },
+    "jsonld#happeningnext": {
+      "urls": [
+        "https://happeningnext.com/managua"
+      ],
+      "venue_default": "Managua, Nicaragua",
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "search:Managua Nicaragua events calendar",
+        "probe_events": 10,
+        "from": "https://happeningnext.com/managua"
       }
     }
   }

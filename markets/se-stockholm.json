@@ -1,0 +1,52 @@
+{
+  "id": "se-stockholm",
+  "name": "Stockholm, Sweden",
+  "country": "SE",
+  "tz": "Europe/Stockholm",
+  "lat": 59.3294,
+  "lng": 18.0687,
+  "radius_km": 50,
+  "currency": "SEK",
+  "auto": true,
+  "created": "2026-11-12",
+  "sources": {
+    "ticketmaster": {},
+    "allevents.in": {
+      "city": "stockholm",
+      "countries": [
+        "sweden"
+      ],
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "guess",
+        "probe_events": 64,
+        "from": ""
+      }
+    },
+    "luma": {
+      "slug": "stockholm",
+      "countries": [
+        "sweden"
+      ],
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "guess",
+        "probe_events": 20,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "se--Stockholm",
+      "countries": [
+        "sweden"
+      ],
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "guess",
+        "probe_events": 11,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

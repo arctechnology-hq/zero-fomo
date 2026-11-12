@@ -1,0 +1,39 @@
+{
+  "id": "lt-vilnius",
+  "name": "Vilnius, Lithuania",
+  "country": "LT",
+  "tz": "Europe/Vilnius",
+  "lat": 54.6892,
+  "lng": 25.2798,
+  "radius_km": 40,
+  "currency": "EUR",
+  "auto": true,
+  "created": "2026-11-12",
+  "sources": {
+    "allevents.in": {
+      "city": "vilnius",
+      "countries": [
+        "lithuania"
+      ],
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "guess",
+        "probe_events": 62,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "lt--Vilnius",
+      "countries": [
+        "lithuania"
+      ],
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "guess",
+        "probe_events": 12,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

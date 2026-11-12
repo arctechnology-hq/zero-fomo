@@ -1,0 +1,27 @@
+{
+  "id": "lv-riga",
+  "name": "Riga, Latvia",
+  "country": "LV",
+  "tz": "Europe/Riga",
+  "lat": 56.946,
+  "lng": 24.1059,
+  "radius_km": 40,
+  "currency": "EUR",
+  "auto": true,
+  "created": "2026-11-12",
+  "sources": {
+    "meetup": {
+      "location": "lv--Riga",
+      "countries": [
+        "latvia"
+      ],
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "guess",
+        "probe_events": 9,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

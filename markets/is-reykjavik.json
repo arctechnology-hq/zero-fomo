@@ -1,0 +1,27 @@
+{
+  "id": "is-reykjavik",
+  "name": "Reykjavík, Iceland",
+  "country": "IS",
+  "tz": "Atlantic/Reykjavik",
+  "lat": 64.1355,
+  "lng": -21.8954,
+  "radius_km": 25,
+  "currency": "ISK",
+  "auto": true,
+  "created": "2026-11-12",
+  "sources": {
+    "allevents.in": {
+      "city": "reykjavik",
+      "countries": [
+        "iceland"
+      ],
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "guess",
+        "probe_events": 39,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "id": "gb-london",
+  "name": "London, United Kingdom",
+  "country": "GB",
+  "tz": "Europe/London",
+  "lat": 51.5085,
+  "lng": -0.1257,
+  "radius_km": 50,
+  "currency": "GBP",
+  "auto": true,
+  "created": "2026-11-12",
+  "sources": {
+    "ticketmaster": {},
+    "seatgeek": {},
+    "allevents.in": {
+      "city": "london",
+      "countries": [
+        "united kingdom",
+        "england",
+        "scotland",
+        "wales",
+        "northern ireland",
+        " uk"
+      ],
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "guess",
+        "probe_events": 89,
+        "from": ""
+      }
+    },
+    "luma": {
+      "slug": "london",
+      "countries": [
+        "united kingdom",
+        "england",
+        "scotland",
+        "wales",
+        "northern ireland",
+        " uk"
+      ],
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "guess",
+        "probe_events": 20,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "gb--London",
+      "countries": [
+        "united kingdom",
+        "england",
+        "scotland",
+        "wales",
+        "northern ireland",
+        " uk"
+      ],
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "guess",
+        "probe_events": 10,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

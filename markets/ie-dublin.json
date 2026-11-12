@@ -1,0 +1,52 @@
+{
+  "id": "ie-dublin",
+  "name": "Dublin, Ireland",
+  "country": "IE",
+  "tz": "Europe/Dublin",
+  "lat": 53.3331,
+  "lng": -6.2489,
+  "radius_km": 50,
+  "currency": "EUR",
+  "auto": true,
+  "created": "2026-11-12",
+  "sources": {
+    "ticketmaster": {},
+    "allevents.in": {
+      "city": "dublin",
+      "countries": [
+        "ireland"
+      ],
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "guess",
+        "probe_events": 62,
+        "from": ""
+      }
+    },
+    "luma": {
+      "slug": "dublin",
+      "countries": [
+        "ireland"
+      ],
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "guess",
+        "probe_events": 12,
+        "from": ""
+      }
+    },
+    "meetup": {
+      "location": "ie--Dublin",
+      "countries": [
+        "ireland"
+      ],
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "guess",
+        "probe_events": 12,
+        "from": ""
+      }
+    },
+    "community": {}
+  }
+}

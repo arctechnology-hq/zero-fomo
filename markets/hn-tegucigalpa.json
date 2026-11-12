@@ -16,12 +16,81 @@
         "honduras"
       ],
       "_auto": {
-        "adopted": "2026-10-13",
-        "via": "guess",
-        "probe_events": 8,
+        "adopted": "2026-11-12",
+        "via": "search:Tegucigalpa Honduras events calendar",
+        "probe_events": 7,
         "from": ""
       }
     },
-    "community": {}
+    "community": {},
+    "eventbrite": {
+      "slug": "honduras--tegucigalpa",
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "search:Tegucigalpa Honduras events calendar",
+        "probe_events": 9,
+        "from": ""
+      }
+    },
+    "jsonld#eticket": {
+      "urls": [
+        "https://www.eticket.hn/eventos.aspx?idciudad=11"
+      ],
+      "venue_default": "Tegucigalpa, Honduras",
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "search:Tegucigalpa Honduras events calendar",
+        "probe_events": 5,
+        "from": "https://www.eticket.hn/eventos.aspx?idciudad=11"
+      }
+    },
+    "jsonld#happeningnext": {
+      "urls": [
+        "https://www.happeningnext.com/tegucigalpa"
+      ],
+      "venue_default": "Tegucigalpa, Honduras",
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "search:Tegucigalpa Honduras events calendar",
+        "probe_events": 8,
+        "from": "https://www.happeningnext.com/tegucigalpa"
+      }
+    },
+    "jsonld#salsavida": {
+      "urls": [
+        "https://www.salsavida.com/guides/honduras/tegucigalpa/"
+      ],
+      "venue_default": "Tegucigalpa, Honduras",
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "search:Tegucigalpa Honduras events calendar",
+        "probe_events": 24,
+        "from": "https://www.salsavida.com/guides/honduras/tegucigalpa/"
+      }
+    },
+    "jsonld#bmticket": {
+      "urls": [
+        "https://bmticket.com/"
+      ],
+      "venue_default": "Tegucigalpa, Honduras",
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "search:Honduras events tickets",
+        "probe_events": 3,
+        "from": "https://bmticket.com/"
+      }
+    },
+    "jsonld#jambase": {
+      "urls": [
+        "https://www.jambase.com/concerts/hn"
+      ],
+      "venue_default": "Tegucigalpa, Honduras",
+      "_auto": {
+        "adopted": "2026-11-12",
+        "via": "search:Honduras events tickets",
+        "probe_events": 5,
+        "from": "https://www.jambase.com/concerts/hn"
+      }
+    }
   }
 }

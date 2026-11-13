@@ -1,0 +1,52 @@
+{
+ "market": "fr-paris",
+ "generated_at": "2026-11-13T15:26:29Z",
+ "sources_run": [
+  "ticketmaster",
+  "allevents.in",
+  "luma",
+  "meetup",
+  "community"
+ ],
+ "raw": 31,
+ "unique": 31,
+ "exported": 31,
+ "review": 0,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 0,
+   "pages": 5,
+   "note": ""
+  },
+  {
+   "name": "luma",
+   "ok": true,
+   "events": 20,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 11,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

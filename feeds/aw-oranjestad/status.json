@@ -1,0 +1,36 @@
+{
+ "market": "aw-oranjestad",
+ "generated_at": "2026-11-13T14:56:00Z",
+ "sources_run": [
+  "eventbrite",
+  "trinijunglejuice",
+  "community"
+ ],
+ "raw": 16,
+ "unique": 16,
+ "exported": 13,
+ "review": 3,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 16,
+   "pages": 4,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

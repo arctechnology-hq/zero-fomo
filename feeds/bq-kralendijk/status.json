@@ -1,0 +1,28 @@
+{
+ "market": "bq-kralendijk",
+ "generated_at": "2026-11-13T15:00:07Z",
+ "sources_run": [
+  "tribe",
+  "community"
+ ],
+ "raw": 21,
+ "unique": 21,
+ "exported": 21,
+ "review": 0,
+ "sources": [
+  {
+   "name": "tribe",
+   "ok": true,
+   "events": 21,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

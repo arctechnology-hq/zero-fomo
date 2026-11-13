@@ -1,0 +1,44 @@
+{
+ "market": "bm-hamilton",
+ "generated_at": "2026-11-13T14:59:49Z",
+ "sources_run": [
+  "eventbrite",
+  "trinijunglejuice",
+  "community",
+  "html-cards#gpass"
+ ],
+ "raw": 14,
+ "unique": 13,
+ "exported": 9,
+ "review": 4,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 8,
+   "pages": 3,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 1,
+   "pages": 0,
+   "note": ""
+  },
+  {
+   "name": "html-cards#gpass",
+   "ok": true,
+   "events": 5,
+   "pages": 1,
+   "note": ""
+  }
+ ]
+}

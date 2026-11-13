@@ -1,0 +1,52 @@
+{
+ "market": "mx-mexico-city",
+ "generated_at": "2026-11-13T15:38:09Z",
+ "sources_run": [
+  "ticketmaster",
+  "allevents.in",
+  "luma",
+  "meetup",
+  "community"
+ ],
+ "raw": 1238,
+ "unique": 1057,
+ "exported": 1056,
+ "review": 1,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 1199,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 16,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "luma",
+   "ok": true,
+   "events": 12,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 11,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

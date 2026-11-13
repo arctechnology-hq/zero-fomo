@@ -1,0 +1,44 @@
+{
+ "market": "no-oslo",
+ "generated_at": "2026-11-13T15:40:30Z",
+ "sources_run": [
+  "ticketmaster",
+  "luma",
+  "meetup",
+  "community"
+ ],
+ "raw": 291,
+ "unique": 270,
+ "exported": 269,
+ "review": 1,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 265,
+   "pages": 2,
+   "note": ""
+  },
+  {
+   "name": "luma",
+   "ok": true,
+   "events": 14,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 12,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

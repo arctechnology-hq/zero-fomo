@@ -1,0 +1,28 @@
+{
+ "market": "sv-san-salvador",
+ "generated_at": "2026-11-13T15:41:39Z",
+ "sources_run": [
+  "allevents.in",
+  "community"
+ ],
+ "raw": 14,
+ "unique": 14,
+ "exported": 14,
+ "review": 0,
+ "sources": [
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 14,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

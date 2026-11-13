@@ -1,0 +1,44 @@
+{
+ "market": "ar-buenos-aires",
+ "generated_at": "2026-11-13T14:55:30Z",
+ "sources_run": [
+  "allevents.in",
+  "luma",
+  "meetup",
+  "community"
+ ],
+ "raw": 87,
+ "unique": 87,
+ "exported": 82,
+ "review": 5,
+ "sources": [
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 64,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "luma",
+   "ok": true,
+   "events": 12,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 11,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "market": "ch-bern",
+ "generated_at": "2026-11-13T15:06:27Z",
+ "sources_run": [
+  "ticketmaster",
+  "meetup",
+  "community"
+ ],
+ "raw": 29,
+ "unique": 28,
+ "exported": 28,
+ "review": 0,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 18,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 11,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

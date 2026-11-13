@@ -1,0 +1,52 @@
+{
+ "market": "ca-ottawa",
+ "generated_at": "2026-11-13T15:06:23Z",
+ "sources_run": [
+  "ticketmaster",
+  "seatgeek",
+  "allevents.in",
+  "meetup",
+  "community"
+ ],
+ "raw": 501,
+ "unique": 472,
+ "exported": 470,
+ "review": 2,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 380,
+   "pages": 2,
+   "note": ""
+  },
+  {
+   "name": "seatgeek",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": ""
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 109,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 12,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

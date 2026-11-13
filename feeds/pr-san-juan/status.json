@@ -1,0 +1,52 @@
+{
+ "market": "pr-san-juan",
+ "generated_at": "2026-11-13T15:41:02Z",
+ "sources_run": [
+  "ticketmaster",
+  "seatgeek",
+  "eventbrite",
+  "trinijunglejuice",
+  "community"
+ ],
+ "raw": 119,
+ "unique": 106,
+ "exported": 103,
+ "review": 3,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "seatgeek",
+   "ok": true,
+   "events": 50,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 69,
+   "pages": 4,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

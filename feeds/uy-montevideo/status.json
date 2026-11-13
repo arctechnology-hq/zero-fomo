@@ -1,0 +1,28 @@
+{
+ "market": "uy-montevideo",
+ "generated_at": "2026-11-13T15:51:06Z",
+ "sources_run": [
+  "meetup",
+  "community"
+ ],
+ "raw": 5,
+ "unique": 5,
+ "exported": 5,
+ "review": 0,
+ "sources": [
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 5,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

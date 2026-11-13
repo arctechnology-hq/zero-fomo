@@ -1,0 +1,36 @@
+{
+ "market": "br-brasilia",
+ "generated_at": "2026-11-13T15:01:17Z",
+ "sources_run": [
+  "allevents.in",
+  "meetup",
+  "community"
+ ],
+ "raw": 23,
+ "unique": 23,
+ "exported": 22,
+ "review": 1,
+ "sources": [
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 19,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 4,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

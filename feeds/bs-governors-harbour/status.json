@@ -1,0 +1,60 @@
+{
+ "market": "bs-governors-harbour",
+ "generated_at": "2026-11-13T15:03:00Z",
+ "sources_run": [
+  "bahamas.com",
+  "tourismtoday",
+  "dated-list#waterwayguide",
+  "community",
+  "eventbrite",
+  "allevents.in"
+ ],
+ "raw": 90,
+ "unique": 74,
+ "exported": 70,
+ "review": 4,
+ "sources": [
+  {
+   "name": "bahamas.com",
+   "ok": true,
+   "events": 15,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "tourismtoday",
+   "ok": true,
+   "events": 17,
+   "pages": 3,
+   "note": ""
+  },
+  {
+   "name": "dated-list#waterwayguide",
+   "ok": true,
+   "events": 3,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  },
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 22,
+   "pages": 4,
+   "note": ""
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 33,
+   "pages": 6,
+   "note": ""
+  }
+ ]
+}

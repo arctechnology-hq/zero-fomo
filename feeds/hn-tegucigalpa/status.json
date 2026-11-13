@@ -1,0 +1,76 @@
+{
+ "market": "hn-tegucigalpa",
+ "generated_at": "2026-11-13T15:30:32Z",
+ "sources_run": [
+  "allevents.in",
+  "community",
+  "eventbrite",
+  "jsonld#eticket",
+  "jsonld#happeningnext",
+  "jsonld#salsavida",
+  "jsonld#bmticket",
+  "jsonld#jambase"
+ ],
+ "raw": 65,
+ "unique": 57,
+ "exported": 54,
+ "review": 3,
+ "sources": [
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 7,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  },
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 13,
+   "pages": 5,
+   "note": ""
+  },
+  {
+   "name": "jsonld#eticket",
+   "ok": true,
+   "events": 5,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "jsonld#happeningnext",
+   "ok": true,
+   "events": 8,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "jsonld#salsavida",
+   "ok": true,
+   "events": 24,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "jsonld#bmticket",
+   "ok": true,
+   "events": 3,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "jsonld#jambase",
+   "ok": true,
+   "events": 5,
+   "pages": 1,
+   "note": ""
+  }
+ ]
+}

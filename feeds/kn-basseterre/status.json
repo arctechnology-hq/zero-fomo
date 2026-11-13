@@ -1,0 +1,52 @@
+{
+ "market": "kn-basseterre",
+ "generated_at": "2026-11-13T15:34:50Z",
+ "sources_run": [
+  "eventbrite",
+  "ticketpal",
+  "trinijunglejuice",
+  "community",
+  "allevents.in"
+ ],
+ "raw": 24,
+ "unique": 24,
+ "exported": 21,
+ "review": 3,
+ "sources": [
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 16,
+   "pages": 3,
+   "note": ""
+  },
+  {
+   "name": "ticketpal",
+   "ok": true,
+   "events": 0,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "trinijunglejuice",
+   "ok": true,
+   "events": 2,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 6,
+   "pages": 6,
+   "note": ""
+  }
+ ]
+}

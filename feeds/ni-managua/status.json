@@ -1,0 +1,68 @@
+{
+ "market": "ni-managua",
+ "generated_at": "2026-11-13T15:39:39Z",
+ "sources_run": [
+  "community",
+  "eventbrite",
+  "html-cards#vamoseventos",
+  "jsonld#salsavida",
+  "html-cards#meticket",
+  "allevents.in",
+  "jsonld#happeningnext"
+ ],
+ "raw": 38,
+ "unique": 30,
+ "exported": 28,
+ "review": 2,
+ "sources": [
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  },
+  {
+   "name": "eventbrite",
+   "ok": true,
+   "events": 10,
+   "pages": 3,
+   "note": ""
+  },
+  {
+   "name": "html-cards#vamoseventos",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": ""
+  },
+  {
+   "name": "jsonld#salsavida",
+   "ok": true,
+   "events": 8,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "html-cards#meticket",
+   "ok": true,
+   "events": 3,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 8,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "jsonld#happeningnext",
+   "ok": true,
+   "events": 9,
+   "pages": 1,
+   "note": ""
+  }
+ ]
+}

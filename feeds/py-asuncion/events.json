@@ -1,0 +1,29 @@
+{
+ "schema_version": 2,
+ "market": "py-asuncion",
+ "country": "PY",
+ "tz": "America/Asuncion",
+ "generated_at": "2026-11-13T15:41:04Z",
+ "events": [
+  {
+   "id": "0a1422060dea",
+   "name": "The Asunción Times’ Pub Crawl CARMELITAS Edition",
+   "date": "2026-11-14",
+   "time_start": "19:00",
+   "time_end": null,
+   "venue": "Mamba Carmelitas, Senador Huey Pierce Long, Asunción 1528, Paraguay, Asunción",
+   "island": null,
+   "lat": -25.2865,
+   "lng": -57.647,
+   "price_min": 24.0,
+   "price_max": 24.0,
+   "is_free": false,
+   "category": "CONCERT_LIVE_MUSIC",
+   "source_url": "https://www.meetup.com/theasunciontimes/events/317385131/",
+   "description": "The Asunción Times’ Pub Crawl CARMELITAS Edition Pub crawl is back! 🥳 This Saturday, our new Pub Crawl host Barbie will take you and up to 49 other fun-loving new friends around some of Asunción’s favourite drinking spots, with a free drink in each venue and some fun and games along the way 🙌 Starting at 7pm, get your wristband and your first free drink, and start getting to know your teammates who you’ll compete with against other teams to win some prizes! Barbie will be your new Pub Crawl host! 🥳 She's a Paraguayan artist and loves bringing people together for a good time! She can't wait to",
+   "country": "PY",
+   "market": "py-asuncion",
+   "tz": "America/Asuncion"
+  }
+ ]
+}

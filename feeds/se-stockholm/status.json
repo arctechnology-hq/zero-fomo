@@ -1,0 +1,52 @@
+{
+ "market": "se-stockholm",
+ "generated_at": "2026-11-13T15:41:27Z",
+ "sources_run": [
+  "ticketmaster",
+  "allevents.in",
+  "luma",
+  "meetup",
+  "community"
+ ],
+ "raw": 263,
+ "unique": 239,
+ "exported": 239,
+ "review": 0,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 167,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 65,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "luma",
+   "ok": true,
+   "events": 20,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 11,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

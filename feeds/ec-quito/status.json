@@ -1,0 +1,36 @@
+{
+ "market": "ec-quito",
+ "generated_at": "2026-11-13T15:23:45Z",
+ "sources_run": [
+  "allevents.in",
+  "meetup",
+  "community"
+ ],
+ "raw": 29,
+ "unique": 29,
+ "exported": 28,
+ "review": 1,
+ "sources": [
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 24,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 5,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

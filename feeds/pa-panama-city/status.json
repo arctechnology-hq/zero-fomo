@@ -1,0 +1,28 @@
+{
+ "market": "pa-panama-city",
+ "generated_at": "2026-11-13T15:40:45Z",
+ "sources_run": [
+  "allevents.in",
+  "community"
+ ],
+ "raw": 25,
+ "unique": 24,
+ "exported": 23,
+ "review": 1,
+ "sources": [
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 25,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

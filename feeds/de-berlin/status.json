@@ -1,0 +1,52 @@
+{
+ "market": "de-berlin",
+ "generated_at": "2026-11-13T15:18:27Z",
+ "sources_run": [
+  "ticketmaster",
+  "allevents.in",
+  "luma",
+  "meetup",
+  "community"
+ ],
+ "raw": 133,
+ "unique": 131,
+ "exported": 130,
+ "review": 1,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": ""
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 101,
+   "pages": 5,
+   "note": ""
+  },
+  {
+   "name": "luma",
+   "ok": true,
+   "events": 20,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 12,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

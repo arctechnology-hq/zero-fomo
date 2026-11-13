@@ -1,0 +1,28 @@
+{
+ "market": "li-vaduz",
+ "generated_at": "2026-11-13T15:36:19Z",
+ "sources_run": [
+  "allevents.in",
+  "community"
+ ],
+ "raw": 21,
+ "unique": 21,
+ "exported": 20,
+ "review": 1,
+ "sources": [
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 21,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

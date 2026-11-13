@@ -1,0 +1,36 @@
+{
+ "market": "lt-vilnius",
+ "generated_at": "2026-11-13T15:36:53Z",
+ "sources_run": [
+  "allevents.in",
+  "meetup",
+  "community"
+ ],
+ "raw": 75,
+ "unique": 75,
+ "exported": 73,
+ "review": 2,
+ "sources": [
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 64,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 11,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

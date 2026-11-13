@@ -1,0 +1,28 @@
+{
+ "market": "pe-lima",
+ "generated_at": "2026-11-13T15:40:48Z",
+ "sources_run": [
+  "meetup",
+  "community"
+ ],
+ "raw": 10,
+ "unique": 10,
+ "exported": 10,
+ "review": 0,
+ "sources": [
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 10,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}

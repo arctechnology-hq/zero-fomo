@@ -1,0 +1,52 @@
+{
+ "market": "at-vienna",
+ "generated_at": "2026-11-13T14:55:49Z",
+ "sources_run": [
+  "ticketmaster",
+  "allevents.in",
+  "luma",
+  "meetup",
+  "community"
+ ],
+ "raw": 207,
+ "unique": 194,
+ "exported": 188,
+ "review": 6,
+ "sources": [
+  {
+   "name": "ticketmaster",
+   "ok": true,
+   "events": 114,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "allevents.in",
+   "ok": true,
+   "events": 66,
+   "pages": 6,
+   "note": ""
+  },
+  {
+   "name": "luma",
+   "ok": true,
+   "events": 18,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "meetup",
+   "ok": true,
+   "events": 9,
+   "pages": 1,
+   "note": ""
+  },
+  {
+   "name": "community",
+   "ok": true,
+   "events": 0,
+   "pages": 0,
+   "note": "no approved submissions yet"
+  }
+ ]
+}
